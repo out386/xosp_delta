@@ -43,7 +43,7 @@ public class SearchZips extends AsyncTask<Void, Void,List<Flashables> > {
     protected List<Flashables> doInBackground(Void... params){
         File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/UCDownloads");
         Collection zipsCollection = FileUtils.listFiles(directory, new String[]{"zip"}, false);
-        return new FilesCatagorize().run(zipsCollection, rootView, context);
+        return new FilesCategorize().run(zipsCollection, rootView, context);
         // return zipsCollection;
     }
 
