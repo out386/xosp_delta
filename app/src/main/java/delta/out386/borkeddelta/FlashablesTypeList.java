@@ -1,0 +1,24 @@
+package delta.out386.borkeddelta;
+
+import java.util.List;
+
+/**
+ * Created by J-PC on 3/25/2016.
+ */
+public class FlashablesTypeList {
+    List<Flashables> roms;
+    List<Flashables> kernels;
+    List<Flashables> deltas;
+    List<Flashables> others;
+
+    public FlashablesTypeList(Flashables flashables) {
+        if(flashables.type.equals("rom"))
+            roms.add(flashables);
+        else if(flashables.type.equals("kernel"))
+            kernels.add(flashables);
+        else if(flashables.type.equals("delta"))
+            deltas.add(flashables);
+        else if(flashables.type.equals("other"))
+            others.add(flashables);
+    }
+}
