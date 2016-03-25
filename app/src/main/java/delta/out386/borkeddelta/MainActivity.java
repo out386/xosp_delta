@@ -47,11 +47,10 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
-			R.id.navigation_drawer,
-			(DrawerLayout) findViewById(R.id.drawer_layout));
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        //ActionBar actionBar = getActionBar();
-        //actionBar.hide();
+
     }
 
     @Override

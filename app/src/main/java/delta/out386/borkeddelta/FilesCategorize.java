@@ -14,13 +14,11 @@ import org.apache.commons.io.FileUtils;
  * Created by J-PC on 3/19/2016.
  */
 public class FilesCategorize {
-    View rootView;
     List<File> zips;
 	Context context;
 
 
-    public List<Flashables> run(Collection<File> fileCollection, View rootView, Context context) {
-        this.rootView = rootView;
+    public List<Flashables> run(Collection<File> fileCollection, Context context) {
 		this.context = context;
         zips=(List<File>) fileCollection;
         return sortSize();
@@ -43,10 +41,5 @@ public class FilesCategorize {
 
         }
         return flashablesTypeList.roms;
-        /*for(FlashablesTypeList current:flashablesArray)
-            if(current != null)
-				if(! current.type.equals("noFlash"))
-                	    output.add(current);
-		return output;*/
     }
 }

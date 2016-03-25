@@ -50,15 +50,8 @@ public class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_base, container, false);
-        //Button button = (Button) rootView.findViewById(R.id.button);
-        //TextView textview = (TextView) rootView.findViewById(R.id.textView);
-        //textview.setText(Environment.getExternalStorageState());
         final Context cont=getActivity();
-        /*button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {*/
-                new SearchZips(cont,rootView).execute();//.setText("working");
-            /*}
-        });*/
+                new SearchZips(cont,rootView).execute();
         return rootView;
     }
 

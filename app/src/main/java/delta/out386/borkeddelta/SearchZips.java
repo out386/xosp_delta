@@ -28,8 +28,6 @@ public class SearchZips extends AsyncTask<Void, Void,List<Flashables> > {
 
     @Override
     protected void onPreExecute(){
-            /*TextView outputTV = (TextView) rootView.findViewById(R.id.textView);
-            outputTV.setText("working");*/
         Activity activity = (Activity) context;
         loading.setCancelable(false);
         try {
@@ -43,14 +41,12 @@ public class SearchZips extends AsyncTask<Void, Void,List<Flashables> > {
     protected List<Flashables> doInBackground(Void... params){
         File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/UCDownloads");
         Collection zipsCollection = FileUtils.listFiles(directory, new String[]{"zip"}, false);
-        return new FilesCategorize().run(zipsCollection, rootView, context);
+        return new FilesCategorize().run(zipsCollection, context);
         // return zipsCollection;
     }
 
     @Override
     protected void onPostExecute(List<Flashables> output){
-			/*TextView out = (TextView) rootView.findViewById(R.id.textView);
-			out.setText(output);*/
         ListView lv=(ListView) rootView.findViewById(R.id.listView);
         FlashablesAdapter adapter = new FlashablesAdapter(context,
                 R.layout.list_item, output);
