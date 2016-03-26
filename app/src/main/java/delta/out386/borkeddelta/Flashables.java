@@ -1,7 +1,9 @@
 package delta.out386.borkeddelta;
 
 import java.io.File;
-public class Flashables
+import java.io.Serializable;
+
+public class Flashables implements Serializable
 {
 	File file;
 	String type;

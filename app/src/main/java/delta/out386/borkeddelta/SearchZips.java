@@ -41,7 +41,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     }
     @Override
     protected FlashablesTypeList doInBackground(Void... params){
-        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/UCDownloads");
+        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/UCDownloads");
         Collection zipsCollection;
         if(directory.exists()) {
             zipsCollection = FileUtils.listFiles(directory, new String[]{"zip"}, false);
@@ -53,8 +53,9 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     @Override
     protected void onPostExecute(FlashablesTypeList output){
         ObjectOutputStream oos = null;
+        if(output != null)
         try {
-            oos = new ObjectOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() + "/FlashablesTypeList"));
+            oos = new ObjectOutputStream(new FileOutputStream(context.getFilesDir().toString() + "/FlashablesTypeList"));
             oos.writeObject(output);
             oos.close();
         }
