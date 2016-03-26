@@ -18,14 +18,14 @@ public class FilesCategorize {
 	Context context;
 
 
-    public List<Flashables> run(Collection<File> fileCollection, Context context) {
+    public FlashablesTypeList run(Collection<File> fileCollection, Context context) {
 		this.context = context;
         zips=(List<File>) fileCollection;
         return sortSize();
 
     }
 
-    public List<Flashables> sortSize(){
+    public FlashablesTypeList sortSize(){
 		if(zips == null)
 			return null;
 		SortFileType sortFile = new SortFileType(context);
@@ -40,6 +40,6 @@ public class FilesCategorize {
                 	flashablesTypeList.addFlashable(new Flashables(current, zipType, size));
 
         }
-        return flashablesTypeList.roms;
+        return flashablesTypeList;//.roms;
     }
 }

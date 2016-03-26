@@ -13,16 +13,18 @@ import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.List;
 
-public class SearchZips extends AsyncTask<Void, Void,List<Flashables> > {
+public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
 
     Context context;
-    View rootView;
     LoadingDialogFragment loading = new LoadingDialogFragment();
-    public SearchZips(Context cont,View rootView){
-        this.rootView = rootView;
+    public SearchZips(Context cont){
         context=cont;
     }
 
@@ -38,16 +40,31 @@ public class SearchZips extends AsyncTask<Void, Void,List<Flashables> > {
         }
     }
     @Override
-    protected List<Flashables> doInBackground(Void... params){
+    protected FlashablesTypeList doInBackground(Void... params){
         File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/UCDownloads");
-        Collection zipsCollection = FileUtils.listFiles(directory, new String[]{"zip"}, false);
-        return new FilesCategorize().run(zipsCollection, context);
-        // return zipsCollection;
+        Collection zipsCollection;
+        if(directory.exists()) {
+            zipsCollection = FileUtils.listFiles(directory, new String[]{"zip"}, false);
+            return new FilesCategorize().run(zipsCollection, context);
+        }
+         return null;
     }
 
     @Override
-    protected void onPostExecute(List<Flashables> output){
-        ListView lv=(ListView) rootView.findViewById(R.id.listView);
+    protected void onPostExecute(FlashablesTypeList output){
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() + "/FlashablesTypeList"));
+            oos.writeObject(output);
+            oos.close();
+        }
+        catch(FileNotFoundException e) {
+            Log.e("borked", e.toString());
+        }
+        catch(IOException e) {
+            Log.e("borked", e.toString());
+        }
+        /*ListView lv=(ListView) rootView.findViewById(R.id.listView);
         FlashablesAdapter adapter = new FlashablesAdapter(context,
                 R.layout.list_item, output);
 
@@ -58,7 +75,7 @@ public class SearchZips extends AsyncTask<Void, Void,List<Flashables> > {
                         R.id.list_normal_view,
                         R.id.list_expandable_view)
         );
-
+*/
         loading.dismiss();
     }
 }
