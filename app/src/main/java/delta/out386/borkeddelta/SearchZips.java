@@ -38,6 +38,9 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
         catch(ClassCastException e) {
             Log.e("borked", e.toString());
         }
+        File f = new File(context.getFilesDir().toString() + "/FlashablesTypeList");
+        if(f.exists())
+            f.delete();
     }
     @Override
     protected FlashablesTypeList doInBackground(Void... params){

@@ -50,8 +50,8 @@ public class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_base, container, false);
-        final Context cont=getActivity();
-                new SearchZips(cont).execute();
+        /*final Context cont=getActivity();
+                new SearchZips(cont).execute();*/
         return rootView;
     }
 

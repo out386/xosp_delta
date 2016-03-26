@@ -50,7 +50,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-
+        loadFiles();
     }
 
     @Override
@@ -127,39 +127,8 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
      * A placeholder fragment containing a simple view.
      */
     
-
-    public void extractXdelta(View view)
-	{
-        InputStream is = null;
-        OutputStream os = null;
-        String storage_dir = getFilesDir().toString();
-        File deltaFile = new File(storage_dir + "/xdelta");
-        if (deltaFile.exists())
-            deltaFile.setWritable(true, true);
-        else
-		{
-			try
-			{
-				is = getAssets().open("xdelta3");
-				os = new FileOutputStream(deltaFile);
-				IOUtils.copy(is, os);
-				is.close();
-				os.flush();
-				os.close();
-				is = null;
-				os = null;
-			}
-			catch (IOException e)
-			{
-				Log.e("borked", e.toString());
-			}
-        }
-        Shell.SU.run("chmod 777 " + storage_dir + "/xdelta");
-        List < String > outputList =  Shell.SU.run(storage_dir + "/xdelta -d -s /sdcard/zzbase.zip /sdcard/zzdelta /sdcard/zzdone"
-												   );
-        //TextView outputTV=(TextView)findViewById(R.id.textView);
-        //outputTV.setText(outputList.toString());
+    public void loadFiles() {
+        new SearchZips(this).execute();
     }
-	
-	
+
 }
