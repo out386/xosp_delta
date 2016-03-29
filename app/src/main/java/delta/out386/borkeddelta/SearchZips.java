@@ -27,9 +27,13 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
 
     Context context;
     boolean isReload=false;
+    View rootView;
+    String typeToDisplay = "roms";
     LoadingDialogFragment loading = new LoadingDialogFragment();
-    public SearchZips(Context cont, boolean isReload){
+    public SearchZips(Context cont, boolean isReload, View rootView, String typeToDisplay){
         this.isReload = isReload;
+        this.typeToDisplay = typeToDisplay;
+        this.rootView = rootView;
         context = cont;
     }
 
@@ -95,9 +99,19 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     @Override
     protected void onPostExecute(FlashablesTypeList output){
 
-        /*ListView lv=(ListView) rootView.findViewById(R.id.listView);
+        ListView lv=(ListView) rootView.findViewById(R.id.listView);
         FlashablesAdapter adapter = new FlashablesAdapter(context,
-                R.layout.list_item, output);
+                R.layout.list_item, output.roms);
+
+        if(typeToDisplay.equals("kernels"))
+             adapter = new FlashablesAdapter(context,
+                    R.layout.list_item, output.kernels);
+        if(typeToDisplay.equals("deltas"))
+            adapter = new FlashablesAdapter(context,
+                    R.layout.list_item, output.deltas);
+        if(typeToDisplay.equals("others"))
+            adapter = new FlashablesAdapter(context,
+                    R.layout.list_item, output.others);
 
         // Assign adapter to ListView
         lv.setAdapter(
@@ -106,7 +120,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
                         R.id.list_normal_view,
                         R.id.list_expandable_view)
         );
-*/
+
         loading.dismiss();
     }
 }

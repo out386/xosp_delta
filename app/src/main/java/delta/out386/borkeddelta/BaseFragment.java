@@ -30,12 +30,13 @@ public class BaseFragment extends Fragment {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
-
+    static int section = 1;
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
     public static BaseFragment newInstance(int sectionNumber) {
+        section = sectionNumber;
         BaseFragment fragment = new BaseFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -50,11 +51,21 @@ public class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_base, container, false);
-        /*final Context cont=getActivity();
-                new SearchZips(cont).execute();*/
+        final Context cont=getActivity();
+        switch (section) {
+            case 1:
+            new SearchZips(cont, false, rootView, "roms").execute();
+            break;
+            case 2:
+                new SearchZips(cont, false, rootView, "deltas").execute();
+            break;
+            case 3:
+                new SearchZips(cont, false, rootView, "kernels").execute();
+            break;
+            case 4:
+                new SearchZips(cont, false, rootView, "others").execute();
+            break;
+        }
         return rootView;
     }
-
-
-
 }

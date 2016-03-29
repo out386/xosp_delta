@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">BorkedDelta</string>
 
-    <string name="title_section1">Delta</string>
-    <string name="title_section2">Title 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">Roms</string>
+    <string name="title_section2">Deltas</string>
+    <string name="title_section3">Kernels</string>
+    <string name="title_section4">Others</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

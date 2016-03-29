@@ -1,5 +1,6 @@
 package delta.out386.borkeddelta;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -49,8 +50,6 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        loadFiles();
     }
 
     @Override
@@ -62,8 +61,12 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
         {
             case 0: fragment = BaseFragment.newInstance(position + 1);
 				break;
-         //   case 1: fragment = PlaceholderFragment.newInstance(position + 1);
-				//break;
+            case 1: fragment = BaseFragment.newInstance(position + 1);
+                break;
+            case 2: fragment = BaseFragment.newInstance(position + 1);
+                break;
+            case 3: fragment = BaseFragment.newInstance(position + 1);
+                break;
         }
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
@@ -84,15 +87,18 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
             case 3:
                 mTitle = getString(R.string.title_section3);
                 break;
+            case 4:
+                mTitle = getString(R.string.title_section4);
+                break;
         }
     }
 
-	/*public void restoreActionBar() {
+	public void restoreActionBar() {
 	 ActionBar actionBar = getActionBar();
 	 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 	 actionBar.setDisplayShowTitleEnabled(true);
 	 actionBar.setTitle(mTitle);
-	 }*/
+	 }
 
 
     /*@Override
@@ -126,9 +132,5 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
     /**
      * A placeholder fragment containing a simple view.
      */
-    
-    public void loadFiles() {
-        new SearchZips(this, false).execute();
-    }
 
 }
