@@ -128,7 +128,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
      */
     
     public void loadFiles() {
-        new SearchZips(this).execute();
+        new SearchZips(this, false).execute();
     }
 
 }
