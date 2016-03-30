@@ -58,7 +58,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/expandableButton"
+            android:id="@+id/selectFileButton"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:background="@drawable/abc_ic_search_api_mtrl_alpha" />
