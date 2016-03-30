@@ -79,6 +79,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
                 output = (FlashablesTypeList) ois.readObject();
+                ois.close();
             }
             catch(FileNotFoundException e) {
                 Log.e("borked", e.toString());

@@ -27,10 +27,11 @@ public class FlashablesAdapter extends ArrayAdapter<Flashables> {
     }
     public FlashablesAdapter(Context context, int resource,List<Flashables> items) {
         super(context,resource,items);
+        this.context = context;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, final View convertView, ViewGroup parent) {
         View v = convertView;
         if(v == null)
             v=LayoutInflater.from(getContext()).inflate(R.layout.list_item,null);
@@ -38,6 +39,15 @@ public class FlashablesAdapter extends ArrayAdapter<Flashables> {
         if(p != null) {
             TextView name = (TextView) v.findViewById(R.id.romNameText);
             TextView type = (TextView) v.findViewById(R.id.romTypeText);
+            ImageButton select = (ImageButton) v.findViewById(R.id.selectFileButton);
+            select.setOnClickListener(new View.OnClickListener(){
+                                            @Override
+                                            public void onClick(View v) {
+                                                new writeFlashables(p, context).execute();
+                                            }
+                                      }
+
+            );
             final TextView size = (TextView) v.findViewById(R.id.expandableTextView);
             if(name != null)
                 name.setText(p.file.getName());
