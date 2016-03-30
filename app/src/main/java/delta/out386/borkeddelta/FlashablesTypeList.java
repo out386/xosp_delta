@@ -17,13 +17,23 @@ public class FlashablesTypeList implements Serializable {
     List<Flashables> others=new ArrayList<>();
 
     public void addFlashable(Flashables flashables) {
-        if(flashables.type.equals("rom"))
-            roms.add(flashables);
-        else if(flashables.type.equals("kernel"))
-            kernels.add(flashables);
-        else if(flashables.type.equals("delta"))
-            deltas.add(flashables);
-        else if(flashables.type.equals("other"))
-            others.add(flashables);
+        List<Flashables> search = null;
+            if(flashables != null)
+                if(flashables.type.equals("rom"))
+                    search = roms;
+                else if(flashables.type.equals("kernel"))
+                    search = kernels;
+                else if(flashables.type.equals("delta"))
+                    search = deltas;
+                else if(flashables.type.equals("other"))
+                    search = others;
+        if(search == null)
+            return;
+        for(Flashables current : search)
+        {
+            if(current.file.equals(flashables.file))
+                return;
+        }
+        search.add(flashables);
     }
 }
