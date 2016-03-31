@@ -67,6 +67,8 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
                 break;
             case 3: fragment = BaseFragment.newInstance(position + 1);
                 break;
+            case 4: fragment = QueueFragment.newInstance(position + 1);
+                break;
         }
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()

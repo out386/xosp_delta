@@ -5,6 +5,7 @@
     <string name="title_section2">Deltas</string>
     <string name="title_section3">Kernels</string>
     <string name="title_section4">Others</string>
+    <string name="title_section5">Queue</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
