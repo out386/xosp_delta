@@ -2,8 +2,14 @@ package delta.out386.borkeddelta;
 
 import android.os.AsyncTask;
 import android.content.Context;
+import android.util.Log;
+
 import java.io.File;
+import java.io.IOException;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipFile;
+
 import eu.chainfire.libsuperuser.Shell;
 public class SortFileType 
 {
@@ -17,22 +23,27 @@ public class SortFileType
 	{
 		this.file = file;
 		boolean other = false;
-		List <String> zipTypeList;
+		Enumeration zipTypeList = null;
 		String [] assets = {"dedelta", "zipadjust"};
 		for(String asset : assets)
 			if(! new File(assetDir + "/" + asset).exists())
 				return "noAsset";
-		
-		zipTypeList = Shell.SH.run("unzip -l " + file.toString());
+		try {
+			zipTypeList = new ZipFile(file.toString()).entries();//Shell.SH.run("unzip -l " + file.toString());
+		}
+		catch(IOException e) {
+			Log.e("borked", e.toString());
+		}
 		
 		if(zipTypeList == null)
 			return "emptylist";
-		for(String line : zipTypeList) {
+		while(zipTypeList.hasMoreElements()){
+			String line = zipTypeList.nextElement().toString();
 			if(line.contains("system.new.dat"))
 				return "rom";
 			else if(line.contains("zImage"))
 				return "kernel";
-			else if(line.contains("delta"))
+			else if(line.contains("deltaconfig"))
 				return "delta";
 			else if(line.contains("update-binary"))
 				other = true;
