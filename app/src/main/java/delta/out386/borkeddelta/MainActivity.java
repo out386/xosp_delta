@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -134,5 +135,18 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
     /**
      * A placeholder fragment containing a simple view.
      */
-
+    @Override
+    public void onRequestPermissionsResult(int code, String[] permissions, int[] result) {
+        if(result.length > 0 && result[0] == PackageManager.PERMISSION_GRANTED)
+        {
+            FragmentManager fragmentManager = getFragmentManager();
+            BaseFragment fragment = BaseFragment.newInstance(1);
+            View mFragmentContainerView = findViewById(R.id.navigation_drawer);
+            DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+        }
+    }
 }

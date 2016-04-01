@@ -1,10 +1,15 @@
 package delta.out386.borkeddelta;
 
+import android.Manifest;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +35,8 @@ public class BaseFragment extends Fragment {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    final int WRITE_STORAGE_PERMISSION = 1;
+    final int READ_STORAGE_PERMISSION = 1;
     static int section = 1;
     /**
      * Returns a new instance of this fragment for the given section
@@ -52,6 +59,14 @@ public class BaseFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_base, container, false);
         final Context cont=getActivity();
+        if(ContextCompat.checkSelfPermission(cont, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_STORAGE_PERMISSION);
+            return rootView;
+        }
+        if(ContextCompat.checkSelfPermission(cont, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION);
+            return rootView;
+        }
         switch (section) {
             case 1:
             new SearchZips(cont, false, rootView, "roms").execute();
@@ -68,4 +83,5 @@ public class BaseFragment extends Fragment {
         }
         return rootView;
     }
+
 }
