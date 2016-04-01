@@ -12,13 +12,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+
+
 /**
  * Created by J-PC on 3/30/2016.
  */
-public class writeFlashables extends AsyncTask<Void, Void, Void> {
+public class WriteFlashablesQueue extends AsyncTask<Void, Void, Void> {
     Flashables flashables;
     Context context;
-    public writeFlashables(Flashables flashables, Context context) {
+    public WriteFlashablesQueue(Flashables flashables, Context context) {
         this.flashables = flashables;
         this.context = context;
     }

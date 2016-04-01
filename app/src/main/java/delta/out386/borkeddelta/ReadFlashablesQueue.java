@@ -11,20 +11,16 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by J-PC on 3/30/2016.
  */
-public class readFlashables extends AsyncTask<Void, Void, FlashablesTypeList> {
+public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeList> {
     Context context;
     View view;
-    public readFlashables(Context context, View view) {
+    public ReadFlashablesQueue(Context context, View view) {
         this.context = context;
         this.view = view;
     }
@@ -50,6 +46,7 @@ public class readFlashables extends AsyncTask<Void, Void, FlashablesTypeList> {
         }
         else
             return null;
+
         return flashablesTypeList;
     }
     @Override
@@ -58,37 +55,45 @@ public class readFlashables extends AsyncTask<Void, Void, FlashablesTypeList> {
         TextView romPath = (TextView)view.findViewById(R.id.queueRomPathText);
         TextView deltaName = (TextView)view.findViewById(R.id.queueDeltaNameText);
         TextView deltaPath = (TextView)view.findViewById(R.id.queueDeltaPathText);
-        TextView queueEmptyTextviw = (TextView)view.findViewById(R.id.queueEmptyTextview);
+        TextView queueEmptyTextview = (TextView)view.findViewById(R.id.queueEmptyTextview);
         RelativeLayout queueEmptyLayout = (RelativeLayout)view.findViewById(R.id.queueEmptyLayout);
         RelativeLayout queueReadyLayout = (RelativeLayout)view.findViewById(R.id.queueReadyLayout);
         Button queueClearButton = (Button)view.findViewById(R.id.queueClearButton);
+        Button queueApplyButton = (Button)view.findViewById(R.id.queueApplyButton);
 
         if(output == null || output.roms.isEmpty() && output.deltas.isEmpty()) {
-            queueEmptyTextviw.setText("No target ROM and no deltas selected. Please select a target ROM and a delta from the ROMs and deltas sections respectively.");
+            queueEmptyTextview.setText("No target ROM and no deltas selected. Please select a target ROM and a delta from the ROMs and deltas sections respectively.");
             queueReadyLayout.setVisibility(RelativeLayout.GONE);
             queueEmptyLayout.setVisibility(RelativeLayout.VISIBLE);
             return;
         }
         if(output.roms.isEmpty()) {
-            queueEmptyTextviw.setText("No target ROM selected. Please select a target ROM from the ROMs section.");
+            queueEmptyTextview.setText("No target ROM selected. Please select a target ROM from the ROMs section.");
             queueReadyLayout.setVisibility(RelativeLayout.GONE);
             queueEmptyLayout.setVisibility(RelativeLayout.VISIBLE);
             return;
         }
         if(output.deltas.isEmpty()) {
-            queueEmptyTextviw.setText("No deltas selected. Please select a delta to apply from the deltas section.");
+            queueEmptyTextview.setText("No deltas selected. Please select a delta to apply from the deltas section.");
             queueReadyLayout.setVisibility(RelativeLayout.GONE);
             queueEmptyLayout.setVisibility(RelativeLayout.VISIBLE);
             return;
         }
         queueEmptyLayout.setVisibility(RelativeLayout.GONE);
-        queueClearButton.setOnClickListener(new View.OnClickListener(){
+        queueClearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 File f = new File(context.getFilesDir().toString() + "/queue");
-                if(f.exists())
+                if (f.exists())
                     f.delete();
-                new readFlashables(context, view).execute();
+                new ReadFlashablesQueue(context, view).execute();
+            }
+        });
+        queueApplyButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                DeltaData data = new DeltaData(output.roms.get(0).file.toString(), output.roms.get(0).file.toString(), output.deltas.get(0).file.toString());
+                new WriteJson(data, context).execute();
             }
         });
         romName.setText(output.roms.get(0).file.getName());

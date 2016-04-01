@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 /**
  * Created by J-PC on 3/30/2016.
@@ -40,7 +39,7 @@ public class QueueFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_queue, container, false);
         final Context cont=getActivity();
 
-        new readFlashables(cont, rootView).execute();
+        new ReadFlashablesQueue(cont, rootView).execute();
         return rootView;
     }
 }

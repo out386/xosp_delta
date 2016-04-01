@@ -5,13 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.List;
 
 /**
@@ -43,7 +40,7 @@ public class FlashablesAdapter extends ArrayAdapter<Flashables> {
             select.setOnClickListener(new View.OnClickListener(){
                                             @Override
                                             public void onClick(View v) {
-                                                new writeFlashables(p, context).execute();
+                                                new WriteFlashablesQueue(p, context).execute();
                                             }
                                       }
 

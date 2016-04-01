@@ -12,11 +12,11 @@ import android.content.Context;
 import org.apache.commons.io.IOUtils;
 import eu.chainfire.libsuperuser.Shell;
 
-public class extractAssets extends AsyncTask<Void, Void, Void> {
+public class ExtractAssets extends AsyncTask<Void, Void, Void> {
 	String storage_dir;
 	Context context;
 
-	public extractAssets(String storage, Context context) {
+	public ExtractAssets(String storage, Context context) {
 		storage_dir=storage;
 		this.context=context;
 	}
