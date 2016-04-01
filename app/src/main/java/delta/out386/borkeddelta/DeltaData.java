@@ -13,8 +13,9 @@ public class DeltaData implements Serializable{
     String sourceMd5 = null;
     String targetMd5 = null;
     String deltaMd5 = null;
-    String source = null;
-    String target = null;
+    String source;
+    String target;
+    String delta;
     /*public DeltaData(String sourceMd5, String targetMd5, String deltaMd5, File source, File target, File delta)
     {
         this.targetSize = FileUtils.sizeOf(target);
@@ -24,10 +25,10 @@ public class DeltaData implements Serializable{
         this.source = source;
         this.target = target;
     }*/
-    public DeltaData(String source, String target,String delta)
+    public DeltaData(String source, String target, String delta)
     {
-       // this.targetSize = FileUtils.sizeOf(target);
         this.source = source;
         this.target = target;
+        this.delta = delta;
     }
 }

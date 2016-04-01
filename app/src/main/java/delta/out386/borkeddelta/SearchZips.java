@@ -52,7 +52,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     @Override
     protected FlashablesTypeList doInBackground(Void... params){
         FlashablesTypeList output = null;
-        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/UCDownloads");
+        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/borkeddelta");
         File f = new File(context.getFilesDir().toString() + "/FlashablesTypeList");
         if(!f.exists() || isReload) {
             Collection zipsCollection;

@@ -9,6 +9,7 @@ import com.squareup.moshi.Moshi;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -31,7 +32,10 @@ public class WriteJson extends AsyncTask<Void, Void, Void> {
         JsonAdapter<DeltaData> jsonAdapter = moshi.adapter(DeltaData.class);
         String dataJson = jsonAdapter.toJson(data);
         try {
-            BufferedWriter brData = new BufferedWriter(new FileWriter(context.getFilesDir().toString() + "/currentDelta"));
+            File file = new File(context.getFilesDir().toString() + "/currentDelta");
+            if(file.exists())
+                file.delete();
+            BufferedWriter brData = new BufferedWriter(new FileWriter(file));
             brData.write(dataJson);
             brData.close();
         }

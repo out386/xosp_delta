@@ -8,11 +8,18 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.List;
+import java.util.Scanner;
+
+import eu.chainfire.libsuperuser.Shell;
 
 /**
  * Created by J-PC on 3/30/2016.
@@ -20,6 +27,7 @@ import java.io.ObjectInputStream;
 public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeList> {
     Context context;
     View view;
+    File source, target, delta;
     public ReadFlashablesQueue(Context context, View view) {
         this.context = context;
         this.view = view;
@@ -43,10 +51,17 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             catch(ClassNotFoundException e) {
                 Log.e("borked", e.toString());
             }
+            if(flashablesTypeList == null) {
+                f.delete();
+                return null;
+            }
         }
         else
             return null;
-
+        if(!flashablesTypeList.deltas.isEmpty()) {
+            delta = flashablesTypeList.deltas.get(0).file;
+            target = targetPath(delta);
+        }
         return flashablesTypeList;
     }
     @Override
@@ -80,6 +95,10 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             return;
         }
         queueEmptyLayout.setVisibility(RelativeLayout.GONE);
+
+        source = output.roms.get(0).file;
+
+
         queueClearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,14 +111,45 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         queueApplyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                DeltaData data = new DeltaData(output.roms.get(0).file.toString(), output.roms.get(0).file.toString(), output.deltas.get(0).file.toString());
+                DeltaData data = null;
+                try {
+                    data = new DeltaData(source.toString(), target.toString(), delta.toString());
+                }
+                catch(Exception e) {
+                    Log.e("borked",e.toString());
+                }
                 new WriteJson(data, context).execute();
             }
         });
-        romName.setText(output.roms.get(0).file.getName());
-        romPath.setText(output.roms.get(0).file.getParent());
-        deltaName.setText(output.deltas.get(0).file.getName());
-        deltaPath.setText(output.deltas.get(0).file.getParent());
+        romName.setText(source.getName());
+        romPath.setText(source.getParent());
+        deltaName.setText(delta.getName());
+        deltaPath.setText(delta.getParent());
         queueReadyLayout.setVisibility(RelativeLayout.VISIBLE);
+    }
+    public File targetPath(File delta) {
+        List<String> result = Shell.SU.run("unzip " + delta.toString() + "deltaconfig " + "-d /sdcard/borkeddelta");
+        if(result == null || result.isEmpty()) {
+            Log.e("borked", "Failed to extract deltaconfig");
+            return null;
+        }
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<DeltaData> jsonAdapter = moshi.adapter(DeltaData.class);
+        String json = "";
+        try {
+            Scanner sc = new Scanner(new FileInputStream(delta.getParent() + "/deltaconfig"));
+            while(sc.hasNextLine())
+                json = json + "\n" + sc.nextLine();
+            Log.v("borked", json);
+            DeltaData deltaData = jsonAdapter.fromJson(json);
+            if(deltaData != null) {
+                Log.v("borked", deltaData.target);
+                return new File(deltaData.target);
+            }
+        }
+        catch(Exception e) {
+            Log.e("borked", e.toString());
+        }
+        return null;
     }
 }
