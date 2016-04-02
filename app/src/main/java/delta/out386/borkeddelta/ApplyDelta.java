@@ -73,7 +73,7 @@ public class ApplyDelta extends AsyncTask<Void, Void, Void> {
             Log.v("borked", apply);
             String z = Shell.SH.run(apply).get(0);
             Log.v("borked", z);
-            new Md5TargetCheck(targetPath, targetMd5).execute();
+            new Md5TargetCheck(targetPath, targetMd5, context).execute();
         } catch (Exception e) {
             Log.e("borked", e.toString());
             return null;
