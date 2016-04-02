@@ -27,7 +27,8 @@ import eu.chainfire.libsuperuser.Shell;
 public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeList> {
     Context context;
     View view;
-    File source, target, delta;
+    File delta, source;
+    DeltaData deltaJson;
     public ReadFlashablesQueue(Context context, View view) {
         this.context = context;
         this.view = view;
@@ -60,7 +61,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             return null;
         if(!flashablesTypeList.deltas.isEmpty()) {
             delta = flashablesTypeList.deltas.get(0).file;
-            target = targetPath(delta);
+            deltaJson = targetPath(delta);
         }
         return flashablesTypeList;
     }
@@ -113,12 +114,14 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             public void onClick(View v) {
                 DeltaData data = null;
                 try {
-                    data = new DeltaData(source.toString(), target.toString(), delta.toString());
+                    //data = new DeltaData(source.toString(), target.toString(), delta.toString());
+                    if(deltaJson != null)
+                        new ApplyDelta(deltaJson, source, context).execute();
                 }
                 catch(Exception e) {
                     Log.e("borked",e.toString());
                 }
-                new WriteJson(data, context).execute();
+                //new WriteJson(data, context).execute();
             }
         });
         romName.setText(source.getName());
@@ -127,10 +130,19 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         deltaPath.setText(delta.getParent());
         queueReadyLayout.setVisibility(RelativeLayout.VISIBLE);
     }
-    public File targetPath(File delta) {
-        List<String> result = Shell.SU.run("unzip " + delta.toString() + "deltaconfig " + "-d /sdcard/borkeddelta");
-        if(result == null || result.isEmpty()) {
-            Log.e("borked", "Failed to extract deltaconfig");
+    public DeltaData targetPath(File delta) {
+        File diff = new File(delta.getParent() + "/diff");
+        if(diff.exists())
+            diff.delete();
+        diff = new File(delta.getParent() + "/deltaconfig");
+        if(diff.exists())
+            diff.delete();
+        List<String> resultConfig = Shell.SU.run("unzip " + delta.toString() + " deltaconfig " + "-d " + delta.getParent());
+        List<String> resultDiff = Shell.SU.run("unzip " + delta.toString() + " diff " + "-d " + delta.getParent());
+        Log.v("borked", resultConfig.toString());
+        Log.v("borked", resultDiff.toString());
+        if(resultConfig == null || resultConfig.isEmpty() || resultDiff == null || resultDiff.isEmpty()) {
+            Log.e("borked", "Failed to extract deltaconfig or diff");
             return null;
         }
         Moshi moshi = new Moshi.Builder().build();
@@ -140,12 +152,9 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             Scanner sc = new Scanner(new FileInputStream(delta.getParent() + "/deltaconfig"));
             while(sc.hasNextLine())
                 json = json + "\n" + sc.nextLine();
-            Log.v("borked", json);
             DeltaData deltaData = jsonAdapter.fromJson(json);
-            if(deltaData != null) {
-                Log.v("borked", deltaData.target);
-                return new File(deltaData.target);
-            }
+            if(deltaData != null)
+                return deltaData;
         }
         catch(Exception e) {
             Log.e("borked", e.toString());

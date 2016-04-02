@@ -14,9 +14,8 @@ import eu.chainfire.libsuperuser.Shell;
 public class SortFileType 
 {
 	File file;
-	String assetDir;
 	public SortFileType(Context context) {
-		assetDir = context.getApplicationContext().getFilesDir().toString();
+
 	}
 
 	public String sort(File file)
@@ -24,10 +23,6 @@ public class SortFileType
 		this.file = file;
 		boolean other = false;
 		Enumeration zipTypeList = null;
-		String [] assets = {"dedelta", "zipadjust"};
-		for(String asset : assets)
-			if(! new File(assetDir + "/" + asset).exists())
-				return "noAsset";
 		try {
 			zipTypeList = new ZipFile(file.toString()).entries();//Shell.SH.run("unzip -l " + file.toString());
 		}
