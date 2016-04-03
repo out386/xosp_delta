@@ -13,7 +13,7 @@ import eu.chainfire.libsuperuser.Shell;
  */
 public class Md5TargetCheck extends AsyncTask<Void, Void, Void> {
     String targetPath, targetMd5Json;
-    LoadingDialogFragment loading = new LoadingDialogFragment();
+    LoadingDialogFragment loading = new LoadingDialogFragment(R.layout.fragment_md5_dialog);
     Context context;
     public Md5TargetCheck(String targetPath, String targetMd5Json, Context context) {
         this.targetPath = targetPath;
@@ -22,11 +22,8 @@ public class Md5TargetCheck extends AsyncTask<Void, Void, Void> {
     }
     @Override
     public void onPreExecute() {
-
         Activity activity = (Activity) context;
         loading.setCancelable(false);
-        TextView loadingTV = (TextView) ((Activity) context).findViewById(R.id.loadingText);
-        loadingTV.setText("Calculating target MD5");
         try {
             loading.show(activity.getFragmentManager(), "dialog");
         } catch (ClassCastException e) {

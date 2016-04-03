@@ -12,15 +12,17 @@ import android.graphics.drawable.ColorDrawable;
 
 public class LoadingDialogFragment extends DialogFragment {
 
-    public LoadingDialogFragment() {
-        // Empty constructor required for DialogFragment
+    int xml;
+    public LoadingDialogFragment(){}
+    public LoadingDialogFragment(int xml) {
+        this.xml = xml;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
         getDialog().setTitle(getString(R.string.app_name));
-        View view = inflater.inflate(R.layout.fragment_loading_dialog,
+        View view = inflater.inflate(xml,
 									 container);
 
         return view;

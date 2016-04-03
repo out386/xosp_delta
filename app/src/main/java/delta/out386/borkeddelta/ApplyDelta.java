@@ -16,12 +16,16 @@ public class ApplyDelta extends AsyncTask<Void, Void, Void> {
     DeltaData deltaJson;
     File source;
     Context context;
-    LoadingDialogFragment loading = new LoadingDialogFragment();
+    LoadingDialogFragment loading = new LoadingDialogFragment(R.layout.fragment_delta_apply_dialog);
+    String sourceMd5 = null, targetMd5, deltaMd5 = null, diff, targetPath;
 
     public ApplyDelta(DeltaData deltaJson, File source, Context context) {
         this.deltaJson = deltaJson;
+        this.targetMd5 = deltaJson.targetMd5;
         this.source = source;
         this.context = context;
+        this.diff = source.getParent() + "/diff";
+        this.targetPath =  source.getParent() + "/" + deltaJson.target;
     }
 
     @Override
@@ -38,8 +42,6 @@ public class ApplyDelta extends AsyncTask<Void, Void, Void> {
 
     @Override
     public Void doInBackground(Void... params) {
-        String sourceMd5 = null, targetMd5 = deltaJson.targetMd5, deltaMd5 = null, diff = source.getParent() + "/diff";
-        String targetPath = source.getParent() + "/" + deltaJson.target;
         try {
             Log.v("borked", "Calculating MD5s");
             Log.v("borked", "Source --> " + source.toString());
@@ -73,7 +75,6 @@ public class ApplyDelta extends AsyncTask<Void, Void, Void> {
             Log.v("borked", apply);
             String z = Shell.SH.run(apply).get(0);
             Log.v("borked", z);
-            new Md5TargetCheck(targetPath, targetMd5, context).execute();
         } catch (Exception e) {
             Log.e("borked", e.toString());
             return null;
@@ -84,7 +85,7 @@ public class ApplyDelta extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void v) {
-
         loading.dismiss();
+        new Md5TargetCheck(targetPath, targetMd5, context).execute();
     }
 }

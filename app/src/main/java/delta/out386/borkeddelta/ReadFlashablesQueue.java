@@ -1,5 +1,6 @@
 package delta.out386.borkeddelta;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -29,9 +30,24 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
     View view;
     File delta, source;
     DeltaData deltaJson;
+    LoadingDialogFragment loading = new LoadingDialogFragment(R.layout.fragment_unzip_dialog);
+
+    //TO-DO - Move this extraction to a service and start it on apply button tap
+
     public ReadFlashablesQueue(Context context, View view) {
         this.context = context;
         this.view = view;
+    }
+    @Override
+    public void onPreExecute() {
+
+        Activity activity = (Activity) context;
+        loading.setCancelable(false);
+        try {
+            loading.show(activity.getFragmentManager(), "dialog");
+        } catch (ClassCastException e) {
+            Log.e("borked", e.toString());
+        }
     }
     @Override
     public FlashablesTypeList doInBackground(Void... v) {
@@ -71,20 +87,24 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         TextView romPath = (TextView)view.findViewById(R.id.queueRomPathText);
         TextView deltaName = (TextView)view.findViewById(R.id.queueDeltaNameText);
         TextView deltaPath = (TextView)view.findViewById(R.id.queueDeltaPathText);
+        TextView targetName = (TextView)view.findViewById(R.id.queueTargetNameText);
+        TextView targetPathDir = (TextView)view.findViewById(R.id.queueTargetPathText);
         TextView queueEmptyTextview = (TextView)view.findViewById(R.id.queueEmptyTextview);
         RelativeLayout queueEmptyLayout = (RelativeLayout)view.findViewById(R.id.queueEmptyLayout);
         RelativeLayout queueReadyLayout = (RelativeLayout)view.findViewById(R.id.queueReadyLayout);
         Button queueClearButton = (Button)view.findViewById(R.id.queueClearButton);
         Button queueApplyButton = (Button)view.findViewById(R.id.queueApplyButton);
 
+        loading.dismiss();
+
         if(output == null || output.roms.isEmpty() && output.deltas.isEmpty()) {
-            queueEmptyTextview.setText("No target ROM and no deltas selected. Please select a target ROM and a delta from the ROMs and deltas sections respectively.");
+            queueEmptyTextview.setText("No base ROM and no deltas selected. Please select a base ROM and a delta from the ROMs and deltas sections respectively.");
             queueReadyLayout.setVisibility(RelativeLayout.GONE);
             queueEmptyLayout.setVisibility(RelativeLayout.VISIBLE);
             return;
         }
         if(output.roms.isEmpty()) {
-            queueEmptyTextview.setText("No target ROM selected. Please select a target ROM from the ROMs section.");
+            queueEmptyTextview.setText("No base ROM selected. Please select a base ROM from the ROMs section.");
             queueReadyLayout.setVisibility(RelativeLayout.GONE);
             queueEmptyLayout.setVisibility(RelativeLayout.VISIBLE);
             return;
@@ -128,6 +148,10 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         romPath.setText(source.getParent());
         deltaName.setText(delta.getName());
         deltaPath.setText(delta.getParent());
+        if(deltaJson != null) {
+            targetName.setText(deltaJson.target);
+            targetPathDir.setText(source.getParent());
+        }
         queueReadyLayout.setVisibility(RelativeLayout.VISIBLE);
     }
     public DeltaData targetPath(File delta) {

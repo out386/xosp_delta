@@ -29,7 +29,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     boolean isReload=false;
     View rootView;
     String typeToDisplay = "roms";
-    LoadingDialogFragment loading = new LoadingDialogFragment();
+    LoadingDialogFragment loading = new LoadingDialogFragment(R.layout.fragment_loading_dialog);
     public SearchZips(Context cont, boolean isReload, View rootView, String typeToDisplay){
         this.isReload = isReload;
         this.typeToDisplay = typeToDisplay;
