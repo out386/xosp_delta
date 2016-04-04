@@ -28,5 +28,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.0.0'
     compile 'com.squareup.moshi:moshi:1.1.0'
     compile 'it.sephiroth.android.library.fork.slideexpandable:library:1.0.1'
-    compile project(':libsuperuser')
+    compile 'eu.chainfire:libsuperuser:1.0.0.+'
 }
