@@ -3,7 +3,8 @@
     package="delta.out386.borkeddelta" >
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,8 +19,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".ApplyDelta"
-            android:exported="false"/>
+        <activity
+            android:name=".DeltaDialogActivity"
+            android:theme="@android:style/ThemeOverlay.Material.Light" >
+        </activity>
+
+        <service
+            android:name=".ApplyDelta"
+            android:exported="false" />
+
+        <activity
+            android:name=".DialogActivity"
+            android:label="@string/title_activity_dialog" >
+        </activity>
     </application>
 
 </manifest>
