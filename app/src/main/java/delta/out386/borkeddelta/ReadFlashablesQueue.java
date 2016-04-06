@@ -2,6 +2,7 @@ package delta.out386.borkeddelta;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -135,8 +136,13 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
                 DeltaData data = null;
                 try {
                     //data = new DeltaData(source.toString(), target.toString(), delta.toString());
-                    if(deltaJson != null)
-                        new ApplyDelta(deltaJson, source, context).execute();
+                    if(deltaJson != null) {
+                        Intent deltaIntent = new Intent(context, ApplyDelta.class);
+                        deltaIntent.putExtra("source", source.toString());
+                        deltaIntent.putExtra("deltaJson", deltaJson);
+                        deltaIntent.putExtra("sourceParent", source.getParent());
+                        context.startService(deltaIntent);
+                    }
                 }
                 catch(Exception e) {
                     Log.e("borked",e.toString());
