@@ -1,18 +1,16 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_PACKAGE_NAME := OpenDelta
+LOCAL_PACKAGE_NAME := BorkedDelta
 LOCAL_MODULE_TAGS := optional
 LOCAL_PRIVILEGED_MODULE := true
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
-LOCAL_SDK_VERSION := 19
+LOCAL_SDK_VERSION := 23
 
 LOCAL_JNI_SHARED_LIBRARIES := libopendelta
 LOCAL_REQUIRED_MODULES := libopendelta
-
-LOCAL_PROGUARD_FLAG_FILES := proguard-project.txt
 
 include $(BUILD_PACKAGE)
 
