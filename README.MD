@@ -18,6 +18,21 @@ Server script
 There is a script to generate the deltas on the build machine. Get server/borkeddelta.sh, and set the variables to reflect your build environment. Run it with the name of the device as a parameter and upload the zip in publish/DEVICE_NAME  
 The zip will have the same name as the second newest (the base ROM) build, to make it easier for the client to find it.  
 
+Server side
+-----------
+
+To create the delta files on the server, you need several things, some of which can be found in the server directory.  
+The main thing is the borkeddelta.sh script. It contains a configuration section which you can edit with the correct file locations on your own system. Quite likely you will need to create a wrapper script that pulls in your previous release and your current release, and pushes out the created delta files.The script depends on xdelta3, zip,and zipadjust.  
+To build the binaries for use on your server, make a copy of the jni directory - do not compile inside jni because you may mess up the build of libopendelta.  
+xdelta3 can be built in (the copy of)jni/xdelta3-3.0.7 by calling:  
+./configure  
+make  
+zipadjust can be built in (the copy of)jni by calling:  
+gcc -o zipadjust zipadjust.c zipadjust_run.c -lz  
+dedelta (not used by the script, but maybe helpful when debugging) can be built in (the copy of)jni by calling:  
+gcc -o dedelta xdelta3-3.0.7/xdelta3.c delta.c delta_run.c  
+You should be able to install zip from your distro's repositories.  
+
 Sample deltaconfig
 -------------------------------
 
