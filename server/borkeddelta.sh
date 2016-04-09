@@ -2,6 +2,10 @@
 
 # Script to generate delta files for OpenDelta - by Jorrit 'Chainfire' Jongma
 # Modified for BorkedDelta by out386
+# Before using this script, download or build the zip and xdelta3 binaries.
+# Also, build the zipadjust binary (located at https://github.com/omnirom/android_packages_apps_OpenDelta)
+# Put all three binaries in the PATH, or set the variables below
+
 
 # Get device either from $DEVICE set by calling script, or first parameter
 
@@ -18,11 +22,11 @@ fi
 
 # ------ CONFIGURATION ------
 
-HOME=/home/build
-BIN_ZIPADJUST=/usr/bin/zipadjust
-
+HOME=/home/out386/build
+BIN_ZIPADJUST=zipadjust
+XDELTA=xdelta3
 FILE_MATCH=XOSP-*OFFICIAL*.zip
-PATH_CURRENT=XOSP/out/target/product/$DEVICE
+PATH_CURRENT=$HOME/in/target/product/$DEVICE
 PATH_LAST=$HOME/delta/last/$DEVICE
 
 
@@ -82,12 +86,10 @@ rm -rf work
 mkdir work
 rm -rf out
 mkdir out
-
 $BIN_ZIPADJUST --decompress $PATH_CURRENT/$FILE_CURRENT work/current.zip
 $BIN_ZIPADJUST --decompress $PATH_LAST/$FILE_LAST work/last.zip
 SRC_BUFF=$(nextPowerOf2 $(getFileSize work/current.zip));
-$BIN_XDELTA -B ${SRC_BUFF} -9evfS none -s work/last.zip work/current.zip out/diff
-SRC_BUFF=$(nextPowerOf2 $(getFileSize work/current_signed.zip));
+$XDELTA -B ${SRC_BUFF} -9evfS none -s work/last.zip work/current.zip out/diff
 
 MD5_CURRENT=$(getFileMD5 $PATH_CURRENT/$FILE_CURRENT)
 MD5_CURRENT_STORE=$(getFileMD5 work/current.zip)
@@ -113,11 +115,11 @@ echo "      \"deltaMd5\": \"$MD5_UPDATE\"" >> $DELTA
 echo "      \"targetSize\": \"$SIZE_CURRENT_STORE\"," >> $DELTA
 echo "}," >> $DELTA
 
-zip -0 -j out/$FILE_LAST_BASE out/diff $DELTA
+zip -0 -j out/$FILE_LAST out/diff $DELTA
 
 mkdir publish >/dev/null 2>/dev/null
 mkdir publish/$DEVICE >/dev/null 2>/dev/null
-cp out/$FILE_LAST_BASE.zip publish/$DEVICE/.
+cp out/$FILE_LAST publish/$DEVICE/.
 
 rm -rf work
 rm -rf out
