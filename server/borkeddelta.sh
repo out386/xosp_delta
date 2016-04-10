@@ -3,7 +3,7 @@
 # Script to generate delta files for OpenDelta - by Jorrit 'Chainfire' Jongma
 # Modified for BorkedDelta by out386
 # Before using this script, download or build the zip and xdelta3 binaries.
-# Also, build the zipadjust binary (located at https://github.com/omnirom/android_packages_apps_OpenDelta)
+# Aslo, build the zipadjuat binary (located at https://github.com/omnirom/android_packages_apps_OpenDelta)
 # Put all three binaries in the PATH, or set the variables below
 
 
@@ -25,7 +25,7 @@ fi
 HOME=/home/out386/build
 BIN_ZIPADJUST=zipadjust
 XDELTA=xdelta3
-FILE_MATCH=XOSP-*OFFICIAL*.zip
+FILE_MATCH=XOSP*OFFICIAL*.zip
 PATH_CURRENT=$HOME/in/target/product/$DEVICE
 PATH_LAST=$HOME/delta/last/$DEVICE
 
@@ -107,13 +107,13 @@ DELTA=out/deltaconfig
 
 echo "{" > $DELTA
 echo "  \"version\": 0.8," >> $DELTA
-echo "      \"source\": \"$FILE_LAST\"," >> $DELTA
-echo "      \"target\": \"$FILE_CURRENT\"," >> $DELTA
-echo "      \"targetMd5\": \"$MD5_CURRENT_STORE\"," >> $DELTA
-echo "      \"sourceMd5\": \"$MD5_LAST_STORE\"," >> $DELTA
-echo "      \"deltaMd5\": \"$MD5_UPDATE\"" >> $DELTA
-echo "      \"targetSize\": \"$SIZE_CURRENT_STORE\"," >> $DELTA
-echo "}," >> $DELTA
+echo "  \"source\": \"$FILE_LAST\"," >> $DELTA
+echo "  \"target\": \"$FILE_CURRENT\"," >> $DELTA
+echo "  \"targetMd5\": \"$MD5_CURRENT_STORE\"," >> $DELTA
+echo "  \"sourceMd5\": \"$MD5_LAST_STORE\"," >> $DELTA
+echo "  \"deltaMd5\": \"$MD5_UPDATE\"," >> $DELTA
+echo "  \"targetSize\": \"$SIZE_CURRENT_STORE\"" >> $DELTA
+echo "}" >> $DELTA
 
 zip -0 -j out/$FILE_LAST out/diff $DELTA
 

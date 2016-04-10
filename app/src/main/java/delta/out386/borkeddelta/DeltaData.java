@@ -10,21 +10,14 @@ import java.io.Serializable;
  */
 public class DeltaData implements Serializable{
     long targetSize = 0;
+    float version = 0.8;
     String sourceMd5 = null;
     String targetMd5 = null;
     String deltaMd5 = null;
     String source;
     String target;
     String delta;
-    /*public DeltaData(String sourceMd5, String targetMd5, String deltaMd5, File source, File target, File delta)
-    {
-        this.targetSize = FileUtils.sizeOf(target);
-        this.sourceMd5 = sourceMd5;
-        this.targetMd5 = targetMd5;
-        this.deltaMd5 = deltaMd5;
-        this.source = source;
-        this.target = target;
-    }*/
+
     public DeltaData(String source, String target, String delta)
     {
         this.source = source;
