@@ -8,11 +8,11 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 
 public class DeltaDialogActivity extends Activity {
-
 
     BroadcastReceiver closeReciever = new BroadcastReceiver() {
         @Override
@@ -28,12 +28,14 @@ public class DeltaDialogActivity extends Activity {
             loadingText.setText(text);
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_delta_apply_dialog);
+        setContentView(R.layout.delta_apply_dialog);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         TextView loadingText = (TextView)findViewById(R.id.loadingText);
-        loadingText.setText("Checking MD5s");
+        loadingText.setText("Verifying MD5s");
 
         IntentFilter apply = new IntentFilter();
         apply.addAction(Constants.ACTION_APPLY_DIALOG);

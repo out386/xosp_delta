@@ -7,8 +7,10 @@ public class Constants {
     final static String TAG = "borked";
     final static String ACTION_CLOSE_DIALOG = "delta.out386.borkeddelta.CLOSE_DIALOG";
     final static String ACTION_APPLY_DIALOG = "delta.out386.borkeddelta.APPLY_DIALOG";
+    final static String GENERIC_DIALOG = "delta.out386.borkeddelta.GENERIC_DIALOG";
 
     final static String DIALOG_MESSAGE = "delta.out386.borkeddelta.DIALOG_MESSAGE";
+    final static String GENERIC_DIALOG_MESSAGE = "delta.out386.borkeddelta.GENERIC_DIALOG_MESSAGE";
 
     final static String UPDATE_JSON_URL = "https://basketbuild.com/uploads/devs/XOSP/deltaTest";
 
