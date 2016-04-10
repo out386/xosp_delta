@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
@@ -100,21 +101,41 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     @Override
     protected void onPostExecute(FlashablesTypeList output){
 
+        boolean isEmpty = true;
         ListView lv=(ListView) rootView.findViewById(R.id.listView);
         FlashablesAdapter adapter = new FlashablesAdapter(context,
-                R.layout.list_item, output.roms);
+                R.layout.list_item, output.roms);;
 
-        if(typeToDisplay.equals("kernels"))
-             adapter = new FlashablesAdapter(context,
+        if(typeToDisplay.equals("roms")) {
+            if(output.roms.size() != 0)
+                isEmpty = false;
+        }
+        if(typeToDisplay.equals("kernels")) {
+            if(output.kernels.size() != 0)
+                    isEmpty = false;
+            adapter = new FlashablesAdapter(context,
                     R.layout.list_item, output.kernels);
-        if(typeToDisplay.equals("deltas"))
+        }
+        if(typeToDisplay.equals("deltas")) {
+            if(output.deltas.size() != 0)
+                isEmpty = false;
             adapter = new FlashablesAdapter(context,
                     R.layout.list_item, output.deltas);
-        if(typeToDisplay.equals("others"))
+        }
+        if(typeToDisplay.equals("others")) {
+            if(output.others.size() != 0)
+                isEmpty = false;
             adapter = new FlashablesAdapter(context,
                     R.layout.list_item, output.others);
+        }
 
-        // Assign adapter to ListView
+        if(isEmpty)
+        {
+            RelativeLayout baseEmpty = (RelativeLayout) rootView.findViewById(R.id.baseEmptyLayout);
+            baseEmpty.setVisibility(View.VISIBLE);
+            loading.dismiss();
+            return;
+        }
         lv.setAdapter(
                 new SlideExpandableListAdapter(
                         adapter,
