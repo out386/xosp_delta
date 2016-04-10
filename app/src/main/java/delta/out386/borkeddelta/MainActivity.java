@@ -41,7 +41,6 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
 	{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-		new ExtractAssets(getFilesDir().toString(),this).execute();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
 			getFragmentManager().findFragmentById(R.id.navigation_drawer);
