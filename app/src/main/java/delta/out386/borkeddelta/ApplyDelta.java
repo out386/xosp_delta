@@ -16,7 +16,6 @@ public class ApplyDelta extends IntentService {
     DeltaData deltaJson;
     String source;
     final String TAG = Constants.TAG;
-    LoadingDialogFragment loading = new LoadingDialogFragment(R.layout.fragment_delta_apply_dialog);
     String sourceMd5 = null, targetMd5, deltaMd5 = null, diff, targetPath;
     public ApplyDelta(){
         super("ApplyDelta");
@@ -27,7 +26,9 @@ public class ApplyDelta extends IntentService {
 
         int zipadjust, delta;
 
-        Intent closeDialog = new Intent(), applyDialog = new Intent(Constants.ACTION_APPLY_DIALOG);
+        Intent closeDialog = new Intent(),
+                applyDialog = new Intent(Constants.ACTION_APPLY_DIALOG),
+                messageDialog = new Intent(Constants.GENERIC_DIALOG);
         closeDialog.setAction(Constants.ACTION_CLOSE_DIALOG);
         applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Decompressing input zip");
 
@@ -51,28 +52,50 @@ public class ApplyDelta extends IntentService {
             Log.v(TAG, sourceMd5);
             Log.v(TAG, deltaMd5);
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            String error = e.toString();
+            Log.e(TAG, error);
             sendBroadcast(closeDialog);
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Couldn't calculate MD5.\nMake sure that you have busybox installed.\n"
+                    + error);
+            sendBroadcast(messageDialog);
             return;
         }
         if (!sourceMd5.equalsIgnoreCase(deltaJson.sourceMd5)) {
             Log.e(TAG, "sourceMd5 doesn't match");
             sendBroadcast(closeDialog);
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Source MD5 mismatch.\nYour base rom is corrupted or not compatable with this delta.\nCheck if you've selected the correct file or try re-downloading.\nAlso check for free space.");
+            sendBroadcast(messageDialog);
             return;
         }
         if (!deltaMd5.equalsIgnoreCase(deltaJson.deltaMd5)) {
             Log.e(TAG, "deltaMd5 doesn't match");
             sendBroadcast(closeDialog);
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Delta MD5 mismatch.\nYour delta file is corrupt or you are out of space.");
+            sendBroadcast(messageDialog);
             return;
         }
 
         sendBroadcast(applyDialog);
-        
+        String sourceDec = source + ".dec";
         try {
-            String sourceDec = source + ".dec";
             zipadjust = Native.zipadjust(source, sourceDec, 1);
             Log.v(TAG, "Result of decompression : " + zipadjust);
-
+        }
+        catch(Exception e) {
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Decompression of base ROM failed.\nMake sure that you have enough free space.");
+            sendBroadcast(closeDialog);
+            sendBroadcast(messageDialog);
+            Log.e(TAG, e.toString());
+            return;
+        }
+        if(zipadjust != 1)
+        {
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Decompression of base ROM failed.\nMake sure that you have enough free space.");
+            sendBroadcast(closeDialog);
+            sendBroadcast(messageDialog);
+            return;
+        }
+        try {
             applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
             applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Applying the delta.\n\nThis could take 20-30 minutes.");
             sendBroadcast(applyDialog);
@@ -81,8 +104,17 @@ public class ApplyDelta extends IntentService {
             delta = Native.dedelta(sourceDec, diff, targetPath);
             Log.v(TAG, "Result of delta apply : " + delta);
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to apply the delta.\nMake sure that you are not out of space.");
             sendBroadcast(closeDialog);
+            sendBroadcast(messageDialog);
+            Log.e(TAG, e.toString());
+            return;
+        }
+        if(delta != 1) {
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to apply the delta.\nMake sure that you are not out of space.");
+            sendBroadcast(closeDialog);
+            sendBroadcast(messageDialog);
+            return;
         }
 
         Log.v(TAG, "Verifying MD5 of built");
@@ -95,13 +127,20 @@ public class ApplyDelta extends IntentService {
         }
         catch(Exception e) {
             Log.e(TAG, e.toString());
-        }
-        finally {
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to verify MD5s.\nMake sure that you have busybox installed.");
+            sendBroadcast(messageDialog);
             sendBroadcast(closeDialog);
+            return;
         }
-        if(!deltaJson.targetMd5.equalsIgnoreCase(targetMd5))
+            sendBroadcast(closeDialog);
+        if(!deltaJson.targetMd5.equalsIgnoreCase(targetMd5)) {
             Log.e(TAG, "Target malformed");
-        else
-            startActivity(new Intent(this, DialogActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Applied the delta, but the generated zip is malformed.\nMake sure that you are not out of space.");
+            sendBroadcast(messageDialog);
+        }
+        else {
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Delta applied successfully");
+            sendBroadcast(messageDialog);
+        }
     }
 }
