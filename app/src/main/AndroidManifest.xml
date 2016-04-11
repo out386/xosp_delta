@@ -27,11 +27,6 @@
         <service
             android:name=".ApplyDelta"
             android:exported="false" />
-
-        <activity
-            android:name=".DialogActivity"
-            android:theme="@style/AppTheme.NoTitleBar" >
-        </activity>
     </application>
 
 </manifest>

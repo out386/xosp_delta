@@ -6,14 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.wang.avi.AVLoadingIndicatorView;
 
 
 public class DeltaDialogActivity extends Activity {
 
+    boolean allowBack = false;
     BroadcastReceiver closeReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -25,6 +27,25 @@ public class DeltaDialogActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             TextView loadingText = (TextView)findViewById(R.id.loadingText);
             String text = intent.getStringExtra(Constants.DIALOG_MESSAGE);
+            loadingText.setText(text);
+        }
+    };
+    BroadcastReceiver genericMessageReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            TextView loadingText = (TextView)findViewById(R.id.loadingText);
+            AVLoadingIndicatorView loader = (AVLoadingIndicatorView)findViewById(R.id.aviLoader);
+            RelativeLayout okButton = (RelativeLayout)findViewById(R.id.ok_button);
+            String text = intent.getStringExtra(Constants.GENERIC_DIALOG_MESSAGE);
+            loader.setVisibility(View.GONE);
+            okButton.setVisibility(View.VISIBLE);
+            okButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+            allowBack = true;
             loadingText.setText(text);
         }
     };
@@ -44,40 +65,24 @@ public class DeltaDialogActivity extends Activity {
         IntentFilter close = new IntentFilter();
         close.addAction(Constants.ACTION_CLOSE_DIALOG);
         registerReceiver(closeReciever, close);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_delta_dialog, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        IntentFilter genericMessage = new IntentFilter();
+        genericMessage.addAction(Constants.GENERIC_DIALOG);
+        registerReceiver(genericMessageReciever, genericMessage);
     }
     public void finish() {
-
         super.finish();
     }
     @Override
     public void onDestroy() {
         unregisterReceiver(closeReciever);
         unregisterReceiver(applyReciever);
+        unregisterReceiver(genericMessageReciever);
         super.onDestroy();
     }
     @Override
     public void onBackPressed() {
+        if(allowBack)
+            super.onBackPressed();
     }
 }

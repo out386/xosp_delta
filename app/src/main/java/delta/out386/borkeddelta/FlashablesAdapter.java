@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -15,13 +17,7 @@ import java.util.List;
  * Created by J-PC on 3/21/2016.
  */
 public class FlashablesAdapter extends ArrayAdapter<Flashables> {
-    private LayoutInflater inflater ;
     private Context context;
-    private Flashables listItem;
-    private List<Flashables> list;
-    public FlashablesAdapter(Context context, int textView) {
-        super(context, textView);
-    }
     public FlashablesAdapter(Context context, int resource,List<Flashables> items) {
         super(context,resource,items);
         this.context = context;
@@ -36,11 +32,12 @@ public class FlashablesAdapter extends ArrayAdapter<Flashables> {
         if(p != null) {
             TextView name = (TextView) v.findViewById(R.id.romNameText);
             TextView type = (TextView) v.findViewById(R.id.romTypeText);
-            ImageButton select = (ImageButton) v.findViewById(R.id.selectFileButton);
+            RelativeLayout select = (RelativeLayout) v.findViewById(R.id.selectFileButton);
             select.setOnClickListener(new View.OnClickListener(){
                                             @Override
                                             public void onClick(View v) {
                                                 new WriteFlashablesQueue(p, context).execute();
+                                                Toast.makeText(context, "Zip selected", Toast.LENGTH_LONG).show();
                                             }
                                       }
 
@@ -50,23 +47,17 @@ public class FlashablesAdapter extends ArrayAdapter<Flashables> {
                 name.setText(p.file.getName());
             if(type != null)
                 type.setText(p.type);
-            /*ImageButton expandableButton = (ImageButton) v.findViewById(R.id.expandableButton);
-            expandableButton.setOnClickListener(
-                    new View.OnClickListener() {
-                        public void onClick(View v) {*/
-                            double printSize = p.size;
-                            String unit = " B";
-                            if (printSize > 1024 && printSize < 1048576) {
-                                unit = " KiB";
-                                printSize = printSize / 1024;
-                            } else if (printSize >= 1048576) {
-                                unit = " MiB";
-                                printSize = printSize / 1024 / 1024;
-                            }
-                            size.setText(new DecimalFormat("#0.00").format(printSize) + unit);
-                        /*}
-                    }
-            );*/
+            double printSize = p.size;
+            String unit = " B";
+            if (printSize > 1024 && printSize < 1048576) {
+                unit = " KiB";
+                printSize = printSize / 1024;
+            } else if (printSize >= 1048576) {
+                unit = " MiB";
+                printSize = printSize / 1024 / 1024;
+            }
+            size.setText(new DecimalFormat("#0.00").format(printSize) + unit);
+
         }
         return v;
     }

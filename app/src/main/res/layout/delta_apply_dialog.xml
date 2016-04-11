@@ -15,12 +15,12 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
+                android:layout_centerInParent="true"
+                android:id="@+id/textHolder">
 	    	<com.wang.avi.AVLoadingIndicatorView
 	    		android:id="@+id/aviLoader"
                 android:layout_width="50.0dip"
                 android:layout_height="50.0dip"
-	    		visibility="visible"
 	    		app:indicator="LineScalePulseOut"
 	    		app:indicator_color="@color/white"
                 android:layout_centerHorizontal="true"/>
@@ -29,11 +29,35 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/aviLoader"
                 android:layout_centerHorizontal="true"
-                android:padding="5.0dip"
+                android:padding="15.0dip"
                 android:gravity="center"
                 android:id="@+id/loadingText"
                 android:textColor="@color/white"
-                android:textSize="15dp" />
+                android:textSize="17sp"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/textHolder"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:padding="3dp"
+                android:id="@+id/ok_button"
+                android:visibility="gone">
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:padding="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="OK"
+                        android:textColor="@color/white"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
     <LinearLayout

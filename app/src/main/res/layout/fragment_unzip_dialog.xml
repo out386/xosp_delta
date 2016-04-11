@@ -11,6 +11,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
+            android:layout_weight="0.2"
             android:padding="15dip">
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -29,12 +30,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/aviLoader"
                 android:layout_centerHorizontal="true"
-                android:padding="5.0dip"
+                android:padding="15.0dip"
                 android:gravity="center"
-                android:text="Unzipping the delta. Will be done soon\n\nDo not close the app"
+                android:text="Unzipping the delta. Will be done soon.\nDo not close the app."
                 android:id="@+id/loadingText"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="17sp"/>
             </RelativeLayout>
         </RelativeLayout>
     <LinearLayout

@@ -53,18 +53,32 @@
             android:layout_height="wrap_content"
             android:text="expandable"
             android:textColor="@color/white"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:id="@+id/expandableTextView" />
+            android:id="@+id/expandableTextView"
+            android:textSize="17sp"/>
 
 
-        <ImageButton
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/selectFileButton"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/abc_ic_search_api_mtrl_alpha" />
+            android:background="@color/white"
+            android:padding="3dp">
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:background="@color/colorAccent"
+               android:padding="5dp">
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Add to Queue"
+                   android:textColor="@color/white"/>
+           </RelativeLayout>
+        </RelativeLayout>
 
     </RelativeLayout>
 
