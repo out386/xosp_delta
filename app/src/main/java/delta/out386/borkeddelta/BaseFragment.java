@@ -69,16 +69,16 @@ public class BaseFragment extends Fragment {
         }
         switch (section) {
             case 1:
-            new SearchZips(cont, false, rootView, "roms").execute();
+                new SearchZips(cont, false, rootView, "roms", null).execute();
             break;
             case 2:
-                new SearchZips(cont, false, rootView, "deltas").execute();
+                new SearchZips(cont, false, rootView, "deltas", null).execute();
             break;
             case 3:
-                new SearchZips(cont, false, rootView, "kernels").execute();
+                new SearchZips(cont, false, rootView, "kernels", null).execute();
             break;
             case 4:
-                new SearchZips(cont, false, rootView, "others").execute();
+                new SearchZips(cont, false, rootView, "others", null).execute();
             break;
         }
         return rootView;

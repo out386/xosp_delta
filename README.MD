@@ -51,12 +51,13 @@ Used libraries and assets
 
 (1) Android Support v4 - Google  
 (2) Android Cardview - Google  
-(3) Apache Commons IO - Apache  
-(4) AVLoadingIndicatorView - Jack Wang  
-(5) Dedelta - Chainfire (https://github.com/omnirom/android_packages_apps_OpenDelta/blob/android-6.0/jni/delta_run.c)  
-(6) libsuperuser - Chainfire  
-(7) Moshi - Square, Inc.  
-(7) Nineoldandroids (used by AVLoadingIndicatorView) - Jake Wharton  
-(8) SlideExpandableListView - tjerkw  
-(9) xdelta3  
-(10) Zipadjust - Chainfire (https://github.com/omnirom/android_packages_apps_OpenDelta/blob/android-6.0/jni/zipadjust.c)  
+(3) Android-MaterialRefreshLayout - android-cjj  
+(4) Apache Commons IO - Apache  
+(5) AVLoadingIndicatorView - Jack Wang  
+(6) Dedelta - Chainfire (https://github.com/omnirom/android_packages_apps_OpenDelta/blob/android-6.0/jni/delta_run.c)  
+(7) libsuperuser - Chainfire  
+(8) Moshi - Square, Inc.  
+(9) Nineoldandroids (used by AVLoadingIndicatorView) - Jake Wharton  
+(10) SlideExpandableListView - tjerkw  
+(11) xdelta3  
+(12) Zipadjust - Chainfire (https://github.com/omnirom/android_packages_apps_OpenDelta/blob/android-6.0/jni/zipadjust.c)  

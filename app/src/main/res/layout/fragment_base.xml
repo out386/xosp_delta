@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -10,39 +10,44 @@
         android:background="@color/colorPrimary">
     </LinearLayout>
 
-
-    <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/listView"
-        android:layout_marginBottom="10dip"
-        android:divider="@null"
-        android:scrollbars="none"
-        android:layout_marginLeft="0dip"
-        android:layout_marginRight="0dip"/>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="-5dip"
-        >
-        <RelativeLayout
+        <com.cjj.MaterialRefreshLayout
             android:layout_width="fill_parent"
-            android:layout_height="160dp"
-            android:id="@+id/baseEmptyLayout"
-            android:visibility="gone">
-            <TextView
+            android:layout_height="fill_parent"
+            android:id="@+id/refresh"
+            app:overlay="true"
+            app:wave_color="@color/colorAccent">
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"
-                android:textSize="17sp"
-                android:text="There are no files of this type.\nRefresh by clearing app data."
-                android:padding="10dip"
-                android:layout_centerInParent="true" />
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-
-
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="-5dip">
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="160dp"
+                        android:id="@+id/baseEmptyLayout"
+                        android:visibility="gone">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="17sp"
+                            android:text="There are no files of this type.\nRefresh by clearing app data."
+                            android:padding="10dip"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+            </RelativeLayout>
+            <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/listView"
+                android:layout_marginBottom="10dip"
+                android:divider="@null"
+                android:scrollbars="none"
+                android:layout_marginLeft="0dip"
+                android:layout_marginRight="0dip"/>
+        </com.cjj.MaterialRefreshLayout>
 </RelativeLayout>

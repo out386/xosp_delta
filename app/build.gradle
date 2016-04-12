@@ -29,4 +29,5 @@ dependencies {
     compile 'com.squareup.moshi:moshi:1.1.0'
     compile 'it.sephiroth.android.library.fork.slideexpandable:library:1.0.1'
     compile 'eu.chainfire:libsuperuser:1.0.0.+'
+    compile 'com.cjj.materialrefeshlayout:library:1.3.0'
 }

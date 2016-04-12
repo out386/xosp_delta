@@ -21,10 +21,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/romTypeText"
                 android:textSize="15sp"
-                android:paddingRight="10dp"
-                android:paddingTop="20dip"
-                android:paddingBottom="20dip"
-                android:layout_alignParentRight="true"
+                android:paddingEnd="10dp"
+                android:paddingTop="30dip"
+                android:paddingBottom="30dip"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true" />
             <TextView
                 android:layout_width="wrap_content"

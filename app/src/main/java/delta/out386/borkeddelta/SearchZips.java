@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
 import org.apache.commons.io.FileUtils;
@@ -30,23 +32,28 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     boolean isReload=false;
     View rootView;
     String typeToDisplay = "roms";
+    final String TAG = Constants.TAG;
+    File f = null;
+    MaterialRefreshLayout refresh;
     LoadingDialogFragment loading = new LoadingDialogFragment(R.layout.fragment_loading_dialog);
-    public SearchZips(Context cont, boolean isReload, View rootView, String typeToDisplay){
+    public SearchZips(Context context, boolean isReload, View rootView, String typeToDisplay, MaterialRefreshLayout refresh){
         this.isReload = isReload;
         this.typeToDisplay = typeToDisplay;
         this.rootView = rootView;
-        context = cont;
+        this.refresh = refresh;
+        this.context = context;
     }
 
     @Override
     protected void onPreExecute(){
-        Activity activity = (Activity) context;
-        loading.setCancelable(false);
-        try {
-            loading.show(activity.getFragmentManager(), "dialog");
-        }
-        catch(ClassCastException e) {
-            Log.e("borked", e.toString());
+        if(!isReload) {
+            Activity activity = (Activity) context;
+            loading.setCancelable(false);
+            try {
+                loading.show(activity.getFragmentManager(), "dialog");
+            } catch (ClassCastException e) {
+                Log.e(TAG, e.toString());
+            }
         }
 
     }
@@ -54,23 +61,24 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     protected FlashablesTypeList doInBackground(Void... params){
         FlashablesTypeList output = null;
         File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/borkeddelta");
-        File f = new File(context.getFilesDir().toString() + "/FlashablesTypeList");
+        f = new File(context.getFilesDir().toString() + "/FlashablesTypeList");
         if(!f.exists() || isReload) {
             Collection zipsCollection;
             if (directory.exists()) {
                 zipsCollection = FileUtils.listFiles(directory, new String[]{"zip"}, false);
                 output = new FilesCategorize().run(zipsCollection, context);
-                ObjectOutputStream oos = null;
+                ObjectOutputStream oos;
                 if(output != null) {
                     try {
                         oos = new ObjectOutputStream(new FileOutputStream(f));
                         oos.writeObject(output);
                         oos.close();
                     } catch (FileNotFoundException e) {
-                        Log.e("borked", e.toString());
+                        Log.e(TAG, e.toString());
                     } catch (IOException e) {
-                        Log.e("borked", e.toString());
+                        Log.e(TAG, e.toString());
                     }
+                    refreshDone();
                     return output;
                 }
             }
@@ -82,29 +90,32 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
                 output = (FlashablesTypeList) ois.readObject();
                 ois.close();
             }
-            catch(FileNotFoundException e) {
-                Log.e("borked", e.toString());
-            }
-            catch(StreamCorruptedException e) {
-                Log.e("borked", e.toString());
-            }
-            catch(IOException e) {
-                Log.e("borked", e.toString());
-            }
-            catch(ClassNotFoundException e) {
-                Log.e("borked", e.toString());
+            catch(Exception e) {
+                Log.e(TAG, e.toString());
+                refreshDone();
             }
         }
+        refreshDone();
          return output;
     }
 
     @Override
     protected void onPostExecute(FlashablesTypeList output){
 
+        final MaterialRefreshLayout refresh = (MaterialRefreshLayout)rootView.findViewById(R.id.refresh);
+        refresh.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
+                new SearchZips(context, true, rootView, typeToDisplay, refresh).execute();
+            }
+        });
+        if(output == null)
+            return;
+
         boolean isEmpty = true;
         ListView lv=(ListView) rootView.findViewById(R.id.listView);
         FlashablesAdapter adapter = new FlashablesAdapter(context,
-                R.layout.list_item, output.roms);;
+                R.layout.list_item, output.roms);
 
         if(typeToDisplay.equals("roms")) {
             if(output.roms.size() != 0)
@@ -128,12 +139,12 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
             adapter = new FlashablesAdapter(context,
                     R.layout.list_item, output.others);
         }
-
         if(isEmpty)
         {
             RelativeLayout baseEmpty = (RelativeLayout) rootView.findViewById(R.id.baseEmptyLayout);
             baseEmpty.setVisibility(View.VISIBLE);
-            loading.dismiss();
+            if(!isReload)
+                loading.dismiss();
             return;
         }
         lv.setAdapter(
@@ -143,6 +154,21 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
                         R.id.list_expandable_view)
         );
 
-        loading.dismiss();
+        if(!isReload)
+            loading.dismiss();
+    }
+    
+    public void refreshDone()
+    {
+        if(refresh == null)
+            return;
+        try {
+            // To display the animation even if the reload happens fast, removes stutters
+            Thread.sleep(1000);
+        }
+        catch(InterruptedException e) {
+            Log.e(TAG, e.toString());
+        }
+        refresh.finishRefresh();
     }
 }
