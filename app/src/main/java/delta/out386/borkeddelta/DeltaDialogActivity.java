@@ -55,8 +55,9 @@ public class DeltaDialogActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.delta_apply_dialog);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        //moveTaskToBack(true);
         TextView loadingText = (TextView)findViewById(R.id.loadingText);
-        loadingText.setText("Verifying MD5s");
+        loadingText.setText("Working");
 
         IntentFilter apply = new IntentFilter();
         apply.addAction(Constants.ACTION_APPLY_DIALOG);
