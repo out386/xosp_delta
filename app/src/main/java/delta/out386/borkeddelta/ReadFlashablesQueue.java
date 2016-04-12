@@ -31,27 +31,17 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
     View view;
     File delta, source;
     DeltaData deltaJson;
-    LoadingDialogFragment loading = new LoadingDialogFragment(R.layout.fragment_unzip_dialog);
-
-    //TO-DO - Move this extraction to a service and start it on apply button tap
+    final String TAG = Constants.TAG;
+    Intent applyDialog = new Intent(Constants.ACTION_APPLY_DIALOG), closeDialog=new Intent();
 
     public ReadFlashablesQueue(Context context, View view) {
         this.context = context;
         this.view = view;
-    }
-    @Override
-    public void onPreExecute() {
-
-        Activity activity = (Activity) context;
-        loading.setCancelable(false);
-        try {
-            loading.show(activity.getFragmentManager(), "dialog");
-        } catch (ClassCastException e) {
-            Log.e("borked", e.toString());
-        }
+        closeDialog.setAction(Constants.ACTION_CLOSE_DIALOG);
     }
     @Override
     public FlashablesTypeList doInBackground(Void... v) {
+
         File f = new File(context.getFilesDir().toString() + "/queue");
         FlashablesTypeList flashablesTypeList = null;
         if(f.exists()) {
@@ -60,14 +50,8 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
                 flashablesTypeList = (FlashablesTypeList) ois.readObject();
                 ois.close();
             }
-            catch(FileNotFoundException e) {
-                Log.e("borked", e.toString());
-            }
-            catch(IOException e) {
-                Log.e("borked", e.toString());
-            }
-            catch(ClassNotFoundException e) {
-                Log.e("borked", e.toString());
+            catch(Exception e) {
+                Log.e(TAG, e.toString());
             }
             if(flashablesTypeList == null) {
                 f.delete();
@@ -96,27 +80,26 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         Button queueClearButton = (Button)view.findViewById(R.id.queueClearButton);
         Button queueApplyButton = (Button)view.findViewById(R.id.queueApplyButton);
 
-        loading.dismiss();
-
         if(output == null || output.roms.isEmpty() && output.deltas.isEmpty()) {
             queueEmptyTextview.setText("No base ROM and no deltas selected. Please select a base ROM and a delta from the ROMs and deltas sections respectively.");
-            queueReadyLayout.setVisibility(RelativeLayout.GONE);
-            queueEmptyLayout.setVisibility(RelativeLayout.VISIBLE);
+            queueReadyLayout.setVisibility(View.GONE);
+            queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
         if(output.roms.isEmpty()) {
             queueEmptyTextview.setText("No base ROM selected. Please select a base ROM from the ROMs section.");
-            queueReadyLayout.setVisibility(RelativeLayout.GONE);
-            queueEmptyLayout.setVisibility(RelativeLayout.VISIBLE);
+            queueReadyLayout.setVisibility(View.GONE);
+            queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
         if(output.deltas.isEmpty()) {
             queueEmptyTextview.setText("No deltas selected. Please select a delta to apply from the deltas section.");
-            queueReadyLayout.setVisibility(RelativeLayout.GONE);
-            queueEmptyLayout.setVisibility(RelativeLayout.VISIBLE);
+            queueReadyLayout.setVisibility(View.GONE);
+            queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
-        queueEmptyLayout.setVisibility(RelativeLayout.GONE);
+        queueEmptyLayout.setVisibility(View.GONE);
+        queueReadyLayout.setVisibility(View.VISIBLE);
 
         source = output.roms.get(0).file;
 
@@ -133,19 +116,18 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         queueApplyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                DeltaData data = null;
                 try {
-                    //data = new DeltaData(source.toString(), target.toString(), delta.toString());
                     if(deltaJson != null) {
                         Intent deltaIntent = new Intent(context, ApplyDelta.class);
                         deltaIntent.putExtra("source", source.toString());
                         deltaIntent.putExtra("deltaJson", deltaJson);
                         deltaIntent.putExtra("sourceParent", source.getParent());
+                        deltaIntent.putExtra("deltaName", delta.toString());
                         context.startService(deltaIntent);
                     }
                 }
                 catch(Exception e) {
-                    Log.e("borked",e.toString());
+                    Log.e(TAG,e.toString());
                 }
                 //new WriteJson(data, context).execute();
             }
@@ -167,12 +149,13 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         diff = new File(delta.getParent() + "/deltaconfig");
         if(diff.exists())
             diff.delete();
-        List<String> resultConfig = Shell.SU.run("unzip " + delta.toString() + " deltaconfig " + "-d " + delta.getParent());
-        List<String> resultDiff = Shell.SU.run("unzip " + delta.toString() + " diff " + "-d " + delta.getParent());
-        Log.v("borked", resultConfig.toString());
-        Log.v("borked", resultDiff.toString());
-        if(resultConfig == null || resultConfig.isEmpty() || resultDiff == null || resultDiff.isEmpty()) {
-            Log.e("borked", "Failed to extract deltaconfig or diff");
+        List<String> resultConfig = Shell.SH.run("unzip " + delta.toString() + " deltaconfig " + "-d " + delta.getParent());
+        Log.v(TAG, resultConfig.toString());
+        if(resultConfig == null || resultConfig.isEmpty()) {
+            Log.e(TAG, "Failed to extract deltaconfig");
+            applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
+            applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Failed to extract deltaconfig.\nThe delta zip is corrupt. Download it again.");
+            context.sendBroadcast(applyDialog);
             return null;
         }
         Moshi moshi = new Moshi.Builder().build();
@@ -187,7 +170,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
                 return deltaData;
         }
         catch(Exception e) {
-            Log.e("borked", e.toString());
+            Log.e(TAG, e.toString());
         }
         return null;
     }

@@ -4,7 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import java.io.File;
+import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
 import eu.chainfire.opendelta.Native;
@@ -25,21 +25,56 @@ public class ApplyDelta extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         int zipadjust, delta;
+        String deltaName;
+        List<String> deltaExtractResult = null;
 
         Intent closeDialog = new Intent(),applyDialog = new Intent(Constants.ACTION_APPLY_DIALOG), messageDialog = new Intent(Constants.GENERIC_DIALOG);
         closeDialog.setAction(Constants.ACTION_CLOSE_DIALOG);
-        applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Decompressing input zip");
 
-        String sourceParent = intent.getStringExtra("sourceParent");
+        String sourceParent = intent.getStringExtra("sourceParent"), diffExtractCommand = "";
         source = intent.getStringExtra("source");
         deltaJson = (DeltaData) intent.getSerializableExtra("deltaJson");
+        deltaName= intent.getStringExtra("deltaName");
         this.diff = sourceParent + "/diff";
         this.targetPath =  sourceParent + "/" + deltaJson.target;
 
-        //Get the fake dialog up
-        startActivity(new Intent(this, DeltaDialogActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        // Get the fake dialog up
+        startActivity(new Intent(this, DeltaDialogActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
+        /* Delay needed as the dialog activity needs time to register
+         * the broadcast receiver
+        */
+        try {
+            Thread.sleep(90);
+        }
+        catch(InterruptedException e) {
+            Log.e(TAG, e.toString());
+        }
+        applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Extracting the delta.");
+        sendBroadcast(applyDialog);
 
+        try {
+            diffExtractCommand = "unzip " + deltaName + " diff " + "-d " + sourceParent;
+            deltaExtractResult = Shell.SH.run(diffExtractCommand);
+        }
+        catch(Exception e) {
+            Log.e(TAG, e.toString());
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Could not extract the delta.\nThe delta zip is corrupt. Download it again.");
+            sendBroadcast(messageDialog);
+            return;
+        }
+        if(deltaExtractResult == null || deltaExtractResult.size() == 0) {
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Could not extract the delta.\nThe delta zip is corrupt. Download it again.");
+            sendBroadcast(messageDialog);
+            return;
+        }
+
+        applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
+        applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Verifying MD5s.");
+        sendBroadcast(applyDialog);
+
+        Log.v(TAG, diffExtractCommand);
         try {
             Log.v(TAG, "Calculating MD5s");
             Log.v(TAG, "Source --> " + source);
@@ -69,6 +104,7 @@ public class ApplyDelta extends IntentService {
             return;
         }
 
+        applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Decompressing input zip");
         sendBroadcast(applyDialog);
         String sourceDec = source + ".dec";
         try {
