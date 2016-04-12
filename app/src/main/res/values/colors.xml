@@ -4,11 +4,12 @@
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryLight">#64B5F6</color>
     <color name="navigationBarColor">#1565C0</color>
-    <color name="colorAccent">#FF6E40</color>
+    <color name="colorAccent">#ff5252</color>
     <color name="white">#FFFFFFFF</color>
     <color name="darkGray">#555555</color>
     <color name="gray">#55000000</color>
     <color name="black">#111111</color>
     <color name="windowBackground">#E5E5E5</color>
     <color name="translucent">#88000000</color>
+    <color name="transparent">#00000000</color>
 </resources>
