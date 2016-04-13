@@ -90,7 +90,7 @@ public class ApplyDelta extends IntentService {
             sendBroadcast(messageDialog);
             return;
         }
-        if (!sourceMd5.equalsIgnoreCase(deltaJson.sourceMd5)) {
+        if (!(sourceMd5.equalsIgnoreCase(deltaJson.sourceMd5) || sourceMd5.equalsIgnoreCase(deltaJson.sourceDecMd5))) {
             Log.e(TAG, "sourceMd5 doesn't match");
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Source MD5 mismatch.\nYour base rom is corrupted or not compatable with this delta. Check if you've selected the correct file or try re-downloading. Also check for free space.");
             sendBroadcast(messageDialog);

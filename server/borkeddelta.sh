@@ -111,6 +111,7 @@ echo "  \"source\": \"$FILE_LAST\"," >> $DELTA
 echo "  \"target\": \"$FILE_CURRENT\"," >> $DELTA
 echo "  \"targetMd5\": \"$MD5_CURRENT_STORE\"," >> $DELTA
 echo "  \"sourceMd5\": \"$MD5_LAST\"," >> $DELTA
+echo "  \"sourceDecMd5\": \"$MD5_LAST_STORE\"," >> $DELTA
 echo "  \"deltaMd5\": \"$MD5_UPDATE\"," >> $DELTA
 echo "  \"targetSize\": \"$SIZE_CURRENT_STORE\"" >> $DELTA
 echo "}" >> $DELTA
