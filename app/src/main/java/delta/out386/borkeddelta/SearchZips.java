@@ -29,7 +29,7 @@ import java.util.List;
 public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
 
     Context context;
-    boolean isReload=false;
+    boolean isReload=false, isLoading = false;
     View rootView;
     String typeToDisplay = "roms";
     final String TAG = Constants.TAG;
@@ -46,7 +46,9 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
 
     @Override
     protected void onPreExecute(){
-        if(!isReload) {
+        f = new File(context.getFilesDir().toString() + "/FlashablesTypeList");
+        if(!isReload && !f.exists()) {
+            isLoading = true;
             Activity activity = (Activity) context;
             loading.setCancelable(false);
             try {
@@ -143,7 +145,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
         {
             RelativeLayout baseEmpty = (RelativeLayout) rootView.findViewById(R.id.baseEmptyLayout);
             baseEmpty.setVisibility(View.VISIBLE);
-            if(!isReload)
+            if(isLoading)
                 loading.dismiss();
             return;
         }
@@ -154,7 +156,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
                         R.id.list_expandable_view)
         );
 
-        if(!isReload)
+        if(isLoading)
             loading.dismiss();
     }
     
