@@ -62,27 +62,40 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     @Override
     protected FlashablesTypeList doInBackground(Void... params){
         FlashablesTypeList output = null;
-        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/borkeddelta");
-        f = new File(context.getFilesDir().toString() + "/FlashablesTypeList");
+        File directory = null;
+        boolean directoryExists = true;
+        try {
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/borkeddelta");
+                if (!directory.exists())
+                    directoryExists = directory.mkdir();
+            }
+        }
+        catch(Exception e) {
+            Log.e(TAG, e.toString());
+            return null;
+        }
+        if(!directoryExists || directory == null) {
+            Log.e(TAG, "Couldn't create storage directory");
+            return null;
+        }
         if(!f.exists() || isReload) {
-            Collection zipsCollection;
-            if (directory.exists()) {
-                zipsCollection = FileUtils.listFiles(directory, new String[]{"zip"}, false);
-                output = new FilesCategorize().run(zipsCollection, context);
-                ObjectOutputStream oos;
-                if(output != null) {
-                    try {
-                        oos = new ObjectOutputStream(new FileOutputStream(f));
-                        oos.writeObject(output);
-                        oos.close();
-                    } catch (FileNotFoundException e) {
-                        Log.e(TAG, e.toString());
-                    } catch (IOException e) {
-                        Log.e(TAG, e.toString());
-                    }
-                    refreshDone();
-                    return output;
+            Collection<File> zipsCollection;
+            if (f.exists())
+                f.delete();
+            zipsCollection = FileUtils.listFiles(directory, new String[]{"zip"}, false);
+            output = new FilesCategorize().run(zipsCollection, context);
+            ObjectOutputStream oos;
+            if(output != null) {
+                try {
+                    oos = new ObjectOutputStream(new FileOutputStream(f));
+                    oos.writeObject(output);
+                    oos.close();
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
                 }
+                refreshDone();
+                return output;
             }
         }
         else {
