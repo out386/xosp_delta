@@ -2,6 +2,7 @@ package delta.out386.borkeddelta;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     final String TAG = Constants.TAG;
     File f = null;
     MaterialRefreshLayout refresh;
-    LoadingDialogFragment loading = new LoadingDialogFragment(R.layout.fragment_loading_dialog);
+    Intent applyDialog = new Intent(Constants.ACTION_APPLY_DIALOG), closeDialog = new Intent(Constants.ACTION_CLOSE_DIALOG);
     public SearchZips(Context context, boolean isReload, View rootView, String typeToDisplay, MaterialRefreshLayout refresh){
         this.isReload = isReload;
         this.typeToDisplay = typeToDisplay;
@@ -43,27 +44,32 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
         this.refresh = refresh;
         this.context = context;
     }
-
-    @Override
-    protected void onPreExecute(){
-        f = new File(context.getFilesDir().toString() + "/FlashablesTypeList");
-        if(!isReload && !f.exists()) {
-            isLoading = true;
-            Activity activity = (Activity) context;
-            loading.setCancelable(false);
-            try {
-                loading.show(activity.getFragmentManager(), "dialog");
-            } catch (ClassCastException e) {
-                Log.e(TAG, e.toString());
-            }
-        }
-
-    }
+    
     @Override
     protected FlashablesTypeList doInBackground(Void... params){
         FlashablesTypeList output = null;
         File directory = null;
         boolean directoryExists = true;
+
+        f = new File(context.getFilesDir().toString() + "/FlashablesTypeList");
+        if(!isReload && !f.exists()) {
+            isLoading = true;
+            // Get the fake dialog up
+            context.startActivity(new Intent(context, DeltaDialogActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+            /* Delay needed as the dialog activity needs time to register
+             * the broadcast receiver
+             */
+            try {
+                Thread.sleep(90);
+            } catch (InterruptedException e) {
+                Log.e(TAG, e.toString());
+            }
+            applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Loading list of files");
+            context.sendBroadcast(applyDialog);
+        }
+
         try {
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/borkeddelta");
@@ -159,7 +165,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
             RelativeLayout baseEmpty = (RelativeLayout) rootView.findViewById(R.id.baseEmptyLayout);
             baseEmpty.setVisibility(View.VISIBLE);
             if(isLoading)
-                loading.dismiss();
+                context.sendBroadcast(closeDialog);
             return;
         }
         lv.setAdapter(
@@ -170,7 +176,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
         );
 
         if(isLoading)
-            loading.dismiss();
+            context.sendBroadcast(closeDialog);
     }
     
     public void refreshDone()

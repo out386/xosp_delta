@@ -28,8 +28,7 @@ public class ApplyDelta extends IntentService {
         String deltaName;
         List<String> deltaExtractResult = null;
 
-        Intent closeDialog = new Intent(),applyDialog = new Intent(Constants.ACTION_APPLY_DIALOG), messageDialog = new Intent(Constants.GENERIC_DIALOG);
-        closeDialog.setAction(Constants.ACTION_CLOSE_DIALOG);
+        Intent applyDialog = new Intent(Constants.ACTION_APPLY_DIALOG), messageDialog = new Intent(Constants.GENERIC_DIALOG);
 
         String sourceParent = intent.getStringExtra("sourceParent"), diffExtractCommand = "";
         source = intent.getStringExtra("source");
