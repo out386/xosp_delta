@@ -35,10 +35,8 @@ public class FilesCategorize {
 		
         for(File current:zips){
             size=FileUtils.sizeOf(current);
-            if(size < 555745280)
-                if((zipType=sortFile.sort(current)) != null)
-                	flashablesTypeList.addFlashable(new Flashables(current, zipType, size));
-
+            if((zipType=sortFile.sort(current)) != null)
+                flashablesTypeList.addFlashable(new Flashables(current, zipType, size));
         }
         return flashablesTypeList;//.roms;
     }
