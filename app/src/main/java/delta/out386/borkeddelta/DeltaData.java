@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class DeltaData implements Serializable{
     long targetSize = 0;
-    float version = 0.8f;
+    float version = 2.1f;
     String sourceMd5 = null;
     String sourceDecMd5 = null;
     String targetMd5 = null;

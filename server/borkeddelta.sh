@@ -106,7 +106,7 @@ SIZE_UPDATE=$(getFileSize out/diff)
 DELTA=out/deltaconfig
 
 echo "{" > $DELTA
-echo "  \"version\": 0.8," >> $DELTA
+echo "  \"version\": 2.1," >> $DELTA
 echo "  \"source\": \"$FILE_LAST\"," >> $DELTA
 echo "  \"target\": \"$FILE_CURRENT\"," >> $DELTA
 echo "  \"targetMd5\": \"$MD5_CURRENT_STORE\"," >> $DELTA
