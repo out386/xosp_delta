@@ -27,6 +27,9 @@
         <service
             android:name=".ApplyDelta"
             android:exported="false" />
+        <service
+            android:name=".BuiltSizeService"
+            android:exported="false" />
     </application>
 
 </manifest>

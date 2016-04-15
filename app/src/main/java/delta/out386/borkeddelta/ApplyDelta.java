@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import java.io.File;
 import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
@@ -122,12 +123,19 @@ public class ApplyDelta extends IntentService {
             sendBroadcast(messageDialog);
             return;
         }
-        try {
-            applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
-            applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Applying the delta.\n\nThis could take 20-30 minutes.");
-            sendBroadcast(applyDialog);
 
-            Log.v(TAG, "Applying delta");
+        applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
+        applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Applying the delta.\n\nThis could take 20-30 minutes.");
+        sendBroadcast(applyDialog);
+        File targetFile = new File(targetPath);
+        if(targetFile.exists())
+            targetFile.delete();
+        Log.v(TAG, "Applying delta");
+        Intent sizeIntent = new Intent(this, BuiltSizeService.class);
+        sizeIntent.putExtra("target", targetPath);
+        sizeIntent.putExtra("targetSize", deltaJson.targetSize);
+        startService(sizeIntent);
+        try {
             delta = Native.dedelta(sourceDec, diff, targetPath);
             Log.v(TAG, "Result of delta apply : " + delta);
         } catch (Exception e) {

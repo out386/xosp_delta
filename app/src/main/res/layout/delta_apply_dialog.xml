@@ -34,6 +34,17 @@
                 android:id="@+id/loadingText"
                 android:textColor="@color/white"
                 android:textSize="17sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/loadingText"
+                    android:layout_centerHorizontal="true"
+                    android:padding="15.0dip"
+                    android:gravity="center"
+                    android:id="@+id/progressText"
+                    android:textColor="@color/white"
+                    android:textSize="17sp"
+                    android:visibility="gone"/>
             </RelativeLayout>
         </RelativeLayout>
     <RelativeLayout

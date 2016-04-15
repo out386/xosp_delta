@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -15,6 +16,8 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 public class DeltaDialogActivity extends Activity {
 
+    TextView loadingText, progressText;
+    final String TAG = Constants.TAG;
     boolean allowBack = false;
     BroadcastReceiver closeReciever = new BroadcastReceiver() {
         @Override
@@ -25,15 +28,23 @@ public class DeltaDialogActivity extends Activity {
     BroadcastReceiver applyReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            TextView loadingText = (TextView)findViewById(R.id.loadingText);
             String text = intent.getStringExtra(Constants.DIALOG_MESSAGE);
             loadingText.setText(text);
+        }
+    };
+    BroadcastReceiver progressReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            float progress = intent.getFloatExtra(Constants.PROGRESS, 0);
+            long speed = intent.getLongExtra(Constants.SPEED, 0);
+            Log.v(TAG, String.valueOf(speed));
+            progressText.setVisibility(View.VISIBLE);
+            progressText.setText(String.valueOf(progress));
         }
     };
     BroadcastReceiver genericMessageReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            TextView loadingText = (TextView)findViewById(R.id.loadingText);
             AVLoadingIndicatorView loader = (AVLoadingIndicatorView)findViewById(R.id.aviLoader);
             RelativeLayout okButton = (RelativeLayout)findViewById(R.id.ok_button);
             String text = intent.getStringExtra(Constants.GENERIC_DIALOG_MESSAGE);
@@ -55,13 +66,18 @@ public class DeltaDialogActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.delta_apply_dialog);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        //moveTaskToBack(true);
-        TextView loadingText = (TextView)findViewById(R.id.loadingText);
+
+        loadingText = (TextView)findViewById(R.id.loadingText);
+        progressText = (TextView)findViewById(R.id.progressText);
         loadingText.setText("Working");
 
         IntentFilter apply = new IntentFilter();
         apply.addAction(Constants.ACTION_APPLY_DIALOG);
         registerReceiver(applyReciever, apply);
+
+        IntentFilter progress = new IntentFilter();
+        progress.addAction(Constants.PROGRESS_DIALOG);
+        registerReceiver(progressReciever, progress);
 
         IntentFilter close = new IntentFilter();
         close.addAction(Constants.ACTION_CLOSE_DIALOG);

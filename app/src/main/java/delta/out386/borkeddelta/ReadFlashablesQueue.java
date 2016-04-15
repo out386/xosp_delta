@@ -129,7 +129,6 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
                 catch(Exception e) {
                     Log.e(TAG,e.toString());
                 }
-                //new WriteJson(data, context).execute();
             }
         });
         romName.setText(source.getName());
