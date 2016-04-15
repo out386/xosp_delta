@@ -27,11 +27,9 @@ public class BuiltSizeService extends IntentService {
             if(targetFile.exists()) {
                 isFileReady = true;
                 currentSize = targetFile.length();
-                float progressValue = (float)currentSize/targetSize * 100;
-                long speed = (currentSize - lastSize) / INTERVAL;
+                int progressValue = (int) ((float)currentSize/targetSize * 100);
                 //Log.v(TAG, String.valueOf(speed));
                 progress.putExtra(Constants.PROGRESS, progressValue);
-                progress.putExtra(Constants.SPEED, speed);
                 sendBroadcast(progress);
                 try {
                     Thread.sleep(INTERVAL * 1000);

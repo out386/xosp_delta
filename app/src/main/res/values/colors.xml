@@ -12,4 +12,6 @@
     <color name="windowBackground">#E5E5E5</color>
     <color name="translucent">#88000000</color>
     <color name="transparent">#00000000</color>
-</resources>
+    <color name="progressReached">#FFFFFFFF</color>
+    <color name="progressUnreached">#77FFFFFF</color>
+    </resources>

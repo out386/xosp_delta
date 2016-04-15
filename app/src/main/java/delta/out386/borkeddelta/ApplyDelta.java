@@ -125,7 +125,7 @@ public class ApplyDelta extends IntentService {
         }
 
         applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
-        applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Applying the delta.\n\nThis could take 20-30 minutes.");
+        applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Applying the delta.");
         sendBroadcast(applyDialog);
         File targetFile = new File(targetPath);
         if(targetFile.exists())

@@ -1,2 +1,2 @@
-include ':app', ':libsuperuser'
-project(':libsuperuser').projectDir=new File('libs/libsuperuser')
+include ':app', ':NumberProgressbar'
+project(':NumberProgressbar').projectDir = new File('libs/NumberProgressbar')

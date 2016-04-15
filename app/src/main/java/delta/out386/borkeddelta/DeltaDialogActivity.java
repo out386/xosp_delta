@@ -11,13 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.wang.avi.AVLoadingIndicatorView;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.wang.avi.AVLoadingIndicatorView;
 
 public class DeltaDialogActivity extends Activity {
 
-    TextView loadingText, progressText;
+    TextView loadingText;
     final String TAG = Constants.TAG;
+    NumberProgressBar progressbar;
+
     boolean allowBack = false;
     BroadcastReceiver closeReciever = new BroadcastReceiver() {
         @Override
@@ -29,17 +32,16 @@ public class DeltaDialogActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra(Constants.DIALOG_MESSAGE);
+            progressbar.setVisibility(View.GONE);
             loadingText.setText(text);
         }
     };
     BroadcastReceiver progressReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            float progress = intent.getFloatExtra(Constants.PROGRESS, 0);
-            long speed = intent.getLongExtra(Constants.SPEED, 0);
-            Log.v(TAG, String.valueOf(speed));
-            progressText.setVisibility(View.VISIBLE);
-            progressText.setText(String.valueOf(progress));
+            int progress = intent.getIntExtra(Constants.PROGRESS, 0);
+            progressbar.setVisibility(View.VISIBLE);
+            progressbar.setProgress(progress);
         }
     };
     BroadcastReceiver genericMessageReciever = new BroadcastReceiver() {
@@ -47,6 +49,7 @@ public class DeltaDialogActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             AVLoadingIndicatorView loader = (AVLoadingIndicatorView)findViewById(R.id.aviLoader);
             RelativeLayout okButton = (RelativeLayout)findViewById(R.id.ok_button);
+            progressbar.setVisibility(View.GONE);
             String text = intent.getStringExtra(Constants.GENERIC_DIALOG_MESSAGE);
             loader.setVisibility(View.GONE);
             okButton.setVisibility(View.VISIBLE);
@@ -68,8 +71,9 @@ public class DeltaDialogActivity extends Activity {
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         loadingText = (TextView)findViewById(R.id.loadingText);
-        progressText = (TextView)findViewById(R.id.progressText);
         loadingText.setText("Working");
+        progressbar = (NumberProgressBar)findViewById(R.id.progressbar);
+
 
         IntentFilter apply = new IntentFilter();
         apply.addAction(Constants.ACTION_APPLY_DIALOG);

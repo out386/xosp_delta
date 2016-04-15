@@ -24,10 +24,26 @@
 	    		app:indicator="LineScalePulseOut"
 	    		app:indicator_color="@color/white"
                 android:layout_centerHorizontal="true"/>
+            <com.daimajia.numberprogressbar.NumberProgressBar
+                android:id="@+id/progressbar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/NumberProgressBar_Twinkle_Night"
+                app:progress_unreached_bar_height="1dp"
+                app:progress_reached_bar_height="1dp"
+                app:progress_text_size_bar="16sp"
+                android:layout_below="@+id/aviLoader"
+                android:paddingTop="35dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:visibility="gone"
+                app:progress_unreached_color="@color/progressUnreached"
+                app:progress_reached_color="@color/progressReached"
+                app:progress_text_color_bar="@color/progressReached"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/aviLoader"
+                android:layout_below="@id/progressbar"
                 android:layout_centerHorizontal="true"
                 android:padding="15.0dip"
                 android:gravity="center"
