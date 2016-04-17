@@ -1,3 +1,6 @@
 /build
+<<<<<<< HEAD
 /src/main/jniLibs
 xosp_release.jks
+=======
+>>>>>>> ba89b4c... Added precompiled JNI libraries
