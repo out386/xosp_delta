@@ -1,2 +1,2 @@
-include ':app', ':NumberProgressbar'
+include ':app', ':NumberProgressbar', ':environment3'
 project(':NumberProgressbar').projectDir = new File('libs/NumberProgressbar')
