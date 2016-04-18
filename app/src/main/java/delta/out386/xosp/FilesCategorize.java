@@ -1,10 +1,8 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
-import android.view.View;
 import android.content.Context;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 

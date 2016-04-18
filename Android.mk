@@ -1,7 +1,7 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_PACKAGE_NAME := BorkedDelta
+LOCAL_PACKAGE_NAME := XOSPDelta
 LOCAL_MODULE_TAGS := optional
 LOCAL_PRIVILEGED_MODULE := true
 

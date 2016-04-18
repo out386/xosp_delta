@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script to generate delta files for OpenDelta - by Jorrit 'Chainfire' Jongma
-# Modified for BorkedDelta by out386
+# Modified for XOSPDelta by out386
 # Before using this script, download or build the zip and xdelta3 binaries.
 # Aslo, build the zipadjuat binary (located at https://github.com/omnirom/android_packages_apps_OpenDelta)
 # Put all three binaries in the PATH, or set the variables below

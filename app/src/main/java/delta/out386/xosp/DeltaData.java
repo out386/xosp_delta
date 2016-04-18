@@ -1,8 +1,5 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
 import java.io.Serializable;
 
 /**

@@ -1,6 +1,5 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -18,14 +17,10 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
 import java.util.Collection;
-import java.util.List;
 
 public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
 
@@ -72,7 +67,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
 
         try {
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/borkeddelta");
+                directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/XOSPDelta");
                 if (!directory.exists())
                     directoryExists = directory.mkdir();
             }

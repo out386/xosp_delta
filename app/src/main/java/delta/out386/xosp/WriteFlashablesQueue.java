@@ -1,4 +1,4 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -19,6 +19,7 @@ import java.io.ObjectOutputStream;
  */
 public class WriteFlashablesQueue extends AsyncTask<Void, Void, Void> {
     Flashables flashables;
+    final String TAG = Constants.TAG;
     Context context;
     public WriteFlashablesQueue(Flashables flashables, Context context) {
         this.flashables = flashables;
@@ -34,14 +35,8 @@ public class WriteFlashablesQueue extends AsyncTask<Void, Void, Void> {
                 flashablesTypeList = (FlashablesTypeList) ois.readObject();
                 ois.close();
             }
-            catch(FileNotFoundException e) {
-                Log.e("borked", e.toString());
-            }
-            catch(IOException e) {
-                Log.e("borked", e.toString());
-            }
-            catch(ClassNotFoundException e) {
-                Log.e("borked", e.toString());
+            catch(Exception e) {
+                Log.e(TAG, e.toString());
             }
         }
         else
@@ -52,10 +47,8 @@ public class WriteFlashablesQueue extends AsyncTask<Void, Void, Void> {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
             oos.writeObject(flashablesTypeList);
             oos.close();
-        } catch (FileNotFoundException e) {
-            Log.e("borked", e.toString());
-        } catch (IOException e) {
-            Log.e("borked", e.toString());
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
         }
         return null;
     }

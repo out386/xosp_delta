@@ -1,4 +1,4 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -6,21 +6,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-
-import org.apache.commons.io.IOUtils;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-
-import eu.chainfire.libsuperuser.*;
 
 public class MainActivity extends Activity
 implements NavigationDrawerFragment.NavigationDrawerCallbacks

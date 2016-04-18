@@ -1,30 +1,16 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
 import android.Manifest;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-
-import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
 /**
  * Created by J-PC on 3/18/2016.

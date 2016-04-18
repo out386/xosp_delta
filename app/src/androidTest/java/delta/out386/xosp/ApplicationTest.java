@@ -1,4 +1,4 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

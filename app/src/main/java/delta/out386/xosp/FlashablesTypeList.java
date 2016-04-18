@@ -1,8 +1,5 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
-import android.util.Log;
-
-import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

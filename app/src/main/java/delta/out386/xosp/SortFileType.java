@@ -1,18 +1,16 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
-import android.os.AsyncTask;
 import android.content.Context;
 import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.zip.ZipFile;
 
-import eu.chainfire.libsuperuser.Shell;
-public class SortFileType 
+public class SortFileType
 {
+	final String TAG = Constants.TAG;
 	File file;
 	public SortFileType(Context context) {
 
@@ -27,7 +25,7 @@ public class SortFileType
 			zipTypeList = new ZipFile(file.toString()).entries();//Shell.SH.run("unzip -l " + file.toString());
 		}
 		catch(IOException e) {
-			Log.e("borked", e.toString());
+			Log.e(TAG, e.toString());
 		}
 		
 		if(zipTypeList == null)

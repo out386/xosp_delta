@@ -1,4 +1,4 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
 import java.io.File;
 import java.io.Serializable;

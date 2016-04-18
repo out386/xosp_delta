@@ -1,6 +1,5 @@
-package delta.out386.borkeddelta;
+package delta.out386.xosp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,8 +14,6 @@ import com.squareup.moshi.Moshi;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.List;
 import java.util.Scanner;
