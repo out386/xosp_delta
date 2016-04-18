@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
+import com.faraji.environment3.Environment3;
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
 import org.apache.commons.io.FileUtils;
@@ -66,17 +67,25 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
         }
 
         try {
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/XOSPDelta");
+                directory = new File(Environment3.getSecondaryExternalStorage().getFile().toString() + "/thugota");
                 if (!directory.exists())
                     directoryExists = directory.mkdir();
+            try{
             }
+            catch(Exception e) {
+                Log.e(TAG, e.toString());
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                    directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/thugota");
+                }
+            }
+            if (!directory.exists())
+                directoryExists = directory.mkdir();
         }
         catch(Exception e) {
             Log.e(TAG, e.toString());
             return null;
         }
-        if(!directoryExists || directory == null) {
+        if(!directoryExists) {
             Log.e(TAG, "Couldn't create storage directory");
             return null;
         }
