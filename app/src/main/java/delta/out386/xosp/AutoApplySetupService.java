@@ -22,8 +22,8 @@ public class AutoApplySetupService extends IntentService {
         String romName = null, deviceName = null;
         int date = 0, maxDate = 0, location = 1;
         File newestRom = null;
-
-        Log.v(TAG, flashablesList.roms.get(0).file.toString());
+        if(flashablesList == null || flashablesList.roms == null || flashablesList.roms.size() == 0)
+            return;
         for(Flashables current : flashablesList.roms) {
             Log.v(TAG,"Foreach");
             StringTokenizer st = new StringTokenizer(current.file.getName(), Constants.ROM_ZIP_DELIMITER);
@@ -76,7 +76,6 @@ public class AutoApplySetupService extends IntentService {
         sendBroadcast(autoUpdate);
 
         if(! deltaZip.exists()) {
-            Log.v(TAG, "No update needed");
             noUpdate();
         }
     }
@@ -92,7 +91,7 @@ public class AutoApplySetupService extends IntentService {
          * the broadcast receiver
          */
         try {
-            Thread.sleep(90);
+            Thread.sleep(500);
         }
         catch(InterruptedException e) {
             Log.e(TAG, e.toString());

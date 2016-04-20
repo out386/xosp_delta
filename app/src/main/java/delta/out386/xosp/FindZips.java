@@ -57,22 +57,17 @@ public class FindZips {
         }
 
         try {
-            try {
-                directory = new File(Environment3.getSecondaryExternalStorage().getFile().toString() + "/thugota");
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
                     directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/thugota");
-                }
             }
+            catch (Exception e) {
+            Log.e(TAG, e.toString());
+            return null;
+        }
             if (directory == null)
                 return null;
             if (!directory.exists())
                 directoryExists = directory.mkdir();
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-            return null;
-        }
         if (!directoryExists) {
             Log.e(TAG, "Couldn't create storage directory");
             return null;
