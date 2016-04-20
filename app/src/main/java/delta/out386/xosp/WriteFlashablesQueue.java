@@ -14,17 +14,21 @@ import java.io.ObjectOutputStream;
 
 public class WriteFlashablesQueue extends AsyncTask<Void, Void, Void> {
     Flashables flashables;
-    final String TAG = Constants.TAG;
     Context context;
+    final String TAG = Constants.TAG;
+    boolean isReload = false;
 
-    public WriteFlashablesQueue(Flashables flashables, Context context) {
+    public WriteFlashablesQueue(Flashables flashables, Context context, boolean isReload) {
         this.flashables = flashables;
         this.context = context;
+        this.isReload = isReload;
     }
     @Override
     public Void doInBackground(Void... v) {
         File f = new File(context.getFilesDir().toString() + "/queue");
         FlashablesTypeList flashablesTypeList = null;
+        if(isReload && f.exists())
+            f.delete();
         if(f.exists()) {
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));

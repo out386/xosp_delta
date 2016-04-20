@@ -32,7 +32,7 @@ public class FlashablesAdapter extends ArrayAdapter<Flashables> {
             select.setOnClickListener(new View.OnClickListener(){
                                             @Override
                                             public void onClick(View v) {
-                                                new WriteFlashablesQueue(p, context).execute();
+                                                new WriteFlashablesQueue(p, context, false).execute();
                                                 Toast.makeText(context, "Zip selected", Toast.LENGTH_SHORT).show();
                                             }
                                       }

@@ -9,12 +9,15 @@ import java.util.StringTokenizer;
 
 public class AutoApplySetupService extends IntentService {
     final String TAG = Constants.TAG;
+    Intent messageDialog = new Intent(Constants.GENERIC_DIALOG_MESSAGE),
+            autoUpdate = new Intent(Constants.AUTO_UPDATE);
     public AutoApplySetupService(){
         super("AutoApplySetupService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
         FlashablesTypeList flashablesList = new FindZips(getApplicationContext(), true, null).run();
         String romName = null, deviceName = null;
         int date = 0, maxDate = 0, location = 1;
@@ -32,7 +35,7 @@ public class AutoApplySetupService extends IntentService {
                     case Constants.ROM_ZIP_DATE_LOCATION: try {
                         date = Integer.parseInt(st.nextToken());
                         }
-                        catch (NumberFormatException e) {}
+                        catch(NumberFormatException e) {}
                         break;
                     case Constants.ROM_ZIP_DEVICE_LOCATION: deviceName = st.nextToken();
                         break;
@@ -58,7 +61,8 @@ public class AutoApplySetupService extends IntentService {
             location = 1;
         }
         if(newestRom == null) {
-            Log.v(TAG, "No update needed");
+            Log.v(TAG, "No updates needed");
+            noUpdate();
             return;
         }
         String deltaZipName;
@@ -66,9 +70,33 @@ public class AutoApplySetupService extends IntentService {
         Log.v(TAG, deltaZipName);
         File deltaZip = new File(deltaZipName);
         Log.v(TAG, newestRom.toString());
+
+        autoUpdate.putExtra(Constants.AUTO_UPDATE_BASE, new Flashables(newestRom, "rom", newestRom.length()));
+        autoUpdate.putExtra(Constants.AUTO_UPDATE_DELTA, new Flashables(deltaZip, "delta", deltaZip.length()));
+        sendBroadcast(autoUpdate);
+
         if(! deltaZip.exists()) {
             Log.v(TAG, "No update needed");
-            return;
+            noUpdate();
         }
+    }
+    private void noUpdate(){
+        messageDialog.putExtra(Constants.DIALOG_MESSAGE, "No updates needed");
+        Log.v(TAG, "No updates needed");
+        // Get the fake dialog up
+        startActivity(new Intent(this, DeltaDialogActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+        /**
+         *  Delay needed as the dialog activity needs time to register
+         * the broadcast receiver
+         */
+        try {
+            Thread.sleep(90);
+        }
+        catch(InterruptedException e) {
+            Log.e(TAG, e.toString());
+        }
+        sendBroadcast(messageDialog);
     }
 }
