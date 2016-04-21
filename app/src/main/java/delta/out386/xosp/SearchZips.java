@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
-import com.faraji.environment3.Environment3;
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
 import org.apache.commons.io.FileUtils;

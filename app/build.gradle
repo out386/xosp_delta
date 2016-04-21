@@ -34,5 +34,4 @@ dependencies {
     compile 'eu.chainfire:libsuperuser:1.0.0.+'
     compile 'com.cjj.materialrefeshlayout:library:1.3.0'
     compile project(':NumberProgressbar')
-    compile project(':environment3')
 }

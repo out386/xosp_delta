@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.cjj.MaterialRefreshLayout;
-import com.faraji.environment3.Environment3;
 
 import org.apache.commons.io.FileUtils;
 
