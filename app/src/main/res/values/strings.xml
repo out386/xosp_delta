@@ -7,15 +7,8 @@
     <string name="title_section4">Kernels</string>
     <string name="title_section5">Others</string>
     <string name="title_section6">Queue</string>
-
+    <string name="title_section7">About</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_example">Example action</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_delta_dialog">DeltaDialogActivity</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_dialog">DialogActivity</string>
+    <string name="author">Written by Ritayan Chakraborty (out386), for the Xperia Open Source Project.\nBased on OpenDelta by Chainfire and OmniROM.\nLibraries used:</string>
 </resources>
