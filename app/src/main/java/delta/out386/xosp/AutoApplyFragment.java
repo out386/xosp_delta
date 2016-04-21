@@ -28,12 +28,22 @@ public class AutoApplyFragment extends Fragment {
             new ReadFlashablesQueue(context, rootView).execute();
         }
     };
+    BroadcastReceiver noRomsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            new ReadFlashablesQueue(context, rootView).execute();
+        }
+    };
 
     @Override
     public void onResume() {
         IntentFilter autoApplyFilter = new IntentFilter();
         autoApplyFilter.addAction(Constants.AUTO_UPDATE);
         getActivity().registerReceiver(autoApplyReceiver, autoApplyFilter);
+
+        IntentFilter noRomsFilter = new IntentFilter();
+        noRomsFilter.addAction(Constants.NO_ROMS);
+        getActivity().registerReceiver(noRomsReceiver, noRomsFilter);
         super.onResume();
     }
 

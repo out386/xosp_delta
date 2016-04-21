@@ -13,8 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.faraji.environment3.Environment3;
-
 /**
  * Created by J-PC on 3/18/2016.
  */

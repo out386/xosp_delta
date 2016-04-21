@@ -26,7 +26,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
     File delta, source;
     DeltaData deltaJson;
     final String TAG = Constants.TAG;
-    Intent applyDialog = new Intent(Constants.ACTION_APPLY_DIALOG), closeDialog=new Intent();
+    Intent closeDialog=new Intent(), messageDialog = new Intent(Constants.GENERIC_DIALOG);
 
     public ReadFlashablesQueue(Context context, View view) {
         this.context = context;
@@ -92,6 +92,12 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
+        if(! output.deltas.get(0).file.exists()) {
+            queueEmptyTextview.setText("No suitable delta found. Update not required, or you don't have the newest delta. Alternatively, select a ROM and a delta to apply manually.");
+            queueReadyLayout.setVisibility(View.GONE);
+            queueEmptyLayout.setVisibility(View.VISIBLE);
+            return;
+        }
         queueEmptyLayout.setVisibility(View.GONE);
         queueReadyLayout.setVisibility(View.VISIBLE);
 
@@ -136,6 +142,10 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         queueReadyLayout.setVisibility(RelativeLayout.VISIBLE);
     }
     public DeltaData targetPath(File delta) {
+        if(! delta.exists()) {
+            context.sendBroadcast(closeDialog);
+            return null;
+        }
         File diff = new File(delta.getParent() + "/diff");
         if(diff.exists())
             diff.delete();
@@ -146,9 +156,8 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         Log.v(TAG, resultConfig.toString());
         if(resultConfig == null || resultConfig.isEmpty()) {
             Log.e(TAG, "Failed to extract deltaconfig");
-            applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
-            applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Failed to extract deltaconfig.\nThe delta zip is corrupt. Download it again.");
-            context.sendBroadcast(applyDialog);
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to extract deltaconfig.\nThe delta zip is corrupt. Download it again.");
+            context.sendBroadcast(messageDialog);
             return null;
         }
         Moshi moshi = new Moshi.Builder().build();

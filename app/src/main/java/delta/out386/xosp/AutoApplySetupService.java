@@ -10,7 +10,8 @@ import java.util.StringTokenizer;
 public class AutoApplySetupService extends IntentService {
     final String TAG = Constants.TAG;
     Intent messageDialog = new Intent(Constants.GENERIC_DIALOG_MESSAGE),
-            autoUpdate = new Intent(Constants.AUTO_UPDATE);
+            autoUpdate = new Intent(Constants.AUTO_UPDATE),
+            noRoms = new Intent(Constants.NO_ROMS);
     public AutoApplySetupService(){
         super("AutoApplySetupService");
     }
@@ -22,8 +23,10 @@ public class AutoApplySetupService extends IntentService {
         String romName = null, deviceName = null;
         int date = 0, maxDate = 0, location = 1;
         File newestRom = null;
-        if(flashablesList == null || flashablesList.roms == null || flashablesList.roms.size() == 0)
+        if(flashablesList == null || flashablesList.roms == null || flashablesList.roms.size() == 0) {
+            sendBroadcast(noRoms);
             return;
+        }
         for(Flashables current : flashablesList.roms) {
             Log.v(TAG,"Foreach");
             StringTokenizer st = new StringTokenizer(current.file.getName(), Constants.ROM_ZIP_DELIMITER);
@@ -80,7 +83,7 @@ public class AutoApplySetupService extends IntentService {
         }
     }
     private void noUpdate(){
-        messageDialog.putExtra(Constants.DIALOG_MESSAGE, "No updates needed");
+        messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "No updates needed");
         Log.v(TAG, "No updates needed");
         // Get the fake dialog up
         startActivity(new Intent(this, DeltaDialogActivity.class)
