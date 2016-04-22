@@ -84,6 +84,7 @@ public class AutoApplyFragment extends Fragment {
     @Override
     public void onPause() {
         getActivity().unregisterReceiver(autoApplyReceiver);
+        getActivity().unregisterReceiver(noRomsReceiver);
         super.onPause();
     }
 }
