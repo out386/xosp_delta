@@ -174,6 +174,18 @@ public class ApplyDeltaService extends IntentService {
         else {
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Delta applied successfully");
             sendStickyBroadcast(messageDialog);
+            File sourceF = new File(source);
+            File diffF = new File(diff);
+            File deltaconfF = new File(sourceParent + "/deltaconfig");
+            File deltaNameF = new File(deltaName);
+            if(sourceF.exists())
+                sourceF.delete();
+            if(diffF.exists())
+                diffF.delete();
+            if(deltaconfF.exists())
+                deltaconfF.delete();
+            if(deltaNameF.exists())
+                deltaNameF.delete();
         }
     }
     @Override
