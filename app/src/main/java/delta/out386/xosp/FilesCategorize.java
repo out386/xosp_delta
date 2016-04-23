@@ -8,9 +8,6 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-/**
- * Created by J-PC on 3/19/2016.
- */
 public class FilesCategorize {
     List<File> zips;
 	Context context;
@@ -36,6 +33,6 @@ public class FilesCategorize {
             if((zipType=sortFile.sort(current)) != null)
                 flashablesTypeList.addFlashable(new Flashables(current, zipType, size));
         }
-        return flashablesTypeList;//.roms;
+        return flashablesTypeList;
     }
 }

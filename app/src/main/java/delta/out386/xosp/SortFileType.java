@@ -22,7 +22,7 @@ public class SortFileType
 		boolean other = false;
 		Enumeration zipTypeList = null;
 		try {
-			zipTypeList = new ZipFile(file.toString()).entries();//Shell.SH.run("unzip -l " + file.toString());
+			zipTypeList = new ZipFile(file.toString()).entries();
 		}
 		catch(IOException e) {
 			Log.e(TAG, e.toString());
@@ -40,8 +40,6 @@ public class SortFileType
 				return "delta";
 			else if(line.contains("update-binary"))
 				other = true;
-			//else
-				//error = error + line + "\n";
 		}
 		if(other)
 			return "other";

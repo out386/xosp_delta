@@ -6,9 +6,6 @@ import android.util.Log;
 
 import java.io.File;
 
-/**
- * Created by J-PC on 4/15/2016.
- */
 public class BuiltSizeService extends IntentService {
     final String TAG = Constants.TAG;
     public BuiltSizeService(){
@@ -16,9 +13,8 @@ public class BuiltSizeService extends IntentService {
     }
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.v(TAG, "Second service");
         String target = intent.getStringExtra("target");
-        long targetSize = intent.getLongExtra("targetSize", 0), currentSize = 0, lastSize = 0;
+        long targetSize = intent.getLongExtra("targetSize", 0), currentSize = 0;
         final int INTERVAL = 10;
         boolean isFileReady = false;
         Intent progress = new Intent(Constants.PROGRESS_DIALOG);
@@ -28,7 +24,6 @@ public class BuiltSizeService extends IntentService {
                 isFileReady = true;
                 currentSize = targetFile.length();
                 int progressValue = (int) ((float)currentSize/targetSize * 100);
-                //Log.v(TAG, String.valueOf(speed));
                 progress.putExtra(Constants.PROGRESS, progressValue);
                 sendBroadcast(progress);
                 try {
@@ -37,7 +32,6 @@ public class BuiltSizeService extends IntentService {
                 catch (InterruptedException e) {
                     Log.e(TAG, e.toString());
                 }
-                lastSize = currentSize;
             }
         }
     }

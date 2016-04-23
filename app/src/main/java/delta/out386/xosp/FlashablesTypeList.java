@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by J-PC on 3/25/2016.
- */
 public class FlashablesTypeList implements Serializable {
     List<Flashables> roms=new ArrayList<>();
     List<Flashables> kernels=new ArrayList<>();

@@ -12,9 +12,6 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.List;
 
-/**
- * Created by J-PC on 3/21/2016.
- */
 public class FlashablesAdapter extends ArrayAdapter<Flashables> {
     private Context context;
     public FlashablesAdapter(Context context, int resource,List<Flashables> items) {

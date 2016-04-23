@@ -10,9 +10,6 @@ import java.util.List;
 import eu.chainfire.libsuperuser.Shell;
 import eu.chainfire.opendelta.Native;
 
-/**
- * Created by J-PC on 4/1/2016.
- */
 public class ApplyDelta extends IntentService {
     DeltaData deltaJson;
     String source;
@@ -42,9 +39,10 @@ public class ApplyDelta extends IntentService {
         startActivity(new Intent(this, DeltaDialogActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
-        /* Delay needed as the dialog activity needs time to register
+        /**
+         *  Delay needed as the dialog activity needs time to register
          * the broadcast receiver
-        */
+         */
         try {
             Thread.sleep(90);
         }

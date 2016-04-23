@@ -17,7 +17,6 @@ import com.wang.avi.AVLoadingIndicatorView;
 public class DeltaDialogActivity extends Activity {
 
     TextView loadingText;
-    final String TAG = Constants.TAG;
     NumberProgressBar progressbar;
 
     boolean allowBack = false;

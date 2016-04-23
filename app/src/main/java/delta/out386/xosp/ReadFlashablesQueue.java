@@ -20,9 +20,6 @@ import java.util.Scanner;
 
 import eu.chainfire.libsuperuser.Shell;
 
-/**
- * Created by J-PC on 3/30/2016.
- */
 public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeList> {
     Context context;
     View view;
@@ -146,7 +143,6 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         if(diff.exists())
             diff.delete();
         List<String> resultConfig = Shell.SH.run("unzip " + delta.toString() + " deltaconfig " + "-d " + delta.getParent());
-        Log.v(TAG, resultConfig.toString());
         if(resultConfig == null || resultConfig.isEmpty()) {
             Log.e(TAG, "Failed to extract deltaconfig");
             applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
