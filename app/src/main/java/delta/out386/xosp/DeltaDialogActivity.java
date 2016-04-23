@@ -63,6 +63,24 @@ public class DeltaDialogActivity extends Activity {
         }
     };
 
+    BroadcastReceiver notXospReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            AVLoadingIndicatorView loader = (AVLoadingIndicatorView)findViewById(R.id.aviLoader);
+            RelativeLayout okButton = (RelativeLayout)findViewById(R.id.ok_button);
+            String text = "Sorry. This app only works on XOSP";
+            loader.setVisibility(View.GONE);
+            okButton.setVisibility(View.VISIBLE);
+            okButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onDestroy();
+                }
+            });
+            loadingText.setText(text);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +107,10 @@ public class DeltaDialogActivity extends Activity {
         IntentFilter genericMessage = new IntentFilter();
         genericMessage.addAction(Constants.GENERIC_DIALOG);
         registerReceiver(genericMessageReciever, genericMessage);
+
+        IntentFilter notXosp = new IntentFilter();
+        notXosp.addAction(Constants.ACTION_NOT_XOSP_DIALOG);
+        registerReceiver(notXospReciever, notXosp);
     }
     public void finish() {
         super.finish();
@@ -98,6 +120,7 @@ public class DeltaDialogActivity extends Activity {
         unregisterReceiver(closeReciever);
         unregisterReceiver(applyReciever);
         unregisterReceiver(genericMessageReciever);
+        unregisterReceiver(notXospReciever);
         super.onDestroy();
     }
     @Override

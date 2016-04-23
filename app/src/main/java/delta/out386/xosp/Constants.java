@@ -9,7 +9,7 @@ public class Constants {
     final static String ACTION_APPLY_DIALOG = "delta.out386.xosp.APPLY_DIALOG";
     final static String GENERIC_DIALOG = "delta.out386.xosp.GENERIC_DIALOG";
     final static String PROGRESS_DIALOG = "delta.out386.xosp.PROGRESS_DIALOG";
-
+    final static String ACTION_NOT_XOSP_DIALOG = "delta.out386.xosp.NOT_XOSP_DIALOG";
     final static String PROGRESS = "delta.out386.xosp.PROGRESS";
     final static String SPEED = "delta.out386.xosp.SPEED";
     final static String DIALOG_MESSAGE = "delta.out386.xosp.DIALOG_MESSAGE";
