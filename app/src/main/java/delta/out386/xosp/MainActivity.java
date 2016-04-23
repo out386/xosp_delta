@@ -10,10 +10,14 @@ import android.view.View;
 import android.content.Intent;
 import java.util.List;
 import android.support.v4.widget.DrawerLayout;
+import eu.chainfire.libsuperuser.Shell;
+import eu.chainfire.opendelta.Native;
+import android.util.Log;
 
 public class MainActivity extends Activity
 implements NavigationDrawerFragment.NavigationDrawerCallbacks
 {
+	final String TAG = Constants.TAG;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
