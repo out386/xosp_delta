@@ -1,10 +1,10 @@
 package delta.out386.xosp;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
@@ -24,24 +24,9 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
 	{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        List<String> xospVersion = Shell.SH.run("getprop ro.xosp.version");
-        if(xospVersion == null || xospVersion.size() == 0) {
-            Intent notXospDialog = new Intent(Constants.ACTION_NOT_XOSP_DIALOG);
-            startActivity(new Intent(this, DeltaDialogActivity.class)
-               .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        /* Delay needed as the dialog activity needs time to register
-          * the broadcast receiver
-          */
-        try {
-            Thread.sleep(90);
-        }
-        catch(InterruptedException e) {
-            Log.e(TAG, e.toString());
-        }
-            sendBroadcast(notXospDialog);
-            onDestroy();
-        }
+        List<String> romVersion = Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP);
+        if (romVersion == null || romVersion.size() == 0 || !romVersion.get(0).contains(Constants.SUPPORTED_ROM_PROP_NAME))
+            new NotSupportedRom().execute();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
 			getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -85,6 +70,24 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
             fragmentManager.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit();
+        }
+    }
+    private class NotSupportedRom extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Intent notXospDialog = new Intent(Constants.ACTION_NOT_XOSP_DIALOG);
+            startActivity(new Intent(getApplicationContext(), DeltaDialogActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            try {
+                Thread.sleep(4000);
+                // Delay needed as the activity needs time to register the reciever
+            }
+            catch (InterruptedException e)
+            {}
+            sendBroadcast(notXospDialog);
+            finish();
+            return null;
         }
     }
 }

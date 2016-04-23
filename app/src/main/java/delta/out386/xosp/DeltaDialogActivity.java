@@ -73,7 +73,7 @@ public class DeltaDialogActivity extends Activity {
             okButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onDestroy();
+                    finish();
                 }
             });
             loadingText.setText(text);
@@ -112,15 +112,17 @@ public class DeltaDialogActivity extends Activity {
         registerReceiver(notXospReciever, notXosp);
     }
     public void finish() {
+
         super.finish();
     }
     @Override
-    public void onDestroy() {
+    public void onPause() {
         unregisterReceiver(closeReciever);
         unregisterReceiver(applyReciever);
+        unregisterReceiver(progressReciever);
         unregisterReceiver(genericMessageReciever);
         unregisterReceiver(notXospReciever);
-        super.onDestroy();
+        super.onPause();
     }
     @Override
     public void onBackPressed() {
