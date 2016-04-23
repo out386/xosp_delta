@@ -21,6 +21,7 @@ package delta.out386.xosp;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.io.File;
@@ -44,7 +45,7 @@ public class BuiltSizeService extends IntentService {
                 currentSize = targetFile.length();
                 int progressValue = (int) ((float)currentSize/targetSize * 100);
                 progress.putExtra(Constants.PROGRESS, progressValue);
-                sendBroadcast(progress);
+                LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(progress);
                 try {
                     Thread.sleep(INTERVAL * 1000);
                 }

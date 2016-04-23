@@ -22,6 +22,7 @@ package delta.out386.xosp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -162,7 +163,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
     }
     public DeltaData targetPath(File delta) {
         if(! delta.exists()) {
-            context.sendBroadcast(closeDialog);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(closeDialog);
             return null;
         }
         File diff = new File(delta.getParent() + "/diff");
@@ -176,7 +177,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         if(resultConfig == null || resultConfig.isEmpty()) {
             Log.e(TAG, "Failed to extract deltaconfig");
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to extract deltaconfig.\nThe delta zip is corrupt. Download it again.");
-            context.sendBroadcast(messageDialog);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(messageDialog);
             return null;
         }
         Moshi moshi = new Moshi.Builder().build();

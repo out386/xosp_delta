@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -103,23 +104,23 @@ public class DeltaDialogActivity extends Activity {
     protected void onResume() {
         IntentFilter apply = new IntentFilter();
         apply.addAction(Constants.ACTION_APPLY_DIALOG);
-        registerReceiver(applyReciever, apply);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(applyReciever, apply);
 
         IntentFilter progress = new IntentFilter();
         progress.addAction(Constants.PROGRESS_DIALOG);
-        registerReceiver(progressReciever, progress);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(progressReciever, progress);
 
         IntentFilter close = new IntentFilter();
         close.addAction(Constants.ACTION_CLOSE_DIALOG);
-        registerReceiver(closeReciever, close);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(closeReciever, close);
 
         IntentFilter genericMessage = new IntentFilter();
         genericMessage.addAction(Constants.GENERIC_DIALOG);
-        registerReceiver(genericMessageReciever, genericMessage);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(genericMessageReciever, genericMessage);
 
         IntentFilter notXosp = new IntentFilter();
         notXosp.addAction(Constants.ACTION_NOT_XOSP_DIALOG);
-        registerReceiver(notXospReciever, notXosp);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(notXospReciever, notXosp);
         super.onResume();
     }
     @Override
@@ -138,11 +139,11 @@ public class DeltaDialogActivity extends Activity {
     }
     @Override
     public void onPause() {
-        unregisterReceiver(closeReciever);
-        unregisterReceiver(applyReciever);
-        unregisterReceiver(progressReciever);
-        unregisterReceiver(genericMessageReciever);
-        unregisterReceiver(notXospReciever);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(closeReciever);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(applyReciever);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(progressReciever);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(genericMessageReciever);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(notXospReciever);
         super.onPause();
     }
     @Override

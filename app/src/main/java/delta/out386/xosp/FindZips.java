@@ -22,6 +22,7 @@ package delta.out386.xosp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 
@@ -71,7 +72,7 @@ public class FindZips {
                 Log.e(TAG, e.toString());
             }
             applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Loading list of files");
-            context.sendBroadcast(applyDialog);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(applyDialog);
         }
 
         try {

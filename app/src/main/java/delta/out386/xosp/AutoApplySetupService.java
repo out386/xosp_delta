@@ -21,6 +21,7 @@ package delta.out386.xosp;
  
 import android.app.IntentService;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.io.File;
@@ -38,12 +39,12 @@ public class AutoApplySetupService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        FlashablesTypeList flashablesList = new FindZips(getApplicationContext(), true, null).run();
+        FlashablesTypeList flashablesList = new FindZips(getApplication(), true, null).run();
         String romName = null, deviceName = null;
         int date = 0, maxDate = 0, location = 1;
         File newestRom = null;
         if(flashablesList == null || flashablesList.roms == null || flashablesList.roms.size() == 0) {
-            sendBroadcast(noRoms);
+            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(noRoms);
             return;
         }
         for(Flashables current : flashablesList.roms) {
@@ -95,7 +96,7 @@ public class AutoApplySetupService extends IntentService {
 
         autoUpdate.putExtra(Constants.AUTO_UPDATE_BASE, new Flashables(newestRom, "rom", newestRom.length()));
         autoUpdate.putExtra(Constants.AUTO_UPDATE_DELTA, new Flashables(deltaZip, "delta", deltaZip.length()));
-        sendBroadcast(autoUpdate);
+        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(autoUpdate);
 
         if(! deltaZip.exists()) {
             noUpdate();
@@ -118,6 +119,6 @@ public class AutoApplySetupService extends IntentService {
         catch(InterruptedException e) {
             Log.e(TAG, e.toString());
         }
-        sendBroadcast(messageDialog);
+        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
     }
 }

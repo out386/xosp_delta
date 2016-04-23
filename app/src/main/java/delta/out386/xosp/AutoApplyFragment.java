@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,11 +59,11 @@ public class AutoApplyFragment extends Fragment {
     public void onResume() {
         IntentFilter autoApplyFilter = new IntentFilter();
         autoApplyFilter.addAction(Constants.AUTO_UPDATE);
-        getActivity().registerReceiver(autoApplyReceiver, autoApplyFilter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(autoApplyReceiver, autoApplyFilter);
 
         IntentFilter noRomsFilter = new IntentFilter();
         noRomsFilter.addAction(Constants.NO_ROMS);
-        getActivity().registerReceiver(noRomsReceiver, noRomsFilter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(noRomsReceiver, noRomsFilter);
         super.onResume();
     }
 
@@ -83,8 +84,8 @@ public class AutoApplyFragment extends Fragment {
     }
     @Override
     public void onPause() {
-        getActivity().unregisterReceiver(autoApplyReceiver);
-        getActivity().unregisterReceiver(noRomsReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(autoApplyReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(noRomsReceiver);
         super.onPause();
     }
 }

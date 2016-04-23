@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -107,7 +108,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
             RelativeLayout baseEmpty = (RelativeLayout) rootView.findViewById(R.id.baseEmptyLayout);
             baseEmpty.setVisibility(View.VISIBLE);
             if(isLoading)
-                context.sendBroadcast(closeDialog);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(closeDialog);
             return;
         }
         lv.setAdapter(
@@ -118,6 +119,6 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
         );
 
         if(isLoading)
-            context.sendBroadcast(closeDialog);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(closeDialog);
     }
 }
