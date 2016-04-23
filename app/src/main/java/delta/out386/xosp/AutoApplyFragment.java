@@ -31,6 +31,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import java.util.List;
+
+import eu.chainfire.libsuperuser.Shell;
+
 public class AutoApplyFragment extends Fragment {
     View rootView;
     public static AutoApplyFragment newInstance() {
@@ -72,6 +76,13 @@ public class AutoApplyFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_queue, container, false);
         final Context context = getActivity();
+        if(Constants.SUPPORTED_ROM_PROP != null) {
+            List<String> romVersion = Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP);
+            if (romVersion == null || romVersion.size() == 0 || !romVersion.get(0).contains(Constants.SUPPORTED_ROM_PROP_NAME)) {
+                // Unsupported ROM. Let's quit.
+                return rootView;
+            }
+        }
         if(Constants.SUPPORTED_ROM_PROP == null) {
             RelativeLayout noAuto = (RelativeLayout)getActivity().findViewById(R.id.queueNoAutoLayout);
             noAuto.setVisibility(View.GONE);
