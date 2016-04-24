@@ -40,18 +40,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 public class MainActivity extends Activity
 {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private String [] mDrawerItems;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState)
 	{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setActionBar(toolbar);
         mDrawerItems = getResources().getStringArray(R.array.drawer_items);
+        setTitle(mDrawerItems[0]);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.addHeaderView(getLayoutInflater().inflate(R.layout.drawer_header, mDrawerList, false), null, false);
