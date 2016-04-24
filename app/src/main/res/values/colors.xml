@@ -7,10 +7,10 @@
     <color name="colorAccent">#ff5252</color>
     <color name="white">#FFFFFFFF</color>
     <color name="darkGray">#555555</color>
-    <color name="gray">#55000000</color>
+    <color name="gray">#22000000</color>
     <color name="black">#111111</color>
     <color name="windowBackground">#E5E5E5</color>
-    <color name="translucent">#88000000</color>
+    <color name="translucent">#77000000</color>
     <color name="transparent">#00000000</color>
     <color name="progressReached">#FFFFFFFF</color>
     <color name="progressUnreached">#77FFFFFF</color>

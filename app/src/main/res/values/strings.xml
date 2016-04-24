@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">XOSPDelta</string>
 
-    <string name="title_section1">Auto Apply</string>
-    <string name="title_section2">Roms</string>
-    <string name="title_section3">Deltas</string>
-    <string name="title_section4">Kernels</string>
-    <string name="title_section5">Others</string>
-    <string name="title_section6">Queue</string>
-    <string name="title_section7">About</string>
+    <string name="drawer_item1">Auto Apply</string>
+    <string name="drawer_item2">Roms</string>
+    <string name="drawer_item3">Deltas</string>
+    <string name="drawer_item4">Kernels</string>
+    <string name="drawer_item5">Others</string>
+    <string name="drawer_item6">Queue</string>
+    <string name="drawer_item7">About</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="author">Written by Ritayan Chakraborty (out386), for the Xperia Open Source Project.\nBased on OpenDelta by Chainfire and OmniROM.\nLibraries used:</string>
