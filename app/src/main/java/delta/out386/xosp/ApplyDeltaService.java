@@ -122,9 +122,8 @@ public class ApplyDeltaService extends IntentService {
 
         applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Decompressing input zip");
         LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(applyDialog);
-        String sourceDec = source + ".dec";
         try {
-            zipadjust = Native.zipadjust(source, sourceDec, 1);
+            zipadjust = Native.zipadjust(source, source, 1);
             Log.v(TAG, "Result of decompression : " + zipadjust);
         }
         catch(Exception e) {
@@ -152,7 +151,7 @@ public class ApplyDeltaService extends IntentService {
         sizeIntent.putExtra("targetSize", deltaJson.targetSize);
         startService(sizeIntent);
         try {
-            delta = Native.dedelta(sourceDec, diff, targetPath);
+            delta = Native.dedelta(source, diff, targetPath);
             Log.v(TAG, "Result of delta apply : " + delta);
         } catch (Exception e) {
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to apply the delta.\nMake sure that you are not out of space.");
