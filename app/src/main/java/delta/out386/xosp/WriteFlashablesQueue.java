@@ -16,7 +16,6 @@ public class WriteFlashablesQueue extends AsyncTask<Void, Void, Void> {
     Flashables flashables;
     final String TAG = Constants.TAG;
     Context context;
-    final String TAG = Constants.TAG;
 
     public WriteFlashablesQueue(Flashables flashables, Context context) {
         this.flashables = flashables;
