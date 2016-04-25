@@ -63,7 +63,26 @@ public class DeltaDialogActivity extends Activity {
             progressbar.setProgress(progress);
         }
     };
-	
+    BroadcastReceiver genericMessageReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            AVLoadingIndicatorView loader = (AVLoadingIndicatorView)findViewById(R.id.aviLoader);
+            RelativeLayout okButton = (RelativeLayout)findViewById(R.id.ok_button);
+            String text = intent.getStringExtra(Constants.GENERIC_DIALOG_MESSAGE);
+            loader.setVisibility(View.GONE);
+            okButton.setVisibility(View.VISIBLE);
+            allowBack = true;
+            okButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+            loadingText.setText(text);
+        }
+    };
+    
+
     @Override
     protected void onResume() {
         IntentFilter apply = new IntentFilter();
@@ -77,6 +96,11 @@ public class DeltaDialogActivity extends Activity {
         IntentFilter close = new IntentFilter();
         close.addAction(Constants.ACTION_CLOSE_DIALOG);
         LocalBroadcastManager.getInstance(getApplication()).registerReceiver(closeReciever, close);
+
+        IntentFilter genericMessage = new IntentFilter();
+        genericMessage.addAction(Constants.GENERIC_DIALOG);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(genericMessageReciever, genericMessage);
+
         super.onResume();
     }
     @Override
@@ -99,6 +123,7 @@ public class DeltaDialogActivity extends Activity {
         LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(closeReciever);
         LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(applyReciever);
         LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(progressReciever);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(genericMessageReciever);
         super.onPause();
     }
     @Override
