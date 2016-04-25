@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -62,44 +63,7 @@ public class DeltaDialogActivity extends Activity {
             progressbar.setProgress(progress);
         }
     };
-    BroadcastReceiver genericMessageReciever = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            AVLoadingIndicatorView loader = (AVLoadingIndicatorView)findViewById(R.id.aviLoader);
-            RelativeLayout okButton = (RelativeLayout)findViewById(R.id.ok_button);
-            progressbar.setVisibility(View.GONE);
-            String text = intent.getStringExtra(Constants.GENERIC_DIALOG_MESSAGE);
-            loader.setVisibility(View.GONE);
-            okButton.setVisibility(View.VISIBLE);
-            allowBack = true;
-            okButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
-            loadingText.setText(text);
-        }
-    };
-
-    BroadcastReceiver notXospReciever = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            AVLoadingIndicatorView loader = (AVLoadingIndicatorView)findViewById(R.id.aviLoader);
-            RelativeLayout okButton = (RelativeLayout)findViewById(R.id.ok_button);
-            String text = "Sorry. This app only works on XOSP";
-            loader.setVisibility(View.GONE);
-            okButton.setVisibility(View.VISIBLE);
-            okButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-            loadingText.setText(text);
-        }
-    };
-
+	
     @Override
     protected void onResume() {
         IntentFilter apply = new IntentFilter();
@@ -113,14 +77,6 @@ public class DeltaDialogActivity extends Activity {
         IntentFilter close = new IntentFilter();
         close.addAction(Constants.ACTION_CLOSE_DIALOG);
         LocalBroadcastManager.getInstance(getApplication()).registerReceiver(closeReciever, close);
-
-        IntentFilter genericMessage = new IntentFilter();
-        genericMessage.addAction(Constants.GENERIC_DIALOG);
-        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(genericMessageReciever, genericMessage);
-
-        IntentFilter notXosp = new IntentFilter();
-        notXosp.addAction(Constants.ACTION_NOT_XOSP_DIALOG);
-        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(notXospReciever, notXosp);
         super.onResume();
     }
     @Override
@@ -132,6 +88,7 @@ public class DeltaDialogActivity extends Activity {
         loadingText = (TextView)findViewById(R.id.loadingText);
         loadingText.setText("Working");
         progressbar = (NumberProgressBar)findViewById(R.id.progressbar);
+        intentCheck();
     }
     public void finish() {
 
@@ -142,13 +99,58 @@ public class DeltaDialogActivity extends Activity {
         LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(closeReciever);
         LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(applyReciever);
         LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(progressReciever);
-        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(genericMessageReciever);
-        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(notXospReciever);
         super.onPause();
     }
     @Override
     public void onBackPressed() {
         if(allowBack)
             super.onBackPressed();
+    }
+
+    private void intentCheck() {
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        if(action == null)
+            return;
+        if(action.equals(Constants.GENERIC_DIALOG))
+            genericDialog(intent);
+        else if(action.equals(Constants.ACTION_NOT_XOSP_DIALOG))
+            notRomDialog();
+        else if(action.equals(Constants.ACTION_APPLY_DIALOG))
+            applyDialog(intent);
+    }
+    private void genericDialog(Intent intent) {
+        AVLoadingIndicatorView loader = (AVLoadingIndicatorView)findViewById(R.id.aviLoader);
+        RelativeLayout okButton = (RelativeLayout)findViewById(R.id.ok_button);
+        String text = intent.getStringExtra(Constants.GENERIC_DIALOG_MESSAGE);
+        loader.setVisibility(View.GONE);
+        okButton.setVisibility(View.VISIBLE);
+        allowBack = true;
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        loadingText.setText(text);
+    }
+    private void notRomDialog() {
+        AVLoadingIndicatorView loader = (AVLoadingIndicatorView)findViewById(R.id.aviLoader);
+        RelativeLayout okButton = (RelativeLayout)findViewById(R.id.ok_button);
+        String text = "Sorry. This app only works on " + Constants.SUPPORTED_ROM_FULL_NAME;
+        loader.setVisibility(View.GONE);
+        okButton.setVisibility(View.VISIBLE);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        loadingText.setText(text);
+    }
+    private void applyDialog(Intent intent) {
+        Log.v("ThugOTA", "RECEIVED DELTA");
+        String text = intent.getStringExtra(Constants.DIALOG_MESSAGE);
+        loadingText.setText(text);
     }
 }

@@ -90,7 +90,6 @@ public class AutoApplyFragment extends Fragment {
         }
         Intent autoApplyService = new Intent(context, AutoApplySetupService.class);
         context.startService(autoApplyService);
-
         return rootView;
     }
     @Override

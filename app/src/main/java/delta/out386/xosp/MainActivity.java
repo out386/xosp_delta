@@ -22,11 +22,14 @@ package delta.out386.xosp;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.content.Intent;
@@ -48,6 +51,37 @@ public class MainActivity extends Activity
     private ListView mDrawerList;
     private String [] mDrawerItems;
     private Toolbar toolbar;
+
+    BroadcastReceiver applyReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.v("ThugOTA", "RECEIVED MAIN");
+            startActivity(new Intent(getApplicationContext(), DeltaDialogActivity.class)
+                    .setAction(Constants.ACTION_APPLY_DIALOG)
+                    .putExtra(Constants.DIALOG_MESSAGE, "Extracting the delta"));
+        }
+    };
+    BroadcastReceiver genericMessageReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.v("ThugOTA", "RECEIVED MAIN");
+            String message = intent.getStringExtra(Constants.GENERIC_DIALOG_MESSAGE);
+            startActivity(new Intent(getApplicationContext(), DeltaDialogActivity.class)
+                    .setAction(Constants.GENERIC_DIALOG)
+                    .putExtra(Constants.GENERIC_DIALOG_MESSAGE, message));
+        }
+    };
+    @Override
+    protected void onResume() {
+        IntentFilter apply = new IntentFilter();
+        apply.addAction(Constants.ACTION_APPLY_DIALOG_FIRST_START);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(applyReciever, apply);
+
+        IntentFilter genericMessage = new IntentFilter();
+        apply.addAction(Constants.ACTION_APPLY_DIALOG_FIRST_START);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(genericMessageReciever, genericMessage);
+        super.onResume();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState)
 	{
@@ -66,13 +100,12 @@ public class MainActivity extends Activity
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-
-        // Checking if the app has been made ROM specific or not
         if(Constants.SUPPORTED_ROM_PROP != null) {
             List<String> romVersion = Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP);
             if (romVersion == null || romVersion.size() == 0 || !romVersion.get(0).contains(Constants.SUPPORTED_ROM_PROP_NAME)) {
                 // Unsupported ROM. Let's quit.
-                new NotSupportedRom().execute();
+                startActivity(new Intent(getApplication(), DeltaDialogActivity.class).setAction(Constants.ACTION_NOT_XOSP_DIALOG));
+                finish();
             }
         }
         FragmentManager fragmentManager = getFragmentManager();
@@ -95,24 +128,7 @@ public class MainActivity extends Activity
                     .commit();*/
         }
     }
-    private class NotSupportedRom extends AsyncTask<Void, Void, Void>
-    {
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Intent notXospDialog = new Intent(Constants.ACTION_NOT_XOSP_DIALOG);
-            startActivity(new Intent(getApplication(), DeltaDialogActivity.class)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            try {
-                Thread.sleep(4000);
-                // Delay needed as the activity needs time to register the receiver
-            }
-            catch (InterruptedException e)
-            {}
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(notXospDialog);
-            finish();
-            return null;
-        }
-    }
+	
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
@@ -178,5 +194,11 @@ public class MainActivity extends Activity
             }
             return v;
         }
+    }
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(applyReciever);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(genericMessageReciever);
+        super.onPause();
     }
 }

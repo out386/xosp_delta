@@ -56,21 +56,19 @@ public class ApplyDeltaService extends IntentService {
         this.targetPath =  sourceParent + "/" + deltaJson.target;
 
         // Get the fake dialog up
-        startActivity(new Intent(this, DeltaDialogActivity.class)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-
-        /**
-         *  Delay needed as the dialog activity needs time to register
-         * the broadcast receiver
-         */
-        try {
-            Thread.sleep(90);
-        }
-        catch(InterruptedException e) {
-            Log.e(TAG, e.toString());
-        }
-        applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Extracting the delta.");
-        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(applyDialog);
+        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(new Intent(Constants.ACTION_APPLY_DIALOG_FIRST_START));
+        Log.v(TAG, "SENT");
+                /**
+                 *  Delay needed as the dialog activity needs time to register
+                 * the broadcast receiver
+                 try {
+                 Thread.sleep(90);
+                 }
+                 catch(InterruptedException e) {
+                 Log.e(TAG, e.toString());
+                 }
+                applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Extracting the delta.");
+        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(applyDialog);*/
 
         try {
             diffExtractCommand = "unzip " + deltaName + " diff " + "-d " + sourceParent;

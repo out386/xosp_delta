@@ -103,22 +103,24 @@ public class AutoApplySetupService extends IntentService {
         }
     }
     private void noUpdate(){
-        messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "No updates needed");
+        //messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "No updates needed");
         Log.v(TAG, "No updates needed");
         // Get the fake dialog up
-        startActivity(new Intent(this, DeltaDialogActivity.class)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        /*Intent noUpdateIntent = new Intent(this, DeltaDialogActivity.class)
+                .putExtra(Constants.GENERIC_DIALOG_MESSAGE, "No updates needed.");
+        startActivity(noUpdateIntent);*/
+        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "No updates needed"));
 
         /**
          *  Delay needed as the dialog activity needs time to register
          * the broadcast receiver
          */
-        try {
+        /*try {
             Thread.sleep(500);
         }
         catch(InterruptedException e) {
             Log.e(TAG, e.toString());
         }
-        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);*/
     }
 }

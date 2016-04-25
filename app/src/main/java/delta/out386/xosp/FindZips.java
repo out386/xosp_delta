@@ -43,7 +43,6 @@ public class FindZips {
     final String TAG = Constants.TAG;
     File f = null;
     MaterialRefreshLayout refresh;
-    Intent applyDialog = new Intent(Constants.ACTION_APPLY_DIALOG);
 
     public FindZips(Context context, boolean isReload, MaterialRefreshLayout refresh){
         this.isReload = isReload;
@@ -61,18 +60,9 @@ public class FindZips {
             isLoading = true;
             // Get the fake dialog up
             context.startActivity(new Intent(context, DeltaDialogActivity.class)
+                    .setAction(Constants.ACTION_APPLY_DIALOG)
+                    .putExtra(Constants.DIALOG_MESSAGE, "Loading list of files")
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-
-            /* Delay needed as the dialog activity needs time to register
-             * the broadcast receiver
-             */
-            try {
-                Thread.sleep(90);
-            } catch (InterruptedException e) {
-                Log.e(TAG, e.toString());
-            }
-            applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Loading list of files");
-            LocalBroadcastManager.getInstance(context).sendBroadcast(applyDialog);
         }
 
         try {

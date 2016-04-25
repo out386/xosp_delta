@@ -35,7 +35,7 @@ public class BuiltSizeService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String target = intent.getStringExtra("target");
         long targetSize = intent.getLongExtra("targetSize", 0), currentSize = 0;
-        final int INTERVAL = 10;
+        final int INTERVAL = 2;
         boolean isFileReady = false;
         Intent progress = new Intent(Constants.PROGRESS_DIALOG);
         while(!isFileReady || currentSize < targetSize) {
