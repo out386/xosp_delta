@@ -1,8 +1,11 @@
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
 .DS_Store
 /build
 /captures
 gradle.properties
+/.idea
+*.iml
+/app/*.iml
+/gradle/
+/libs/NumberProgressbar/*.iml

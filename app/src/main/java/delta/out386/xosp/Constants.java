@@ -16,6 +16,7 @@
  */
  
 package delta.out386.xosp;
+import eu.chainfire.libsuperuser.Shell;
 
 public class Constants {
     final static String TAG = "XOSPDelta";
@@ -53,7 +54,7 @@ public class Constants {
     final static int ROM_ZIP_DATE_LOCATION = 5;
     final static int ROM_ZIP_DEVICE_LOCATION = 6;
     final static String ROM_ZIP_NAME = "XOSP";
-    final static String ROM_ZIP_DEVICE_NAME = "Z00A";
+    final static String ROM_ZIP_DEVICE_NAME = Shell.SH.run("getprop ro.xosp.device").get(0);
     /**
      * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device.zip
      */
