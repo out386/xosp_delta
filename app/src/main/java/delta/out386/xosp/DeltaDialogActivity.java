@@ -61,6 +61,8 @@ public class DeltaDialogActivity extends Activity {
             int progress = intent.getIntExtra(Constants.PROGRESS, 0);
             progressbar.setVisibility(View.VISIBLE);
             progressbar.setProgress(progress);
+            loadingText.setText("Applying the delta");
+            // Setting text every two seconds is a dirty fix
         }
     };
     BroadcastReceiver genericMessageReciever = new BroadcastReceiver() {
