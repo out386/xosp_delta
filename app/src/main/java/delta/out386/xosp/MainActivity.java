@@ -140,7 +140,7 @@ public class MainActivity extends Activity
         switch (position)
         {
             case 1: fragment = AutoApplyFragment.newInstance();
-                break;
+                break;/*
             case 2: fragment = BaseFragment.newInstance(position);
                 break;
             case 3: fragment = BaseFragment.newInstance(position);
@@ -149,9 +149,9 @@ public class MainActivity extends Activity
                 break;
             case 5: fragment = BaseFragment.newInstance(position);
                 break;
-            case 6: fragment = QueueFragment.newInstance(position);
-                break;
-            case 7: fragment = AboutFragment.newInstance();
+            case 2: fragment = QueueFragment.newInstance(position);
+                break;*/
+            case 3: fragment = AboutFragment.newInstance();
                 break;
         }
         FragmentManager fragmentManager = getFragmentManager();
