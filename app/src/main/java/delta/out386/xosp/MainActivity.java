@@ -55,7 +55,6 @@ public class MainActivity extends Activity
     BroadcastReceiver applyReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.v("ThugOTA", "RECEIVED MAIN");
             startActivity(new Intent(getApplicationContext(), DeltaDialogActivity.class)
                     .setAction(Constants.ACTION_APPLY_DIALOG)
                     .putExtra(Constants.DIALOG_MESSAGE, "Extracting the delta"));
@@ -64,7 +63,6 @@ public class MainActivity extends Activity
     BroadcastReceiver genericMessageReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.v("ThugOTA", "RECEIVED MAIN");
             String message = intent.getStringExtra(Constants.GENERIC_DIALOG_MESSAGE);
             startActivity(new Intent(getApplicationContext(), DeltaDialogActivity.class)
                     .setAction(Constants.GENERIC_DIALOG)

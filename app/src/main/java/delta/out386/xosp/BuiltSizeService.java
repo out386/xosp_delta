@@ -46,6 +46,7 @@ public class BuiltSizeService extends IntentService {
                 int progressValue = (int) ((float)currentSize/targetSize * 100);
                 progress.putExtra(Constants.PROGRESS, progressValue);
                 LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(progress);
+                Log.v(TAG, progressValue + "%");
                 try {
                     Thread.sleep(INTERVAL * 1000);
                 }

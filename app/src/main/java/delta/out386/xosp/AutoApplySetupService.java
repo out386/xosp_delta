@@ -29,8 +29,7 @@ import java.util.StringTokenizer;
 
 public class AutoApplySetupService extends IntentService {
     final String TAG = Constants.TAG;
-    Intent messageDialog = new Intent(Constants.GENERIC_DIALOG_MESSAGE),
-            autoUpdate = new Intent(Constants.AUTO_UPDATE),
+    Intent autoUpdate = new Intent(Constants.AUTO_UPDATE),
             noRoms = new Intent(Constants.NO_ROMS);
     public AutoApplySetupService(){
         super("AutoApplySetupService");
@@ -103,24 +102,7 @@ public class AutoApplySetupService extends IntentService {
         }
     }
     private void noUpdate(){
-        //messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "No updates needed");
         Log.v(TAG, "No updates needed");
-        // Get the fake dialog up
-        /*Intent noUpdateIntent = new Intent(this, DeltaDialogActivity.class)
-                .putExtra(Constants.GENERIC_DIALOG_MESSAGE, "No updates needed.");
-        startActivity(noUpdateIntent);*/
-        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "No updates needed"));
-
-        /**
-         *  Delay needed as the dialog activity needs time to register
-         * the broadcast receiver
-         */
-        /*try {
-            Thread.sleep(500);
-        }
-        catch(InterruptedException e) {
-            Log.e(TAG, e.toString());
-        }
-        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);*/
+        // ReadFlashablesQueue will make the card with the no update message visible
     }
 }
