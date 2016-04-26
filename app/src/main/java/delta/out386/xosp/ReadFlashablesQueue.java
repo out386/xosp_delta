@@ -177,7 +177,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         if(resultConfig == null || resultConfig.isEmpty()) {
             Log.e(TAG, "Failed to extract deltaconfig");
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to extract deltaconfig.\nThe delta zip is corrupt. Download it again.");
-            LocalBroadcastManager.getInstance(context).sendBroadcast(messageDialog);
+            context.sendStickyBroadcast(messageDialog);
             return null;
         }
         Moshi moshi = new Moshi.Builder().build();

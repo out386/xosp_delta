@@ -21,6 +21,7 @@ package delta.out386.xosp;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -35,6 +36,7 @@ public class ApplyDeltaService extends IntentService {
     String source;
     final String TAG = Constants.TAG;
     String sourceMd5 = null, targetMd5, deltaMd5 = null, diff, targetPath;
+    PowerManager.WakeLock wakeLock;
     public ApplyDeltaService(){
         super("ApplyDeltaService");
     }
@@ -44,31 +46,20 @@ public class ApplyDeltaService extends IntentService {
 
         int zipadjust, delta;
         String deltaName;
-        List<String> deltaExtractResult = null;
-
+        List<String> deltaExtractResult;
         Intent applyDialog = new Intent(Constants.ACTION_APPLY_DIALOG), messageDialog = new Intent(Constants.GENERIC_DIALOG);
-
         String sourceParent = intent.getStringExtra("sourceParent"), diffExtractCommand = "";
         source = intent.getStringExtra("source");
         deltaJson = (DeltaData) intent.getSerializableExtra("deltaJson");
         deltaName= intent.getStringExtra("deltaName");
         this.diff = sourceParent + "/diff";
         this.targetPath =  sourceParent + "/" + deltaJson.target;
+        PowerManager pmgr = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = pmgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DeltaWakeLock");
+        wakeLock.acquire();
 
-        // Get the fake dialog up
+
         LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(new Intent(Constants.ACTION_APPLY_DIALOG_FIRST_START));
-        Log.v(TAG, "SENT");
-                /**
-                 *  Delay needed as the dialog activity needs time to register
-                 * the broadcast receiver
-                 try {
-                 Thread.sleep(90);
-                 }
-                 catch(InterruptedException e) {
-                 Log.e(TAG, e.toString());
-                 }
-                applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Extracting the delta.");
-        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(applyDialog);*/
 
         try {
             diffExtractCommand = "unzip " + deltaName + " diff " + "-d " + sourceParent;
@@ -77,16 +68,15 @@ public class ApplyDeltaService extends IntentService {
         catch(Exception e) {
             Log.e(TAG, e.toString());
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Could not extract the delta.\nThe delta zip is corrupt. Download it again.");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
             return;
         }
         if(deltaExtractResult == null || deltaExtractResult.size() == 0) {
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Could not extract the delta.\nThe delta zip is corrupt. Download it again.");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
             return;
         }
 
-        applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
         applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Verifying MD5s.");
         LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(applyDialog);
 
@@ -102,21 +92,20 @@ public class ApplyDeltaService extends IntentService {
         } catch (Exception e) {
             String error = e.toString();
             Log.e(TAG, error);
-            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Couldn't calculate MD5.\nMake sure that you have busybox installed."
-                    + error);
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Couldn't calculate MD5.\nMake sure that you have busybox installed.");
+            sendStickyBroadcast(messageDialog);
             return;
         }
         if (!(sourceMd5.equalsIgnoreCase(deltaJson.sourceMd5) || sourceMd5.equalsIgnoreCase(deltaJson.sourceDecMd5))) {
             Log.e(TAG, "sourceMd5 doesn't match");
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Source MD5 mismatch.\nYour base rom is corrupted or not compatable with this delta. Check if you've selected the correct file or try re-downloading. Also check for free space.");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
             return;
         }
         if (!deltaMd5.equalsIgnoreCase(deltaJson.deltaMd5)) {
             Log.e(TAG, "deltaMd5 doesn't match");
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Delta MD5 mismatch.\nYour delta file is corrupt or you are out of space.");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
             return;
         }
 
@@ -128,18 +117,17 @@ public class ApplyDeltaService extends IntentService {
         }
         catch(Exception e) {
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Decompression of base ROM failed.\nMake sure that you have enough free space.");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
             Log.e(TAG, e.toString());
             return;
         }
         if(zipadjust != 1)
         {
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Decompression of base ROM failed.\nMake sure that you have enough free space.");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
             return;
         }
 
-        applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
         applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Applying the delta.");
         LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(applyDialog);
         File targetFile = new File(targetPath);
@@ -155,18 +143,17 @@ public class ApplyDeltaService extends IntentService {
             Log.v(TAG, "Result of delta apply : " + delta);
         } catch (Exception e) {
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to apply the delta.\nMake sure that you are not out of space.");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
             Log.e(TAG, e.toString());
             return;
         }
         if(delta != 1) {
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to apply the delta.\nMake sure that you are not out of space.");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
             return;
         }
 
         Log.v(TAG, "Verifying MD5 of built");
-        applyDialog.removeExtra(Constants.DIALOG_MESSAGE);
         applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Verifying MD5 of built delta");
         LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(applyDialog);
 
@@ -176,17 +163,22 @@ public class ApplyDeltaService extends IntentService {
         catch(Exception e) {
             Log.e(TAG, e.toString());
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to verify MD5s.\nMake sure that you have busybox installed.");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
             return;
         }
         if(!deltaJson.targetMd5.equalsIgnoreCase(targetMd5)) {
             Log.e(TAG, "Target malformed");
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Applied the delta, but the generated zip is malformed.\nMake sure that you are not out of space.");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
         }
         else {
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Delta applied successfully");
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(messageDialog);
+            sendStickyBroadcast(messageDialog);
         }
+    }
+    @Override
+    public void onDestroy() {
+        wakeLock.release();
+        super.onDestroy();
     }
 }
