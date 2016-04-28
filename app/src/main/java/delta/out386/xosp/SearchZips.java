@@ -60,7 +60,8 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     
     @Override
     protected FlashablesTypeList doInBackground(Void... params){
-        return new FindZips(context,isReload,refresh).run();
+        return new FindZips(context,isReload,refresh, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
+                .run();
     }
 
     @Override

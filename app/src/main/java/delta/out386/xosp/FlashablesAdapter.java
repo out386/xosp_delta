@@ -62,16 +62,7 @@ public class FlashablesAdapter extends ArrayAdapter<Flashables> {
                 name.setText(p.file.getName());
             if(type != null)
                 type.setText(p.type);
-            float printSize = p.size;
-            String unit = " B";
-            if (printSize > 1024 && printSize < 1048576) {
-                unit = " KiB";
-                printSize = printSize / 1024;
-            } else if (printSize >= 1048576) {
-                unit = " MiB";
-                printSize = printSize / 1024 / 1024;
-            }
-            size.setText(new DecimalFormat("#0.00").format(printSize) + unit);
+            size.setText(new Tools().sizeFormat(p.size));
 
         }
         return v;

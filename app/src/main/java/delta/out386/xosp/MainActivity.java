@@ -26,10 +26,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.content.Intent;
@@ -151,7 +149,9 @@ public class MainActivity extends Activity
                 break;
             case 2: fragment = QueueFragment.newInstance(position);
                 break;*/
-            case 3: fragment = AboutFragment.newInstance();
+            case 2: fragment = AboutFragment.newInstance();
+                break;
+            case 3: fragment = SettingsFragment.newInstance();
                 break;
         }
         FragmentManager fragmentManager = getFragmentManager();
