@@ -56,6 +56,7 @@ public class FindZips {
         File directory = null;
         boolean directoryExists = true;
         String location = preferences.getString("location", Environment.getExternalStorageDirectory().getAbsolutePath());
+        Log.v(TAG, location);
         File storage = new File(location);
         f = new File(context.getFilesDir().toString() + "/FlashablesTypeList");
         if (!isReload && !f.exists()) {
@@ -73,7 +74,7 @@ public class FindZips {
                 return null;
             }
                 if (Environment.getExternalStorageState(storage).equals(Environment.MEDIA_MOUNTED))
-                    directory = new File(storage.getAbsolutePath() + "/thugota");
+                    directory = new File(location + "/thugota");
             }
             catch (Exception e) {
             Log.e(TAG, e.toString());
