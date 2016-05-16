@@ -22,4 +22,15 @@ public class Constants {
     final static String SUPPORTED_ROM_FULL_NAME = "Xperia Open Source Project";
     final static String SUPPORTED_ROM_PROP = "ro.xosp.display.version";
     final static String SUPPORTED_ROM_PROP_NAME="XOSP";
+	
+	// The delimiter(s) used in the ROM zip to separate name, date, version, etc.
+    final static String ROM_ZIP_DELIMITER = "-_.";
+    final static int ROM_ZIP_NAME_LOCATION = 1;
+    final static int ROM_ZIP_DATE_LOCATION = 5;
+    final static int ROM_ZIP_DEVICE_LOCATION = 6;
+    final static String ROM_ZIP_NAME = "XOSP";
+    final static String ROM_ZIP_DEVICE_NAME = "Z00A";
+    /**
+     * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device.zip
+     */
 }

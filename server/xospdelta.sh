@@ -116,7 +116,7 @@ echo "  \"deltaMd5\": \"$MD5_UPDATE\"," >> $DELTA
 echo "  \"targetSize\": \"$SIZE_CURRENT_STORE\"" >> $DELTA
 echo "}" >> $DELTA
 
-zip -0 -j out/$FILE_LAST out/diff $DELTA
+zip -0 -j out/delta.$FILE_LAST out/diff $DELTA
 
 mkdir publish >/dev/null 2>/dev/null
 mkdir publish/$DEVICE >/dev/null 2>/dev/null

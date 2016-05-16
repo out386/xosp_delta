@@ -112,7 +112,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             public void onClick(View v) {
                 try {
                     if(deltaJson != null) {
-                        Intent deltaIntent = new Intent(context, ApplyDelta.class);
+                        Intent deltaIntent = new Intent(context, ApplyDeltaService.class);
                         deltaIntent.putExtra("source", source.toString());
                         deltaIntent.putExtra("deltaJson", deltaJson);
                         deltaIntent.putExtra("sourceParent", source.getParent());
@@ -143,6 +143,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         if(diff.exists())
             diff.delete();
         List<String> resultConfig = Shell.SH.run("unzip " + delta.toString() + " deltaconfig " + "-d " + delta.getParent());
+        Log.v(TAG, resultConfig.toString());
         if(resultConfig == null || resultConfig.isEmpty()) {
             Log.e(TAG, "Failed to extract deltaconfig");
             applyDialog.removeExtra(Constants.DIALOG_MESSAGE);

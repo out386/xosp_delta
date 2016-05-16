@@ -12,9 +12,6 @@ public class SortFileType
 {
 	final String TAG = Constants.TAG;
 	File file;
-	public SortFileType(Context context) {
-
-	}
 
 	public String sort(File file)
 	{

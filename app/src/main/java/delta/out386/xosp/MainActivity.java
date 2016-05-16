@@ -42,7 +42,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
         Fragment fragment=new Fragment();
         switch (position)
         {
-            case 0: fragment = BaseFragment.newInstance(position + 1);
+            case 0: fragment = AutoApplyFragment.newInstance();
 				break;
             case 1: fragment = BaseFragment.newInstance(position + 1);
                 break;
@@ -50,7 +50,9 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks
                 break;
             case 3: fragment = BaseFragment.newInstance(position + 1);
                 break;
-            case 4: fragment = QueueFragment.newInstance(position + 1);
+            case 4: fragment = BaseFragment.newInstance(position + 1);
+                break;
+            case 5: fragment = QueueFragment.newInstance(position + 1);
                 break;
         }
         FragmentManager fragmentManager = getFragmentManager();

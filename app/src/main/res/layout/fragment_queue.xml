@@ -197,6 +197,19 @@
                     android:padding="20dip"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="160dp"
+                android:id="@+id/queueNoAutoLayout"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:text="Sorry, delta auto apply is not available on this build."
+                    android:padding="20dip"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
     </ScrollView>
 </RelativeLayout>

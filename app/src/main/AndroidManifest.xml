@@ -25,10 +25,13 @@
         </activity>
 
         <service
-            android:name=".ApplyDelta"
+            android:name=".ApplyDeltaService"
             android:exported="false" />
         <service
             android:name=".BuiltSizeService"
+            android:exported="false" />
+        <service
+            android:name=".AutoApplySetupService"
             android:exported="false" />
     </application>
 

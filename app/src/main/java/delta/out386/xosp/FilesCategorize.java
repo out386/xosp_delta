@@ -10,11 +10,8 @@ import org.apache.commons.io.FileUtils;
 
 public class FilesCategorize {
     List<File> zips;
-	Context context;
 
-
-    public FlashablesTypeList run(Collection<File> fileCollection, Context context) {
-		this.context = context;
+    public FlashablesTypeList run(Collection<File> fileCollection) {
         zips=(List<File>) fileCollection;
         return sortSize();
 
@@ -23,7 +20,7 @@ public class FilesCategorize {
     public FlashablesTypeList sortSize(){
 		if(zips == null)
 			return null;
-		SortFileType sortFile = new SortFileType(context);
+		SortFileType sortFile = new SortFileType();
         FlashablesTypeList flashablesTypeList = new FlashablesTypeList();
 		String zipType;
         long size=0;
