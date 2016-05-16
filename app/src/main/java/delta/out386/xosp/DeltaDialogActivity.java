@@ -179,7 +179,7 @@ public class DeltaDialogActivity extends Activity {
         loadingText.setText(text);
     }
     private void applyDialog(Intent intent) {
-        Log.v("ThugOTA", "RECEIVED DELTA");
+        Log.v("XOSPDelta", "RECEIVED DELTA");
         String text = intent.getStringExtra(Constants.DIALOG_MESSAGE);
         loadingText.setText(text);
     }
