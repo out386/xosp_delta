@@ -25,6 +25,10 @@
             android:name=".DeltaDialogActivity"
             android:theme="@style/AppTheme.NoTitleBar" >
         </activity>
+        <activity
+            android:name=".IntroActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
+        </activity>
 
         <service
             android:name=".ApplyDeltaService"
