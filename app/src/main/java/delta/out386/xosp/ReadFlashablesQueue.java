@@ -95,25 +95,25 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         Button queueApplyButton = (Button)view.findViewById(R.id.queueApplyButton);
 
         if(output == null || output.roms.isEmpty() && output.deltas.isEmpty()) {
-            queueEmptyTextview.setText("No base ROM and no deltas selected. Please select a base ROM and a delta from the ROMs and deltas sections respectively.");
+            queueEmptyTextview.setText("No base ROM and no deltas found. Please download a base ROM and a delta from the XOSP Basketbuild or SourceForge sites.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
         if(output.roms.isEmpty()) {
-            queueEmptyTextview.setText("No base ROM selected. Please select a base ROM from the ROMs section.");
+            queueEmptyTextview.setText("No base ROM found. Please select a base ROM from the ROMs XOSP Basketbuild or SourceForge sites.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
         if(output.deltas.isEmpty()) {
-            queueEmptyTextview.setText("No deltas selected. Please select a delta to apply from the deltas section.");
+            queueEmptyTextview.setText("No deltas found. Please select a delta to apply from the deltas XOSP Basketbuild or SourceForge sites.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
         if(! output.deltas.get(0).file.exists()) {
-            queueEmptyTextview.setText("No suitable delta found. Update not required, or you don't have the newest delta. Alternatively, select a ROM and a delta to apply manually.");
+            queueEmptyTextview.setText("No suitable delta found. Update not required, or you don't have the newest delta. Alternatively, select a ROM and a delta to apply manually. You can find new deltas on the XOSP Basketbuild or SourceForge sites");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
