@@ -46,6 +46,7 @@ public class AboutFragment extends Fragment {
         aboutList.add(new AboutData("Android-MaterialRefreshLayout", 2, "https://github.com/android-cjj/Android-MaterialRefreshLayout"));
         aboutList.add(new AboutData("Android-SlideExpandableListView", 0, "https://github.com/tjerkw/Android-SlideExpandableListView"));
         aboutList.add(new AboutData("Apache Commons IO", 0, "http://commons.apache.org/io"));
+        aboutList.add(new AboutData("AppIntro", 0, "https://github.com/PaoloRotolo/AppIntro"));
         aboutList.add(new AboutData("AVLoadingIndicatorView", 0, "https://github.com/81813780/AVLoadingIndicatorView"));
         aboutList.add(new AboutData("libopendelta", 1, "https://github.com/omnirom/android_packages_apps_OpenDelta/blob/android-6.0/jni/Android.mk"));
         aboutList.add(new AboutData("libsuperuser", 0, "https://github.com/Chainfire/libsuperuser"));

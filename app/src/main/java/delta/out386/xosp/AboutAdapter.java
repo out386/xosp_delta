@@ -47,7 +47,7 @@ public class AboutAdapter extends ArrayAdapter<AboutData> {
             TextView link = (TextView) v.findViewById(R.id.libraryLinkText);
             String license = null;
             if(p.license == 0)
-                license = "Apache version 2.0";
+                license = "Apache License, version 2.0";
             else if(p.license == 1)
                 license = "GNU General Public License 3";
             else if(p.license == 2)
