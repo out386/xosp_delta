@@ -41,19 +41,19 @@ public class IntroActivity extends AppIntro2 {
         addSlide(AppIntroFragment.newInstance(
                 "Quick info",
                 "Once an update releases, copy the old ROM zip you already have, and the new delta, to the 'XOSPDelta' directory in root of storage. This is only needed the first time. For the next updates, copy over just the new delta.",
-                R.drawable.ic_drawer,
+                R.drawable.slide3,
                 Color.parseColor("#F44336")
         ));
         addSlide(AppIntroFragment.newInstance(
                 "Quick info",
                 "Once the delta is applied, just flash the zip it just created.",
-                R.drawable.ic_drawer,
+                R.drawable.slide3,
                 Color.parseColor("#FF9800")
         ));
         addSlide(AppIntroFragment.newInstance(
                 "That's it!",
                 "Everything will be automated from the next version, but for now, take a peek in Settings before starting.",
-                R.drawable.ic_drawer,
+                R.drawable.slide4,
                 Color.parseColor("#795548")
         ));
         setFadeAnimation();
