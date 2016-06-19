@@ -55,6 +55,8 @@ public class Constants {
     final static int ROM_ZIP_DEVICE_LOCATION = 6;
     final static String ROM_ZIP_NAME = "XOSP";
     final static String ROM_ZIP_DEVICE_NAME = Shell.SH.run("getprop ro.xosp.device").get(0);
+    final static String OFFICIAL_LIST = "angler armani d851 d855 falcon h811 h815 hammerhead lettuce lux mako oneplus2 osprey shamu sprout4 sprout8 surnia titan tomato vs985 Z008 Z00A";
+
     /**
      * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device.zip
      */

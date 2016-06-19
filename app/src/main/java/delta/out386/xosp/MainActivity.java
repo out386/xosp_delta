@@ -111,6 +111,10 @@ public class MainActivity extends Activity
                 finish();
             }
         }
+        if(!Constants.OFFICIAL_LIST.contains(Constants.ROM_ZIP_DEVICE_NAME)) {
+            // Wrong device. Let's purposefully not tell the user why the app just closed :p
+            finish();
+        }
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
