@@ -33,7 +33,7 @@ public class IntroActivity extends AppIntro2 {
                 Color.parseColor("#03A9F4")
         ));
         addSlide(AppIntroFragment.newInstance(
-                "ROM updated? No worries!",
+                "ROM updated? No worries.",
                 "Just grab a tiny delta of the update, combine with your old ROM zip, and flash to get the update!",
                 R.drawable.slide2,
                 Color.parseColor("#FFC107")
@@ -52,9 +52,9 @@ public class IntroActivity extends AppIntro2 {
         ));
         addSlide(AppIntroFragment.newInstance(
                 "That's it!",
-                "Everything will be automated from the next version, but for now, take a peek in Settings before starting.",
+                "You might want to take a peek in Settings before starting.",
                 R.drawable.slide4,
-                Color.parseColor("#795548")
+                Color.parseColor("#8BC34A")
         ));
         setFadeAnimation();
     }

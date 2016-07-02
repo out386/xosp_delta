@@ -46,6 +46,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 public class MainActivity extends Activity
@@ -112,7 +113,8 @@ public class MainActivity extends Activity
             }
         }
         if(!Constants.OFFICIAL_LIST.contains(Constants.ROM_ZIP_DEVICE_NAME)) {
-            // Wrong device. Let's purposefully not tell the user why the app just closed :p
+            // Wrong device.
+            Toast.makeText(MainActivity.this, "XOSPDelta is only for the official XOSP devices.", Toast.LENGTH_SHORT).show();
             finish();
         }
         Thread t = new Thread(new Runnable() {
@@ -151,14 +153,6 @@ public class MainActivity extends Activity
             getFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, AutoApplyFragment.newInstance())
                     .commit();
-            /*FragmentManager fragmentManager = getFragmentManager();
-            BaseFragment fragment = BaseFragment.newInstance(1);
-            View mFragmentContainerView = findViewById(R.id.navigation_drawer);
-            DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .commit();*/
         }
     }
 	
