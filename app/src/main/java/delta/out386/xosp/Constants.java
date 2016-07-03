@@ -65,4 +65,6 @@ public class Constants {
     /**
      * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device.zip
      */
+	 
+	 final static String UPDATE_JSON_URL = "https://basketbuild.com/api4web/devs/XOSP/";
 }

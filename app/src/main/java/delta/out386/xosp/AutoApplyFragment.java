@@ -31,6 +31,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
+
 import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
@@ -90,7 +93,16 @@ public class AutoApplyFragment extends Fragment {
         }
         Intent autoApplyService = new Intent(context, AutoApplySetupService.class);
         context.startService(autoApplyService);
-        return rootView;
+
+        MaterialRefreshLayout emptyRefresh = (MaterialRefreshLayout) rootView.findViewById(R.id.emptyRefresh);
+        new DownloadUpdateJson(context, rootView).execute();
+        emptyRefresh.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+                new DownloadUpdateJson(context, rootView).execute();
+            }
+        });
+            return rootView;
     }
     @Override
     public void onPause() {

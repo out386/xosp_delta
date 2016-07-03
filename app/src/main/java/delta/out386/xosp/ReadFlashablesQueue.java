@@ -101,13 +101,13 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             return;
         }
         if(output.roms.isEmpty()) {
-            queueEmptyTextview.setText("No base ROM found. Please select a base ROM from the ROMs XOSP Basketbuild.");
+            queueEmptyTextview.setText("No base ROM found. Please download a base ROM from the ROMs XOSP Basketbuild.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
         if(output.deltas.isEmpty()) {
-            queueEmptyTextview.setText("No deltas found. Please select a delta to apply from the deltas XOSP Basketbuild.");
+            queueEmptyTextview.setText("No deltas found. Please download a delta to apply from the deltas XOSP Basketbuild.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
