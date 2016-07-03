@@ -112,7 +112,7 @@ public class MainActivity extends Activity
                 finish();
             }
         }
-        if(!Constants.OFFICIAL_LIST.contains(Constants.ROM_ZIP_DEVICE_NAME)) {
+        if(! isOfficial()) {
             // Wrong device.
             Toast.makeText(MainActivity.this, "XOSPDelta is only for the official XOSP devices.", Toast.LENGTH_SHORT).show();
             finish();
@@ -229,5 +229,12 @@ public class MainActivity extends Activity
         LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(applyReciever);
         LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(genericMessageReciever);
         super.onPause();
+    }
+
+    public boolean isOfficial() {
+        for(String deviceName:Constants.OFFICIAL_LIST)
+            if(deviceName.equals(Constants.ROM_ZIP_DEVICE_NAME))
+                return true;
+        return false;
     }
 }
