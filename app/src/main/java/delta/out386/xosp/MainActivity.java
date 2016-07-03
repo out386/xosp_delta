@@ -82,7 +82,7 @@ public class MainActivity extends Activity
         LocalBroadcastManager.getInstance(getApplication()).registerReceiver(applyReciever, apply);
 
         IntentFilter genericMessage = new IntentFilter();
-        apply.addAction(Constants.ACTION_APPLY_DIALOG_FIRST_START);
+        genericMessage.addAction(Constants.GENERIC_DIALOG_FIRST_START);
         LocalBroadcastManager.getInstance(getApplication()).registerReceiver(genericMessageReciever, genericMessage);
         super.onResume();
     }
