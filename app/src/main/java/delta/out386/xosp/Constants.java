@@ -37,6 +37,9 @@ public class Constants {
 	final static String AUTO_UPDATE_BASE = "delta.out386.xosp.AUTO_UPDATE_BASE";
     final static String AUTO_UPDATE_DELTA = "delta.out386.xosp.AUTO_UPDATE_DELTA";
 
+    final static String GENERIC_TOAST = "delta.out386.xosp.GENERIC_TOAST";
+    final static String GENERIC_TOAST_MESSAGE = "delta.out386.xosp.GENERIC_TOAST_MESSAGE";
+
     /**
      * Information about the supported rom.
      * SUPPORTED_ROM_PROP is the is the property that XOSP uses to identify itself.

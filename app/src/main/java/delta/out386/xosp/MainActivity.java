@@ -75,6 +75,14 @@ public class MainActivity extends Activity
                     .putExtra(Constants.GENERIC_DIALOG_MESSAGE, message));
         }
     };
+
+    BroadcastReceiver genericToastReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String message = intent.getStringExtra(Constants.GENERIC_TOAST_MESSAGE);
+            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+        }
+    };
     @Override
     protected void onResume() {
         IntentFilter apply = new IntentFilter();
@@ -84,6 +92,10 @@ public class MainActivity extends Activity
         IntentFilter genericMessage = new IntentFilter();
         genericMessage.addAction(Constants.GENERIC_DIALOG_FIRST_START);
         LocalBroadcastManager.getInstance(getApplication()).registerReceiver(genericMessageReciever, genericMessage);
+
+        IntentFilter genericToast = new IntentFilter();
+        genericToast.addAction(Constants.GENERIC_TOAST);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(genericToastReciever, genericToast);
         super.onResume();
     }
     @Override

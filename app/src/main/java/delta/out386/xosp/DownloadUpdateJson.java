@@ -88,7 +88,7 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     public void onPostExecute(Void v){
         emptyRefresh.finishRefresh();
         if(isSuccessful)
-            new ProcessUpdateJson(json).execute();
+            new ProcessUpdateJson(json, context).execute();
     }
     private HttpsURLConnection setupHttpsRequest(String urlStr){
         URL url;
@@ -104,13 +104,17 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
             urlConnection.connect();
             int code = urlConnection.getResponseCode();
             if (code != HttpsURLConnection.HTTP_OK) {
-                Toast.makeText(context, "Failed to download the list of ROMs and deltas. The error code is " + code, Toast.LENGTH_SHORT).show();
+                Intent genericToast = new Intent(Constants.GENERIC_TOAST);
+                genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "Failed to download the list of ROMs and deltas. The error code is " + code);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
                 return null;
             }
             return urlConnection;
         }
         catch(UnknownHostException e) {
-            Toast.makeText(context, "Could not connect to the download server", Toast.LENGTH_SHORT).show();
+            Intent genericToast = new Intent(Constants.GENERIC_TOAST);
+            genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "Could not connect to the download server");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
         }
         catch (Exception e) {
             Log.e(TAG, "URLConnection : " + e.toString());

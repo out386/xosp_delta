@@ -18,7 +18,10 @@ package delta.out386.xosp;
  * You should have received a copy of the GNU General Public License
  * along with XOSPDelta. If not, see <http://www.gnu.org/licenses/>.
  */
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -35,10 +38,12 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
     String json;
     final String TAG = Constants.TAG;
     BasketbuildJson updates;
+    Context context;
     final String DEVICE = Constants.ROM_ZIP_DEVICE_NAME;
 
-    public ProcessUpdateJson(String json){
+    public ProcessUpdateJson(String json, Context context){
         this.json = json;
+        this.context = context;
     }
 
     @Override
@@ -56,7 +61,9 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
 
         try {
             if (updates == null || updates.files.length == 0) {
-                Log.e(TAG, "ROM descriptors are wrong. Ask the maintainer to fix it.");
+                Intent genericToast = new Intent(Constants.GENERIC_TOAST);
+                genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "ROM descriptors are wrong. Ask the maintainer to fix it.");
+                LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
                 return null;
             }
             Log.v(TAG, "updates.files.length : " + updates.files.length);
