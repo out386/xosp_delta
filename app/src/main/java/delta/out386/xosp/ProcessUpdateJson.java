@@ -23,16 +23,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Scanner;
 
 public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
     String json;

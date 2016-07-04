@@ -181,17 +181,7 @@ public class MainActivity extends Activity
         switch (position)
         {
             case 1: fragment = AutoApplyFragment.newInstance();
-                break;/*
-            case 2: fragment = BaseFragment.newInstance(position);
                 break;
-            case 3: fragment = BaseFragment.newInstance(position);
-                break;
-            case 4: fragment = BaseFragment.newInstance(position);
-                break;
-            case 5: fragment = BaseFragment.newInstance(position);
-                break;
-            case 2: fragment = QueueFragment.newInstance(position);
-                break;*/
             case 2: fragment = AboutFragment.newInstance();
                 break;
             case 3: fragment = SettingsFragment.newInstance();

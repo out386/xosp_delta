@@ -1,7 +1,5 @@
 package delta.out386.xosp;
 
-import android.content.Intent;
-
 import java.util.StringTokenizer;
 
 /*

@@ -1,12 +1,7 @@
 <resources>
     <string name="app_name">XOSPDelta</string>
 
-    <string name="drawer_item1">Auto Apply</string>
-    <string name="drawer_item2">Roms</string>
-    <string name="drawer_item3">Deltas</string>
-    <string name="drawer_item4">Kernels</string>
-    <string name="drawer_item5">Others</string>
-    <string name="drawer_item6">Queue</string>
+    <string name="drawer_item1">Apply</string>
     <string name="drawer_item7">About</string>
     <string name="drawer_item8">Settings</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
