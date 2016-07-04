@@ -25,15 +25,20 @@ import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.cjj.MaterialRefreshLayout;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -43,7 +48,7 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
 
     final String TAG = Constants.TAG;
     String url = Constants.UPDATE_JSON_URL + Constants.ROM_ZIP_DEVICE_NAME;
-    File f;
+    String json = "", jsonLine;
     View rootView;
     Context context;
     boolean isSuccessful = false;
@@ -52,7 +57,6 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     public DownloadUpdateJson(Context context, View rootView) {
         this.context = context;
         this.rootView = rootView;
-        f = new File(context.getFilesDir().toString() + "/updateJson");
     }
     @Override
     public void onPreExecute() {
@@ -61,26 +65,19 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     @Override
     public Void doInBackground(Void... v) {
         HttpsURLConnection urlConnection = null;
-        long len = 0;
-        if (f.exists())
-            f.delete();
         try {
             urlConnection = setupHttpsRequest(url);
             if(urlConnection == null)
                 return null;
-            len = urlConnection.getContentLength();
-            InputStream is = urlConnection.getInputStream();
-            FileOutputStream os = new FileOutputStream(f, false);
-            IOUtils.copy(is, os);
-            is.close();
-            os.flush();
-            os.close();
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            while((jsonLine = br.readLine()) != null)
+                json = json + jsonLine;
+            br.close();
             isSuccessful = true;
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         } finally {
             if (urlConnection != null) {
-                Log.v(TAG, String.valueOf(len));
                 urlConnection.disconnect();
             }
         }
@@ -91,7 +88,7 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     public void onPostExecute(Void v){
         emptyRefresh.finishRefresh();
         if(isSuccessful)
-            new ProcessUpdateJson(f).execute();
+            new ProcessUpdateJson(json).execute();
     }
     private HttpsURLConnection setupHttpsRequest(String urlStr){
         URL url;
@@ -107,17 +104,17 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
             urlConnection.connect();
             int code = urlConnection.getResponseCode();
             if (code != HttpsURLConnection.HTTP_OK) {
-                Log.e(TAG, "JSON download failed : " + code);
-                Log.e(TAG, "With URL : " + url);
-                Intent failureMessage = new Intent(Constants.GENERIC_DIALOG_FIRST_START);
-                failureMessage.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Failed to download the list of ROMs and deltas. The error code is " + code);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(failureMessage);
+                Toast.makeText(context, "Failed to download the list of ROMs and deltas. The error code is " + code, Toast.LENGTH_SHORT).show();
                 return null;
             }
             return urlConnection;
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-            return null;
         }
+        catch(UnknownHostException e) {
+            Toast.makeText(context, "Could not connect to the download server", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e) {
+            Log.e(TAG, "URLConnection : " + e.toString());
+        }
+        return null;
     }
 }

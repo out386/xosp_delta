@@ -32,42 +32,34 @@ import java.io.FileInputStream;
 import java.util.Scanner;
 
 public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
-    File file;
+    String json;
     final String TAG = Constants.TAG;
     BasketbuildJson updates;
     final String DEVICE = Constants.ROM_ZIP_DEVICE_NAME;
 
-    public ProcessUpdateJson(File file){
-        this.file = file;
+    public ProcessUpdateJson(String json){
+        this.json = json;
     }
 
     @Override
     public Void doInBackground(Void... params){
-
-        if(!file.exists())
-            return null;
         Log.v(TAG, "Parsing update JSON");
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<BasketbuildJson> jsonAdapter = moshi.adapter(BasketbuildJson.class);
-        String json = "";
         try {
-            Scanner sc = new Scanner(new FileInputStream(file));
-            while(sc.hasNextLine())
-                json = json + "\n" + sc.nextLine();
             Log.v(TAG, "json : " + json);
             updates = jsonAdapter.fromJson(json);
-            Log.v(TAG, "updates.length : " + updates.files.length);
         }
         catch(Exception e) {
             Log.e(TAG, e.toString());
         }
 
         try {
-            String temp = "";
-            if (updates == null) {
+            if (updates == null || updates.files.length == 0) {
                 Log.e(TAG, "ROM descriptors are wrong. Ask the maintainer to fix it.");
                 return null;
             }
+            Log.v(TAG, "updates.files.length : " + updates.files.length);
             for (folder folder : updates.folders) {
                 Log.i(TAG, "Folder : " + folder.folder);
             }
