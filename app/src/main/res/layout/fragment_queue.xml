@@ -10,16 +10,12 @@
         android:background="@color/colorPrimary">
     </LinearLayout>
 
-    <com.cjj.MaterialRefreshLayout
+    <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/emptyRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:overlay="false"
-        app:wave_show="true"
-        app:wave_color="@color/colorAccent"
-        app:wave_height_type="normal" >
+         >
         <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -222,5 +218,5 @@
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
         </ScrollView>
-    </com.cjj.MaterialRefreshLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

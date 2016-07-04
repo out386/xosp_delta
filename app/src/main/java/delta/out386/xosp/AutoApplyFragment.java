@@ -26,13 +26,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-
-import com.cjj.MaterialRefreshLayout;
-import com.cjj.MaterialRefreshListener;
 
 import java.util.List;
 
@@ -94,11 +92,18 @@ public class AutoApplyFragment extends Fragment {
         Intent autoApplyService = new Intent(context, AutoApplySetupService.class);
         context.startService(autoApplyService);
 
-        MaterialRefreshLayout emptyRefresh = (MaterialRefreshLayout) rootView.findViewById(R.id.emptyRefresh);
-        new DownloadUpdateJson(context, rootView).execute();
-        emptyRefresh.setMaterialRefreshListener(new MaterialRefreshListener() {
+        final SwipeRefreshLayout emptyRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.emptyRefresh);
+        emptyRefresh.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary);
+        emptyRefresh.post(new Runnable() {
             @Override
-            public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+            public void run() {
+                emptyRefresh.setRefreshing(true);
+            }
+        });
+        new DownloadUpdateJson(context, rootView).execute();
+        emptyRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
                 new DownloadUpdateJson(context, rootView).execute();
             }
         });

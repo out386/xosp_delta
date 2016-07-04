@@ -23,11 +23,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
-import com.cjj.MaterialRefreshLayout;
 
 import org.apache.commons.io.IOUtils;
 
@@ -52,7 +51,7 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     View rootView;
     Context context;
     boolean isSuccessful = false;
-    MaterialRefreshLayout emptyRefresh;
+    SwipeRefreshLayout emptyRefresh;
 
     public DownloadUpdateJson(Context context, View rootView) {
         this.context = context;
@@ -60,7 +59,7 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     }
     @Override
     public void onPreExecute() {
-        emptyRefresh = (MaterialRefreshLayout) rootView.findViewById(R.id.emptyRefresh);
+        emptyRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.emptyRefresh);
     }
     @Override
     public Void doInBackground(Void... v) {
@@ -86,7 +85,12 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
 
     @Override
     public void onPostExecute(Void v){
-        emptyRefresh.finishRefresh();
+        emptyRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                emptyRefresh.setRefreshing(false);
+            }
+        });
         if(isSuccessful)
             new ProcessUpdateJson(json, context).execute();
     }
