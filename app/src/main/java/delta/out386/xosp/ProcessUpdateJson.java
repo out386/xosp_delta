@@ -27,6 +27,12 @@ import android.util.Log;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+
 public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
     String json;
     final String TAG = Constants.TAG;
@@ -42,6 +48,10 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
     @Override
     public Void doInBackground(Void... params){
         Log.v(TAG, "Parsing update JSON");
+        if(json.equals(""))
+            if(!readOldJson())
+                return null;
+
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<BasketbuildJson> jsonAdapter = moshi.adapter(BasketbuildJson.class);
         try {
@@ -75,5 +85,22 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             Log.e(TAG, e.toString());
         }
         return null;
+    }
+    public boolean readOldJson() {
+        File oldJson = new File(context.getCacheDir().toString() + "/romsList");
+        if(!oldJson.exists())
+            return false;
+        try {
+            BufferedReader bw = new BufferedReader(new InputStreamReader(new FileInputStream(oldJson)));
+            String tmp;
+            while((tmp = bw.readLine()) != null)
+                json = json + tmp;
+            bw.close();
+        }
+        catch(Exception e) {
+            Log.e(TAG, "readOldJson: ", e);
+            return false;
+        }
+        return true;
     }
 }

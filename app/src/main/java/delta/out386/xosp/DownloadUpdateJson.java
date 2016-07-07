@@ -28,7 +28,11 @@ import android.util.Log;
 import android.view.View;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.UnknownHostException;
 
@@ -39,16 +43,16 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     static final int HTTP_CONNECTION_TIMEOUT = 30000;
 
     final String TAG = Constants.TAG;
-    String url = Constants.UPDATE_JSON_URL + Constants.ROM_ZIP_DEVICE_NAME;
-    String json = "", jsonLine;
+    String url = Constants.UPDATE_JSON_URL + Constants.ROM_ZIP_DEVICE_NAME, json = "", jsonLine;
+    File jsonStore;
     View rootView;
     Context context;
-    boolean isSuccessful = false;
     SwipeRefreshLayout emptyRefresh;
 
     public DownloadUpdateJson(Context context, View rootView) {
         this.context = context;
         this.rootView = rootView;
+        jsonStore = new File(context.getCacheDir().toString() + "/romsList");
     }
     @Override
     public void onPreExecute() {
@@ -65,7 +69,13 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
             while((jsonLine = br.readLine()) != null)
                 json = json + jsonLine;
             br.close();
-            isSuccessful = true;
+
+            if(jsonStore.exists())
+                jsonStore.delete();
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(jsonStore)));
+            bw.write(json);
+            bw.close();
+            Log.i(TAG, jsonStore.toString());
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         } finally {
@@ -84,7 +94,6 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
                 emptyRefresh.setRefreshing(false);
             }
         });
-        if(isSuccessful)
             new ProcessUpdateJson(json, context).execute();
     }
     private HttpsURLConnection setupHttpsRequest(String urlStr){
