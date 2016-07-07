@@ -28,10 +28,10 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import delta.out386.xosp.BasketbuildJson.*;
 
 public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
     String json;
@@ -53,8 +53,8 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
                 return null;
 
         Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<BasketbuildJson> jsonAdapter = moshi.adapter(BasketbuildJson.class);
         try {
+            JsonAdapter<BasketbuildJson> jsonAdapter = moshi.adapter(BasketbuildJson.class);
             Log.v(TAG, "json : " + json);
             updates = jsonAdapter.fromJson(json);
         }
@@ -70,11 +70,8 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
                 return null;
             }
             Log.v(TAG, "updates.files.length : " + updates.files.length);
-            for (folder folder : updates.folders) {
-                Log.i(TAG, "Folder : " + folder.folder);
-            }
+            updates.process(updates);
             for (file file : updates.files) {
-                file.process();
                 Log.i(TAG, "File : " + file.file);
                 Log.i(TAG, "File size: " + file.filesize);
                 Log.i(TAG, "File MD5: " + file.filemd5);

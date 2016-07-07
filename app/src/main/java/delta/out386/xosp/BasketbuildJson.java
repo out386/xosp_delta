@@ -22,20 +22,19 @@ import java.util.StringTokenizer;
  * along with XOSPDelta. If not, see <http://www.gnu.org/licenses/>.
  */
 public class BasketbuildJson {
-    folder [] folders;
-    file [] files;
-}
-class folder {
-    String folder;
-}
-class file {
-    String file;
-    String filesize;
-    String filemd5;
-    long date;
+    file[] files;
 
-    public void process() {
-        String [] fileComponents = file.split("[" + Constants.ROM_ZIP_DELIMITER + "]");
-        date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION - 1]);
+    static class file {
+        String file;
+        String filesize;
+        String filemd5;
+        long date;
+    }
+
+    public void process(BasketbuildJson updates) {
+        for(int i = 0; i< updates.files.length; i++) {
+            String[] fileComponents = updates.files[i].file.split("[" + Constants.ROM_ZIP_DELIMITER + "]");
+            updates.files[i].date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION - 1]);
+        }
     }
 }
