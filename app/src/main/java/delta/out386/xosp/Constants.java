@@ -60,9 +60,9 @@ public class Constants {
     final static String ROM_ZIP_DEVICE_NAME = "angler";//Shell.SH.run("getprop ro.xosp.device").get(0);
 
     final static String [] OFFICIAL_LIST = {
-            "angler", "armani", "d851", "d855", "falcon", "h811", "h815", "hammerhead",
-            "lettuce", "lux", "mako", "oneplus2", "osprey", "shamu", "sprout4", "sprout8",
-            "surnia", "titan", "tomato", "vs985", "Z008", "Z00A"
+            "angler", "armani", "bullhead", "d802", "d850", "d851", "d855", "falcon", "h811", "h815", "hammerhead",
+            "kenzo", "lettuce", "lux", "mako", "oneplus2", "onyx", "osprey", "shamu", "shieldtablet", "sprout4",
+            "sprout8", "surnia", "titan", "tomato", "wt88047", "vs985", "Z008", "Z00A"
     };
 
     /**
