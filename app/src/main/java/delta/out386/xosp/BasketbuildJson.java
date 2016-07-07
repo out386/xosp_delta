@@ -23,7 +23,7 @@ import java.util.StringTokenizer;
  */
 public class BasketbuildJson {
     file[] files;
-
+    // BasketBuild support is broken now.
     static class file {
         String file;
         String filesize;

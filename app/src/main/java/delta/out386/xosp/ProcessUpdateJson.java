@@ -32,11 +32,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import delta.out386.xosp.BasketbuildJson.*;
+import delta.out386.xosp.JenkinsJson.*;
 
 public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
     String json;
     final String TAG = Constants.TAG;
-    BasketbuildJson updates;
+    JenkinsJson updates;
     Context context;
     final String DEVICE = Constants.ROM_ZIP_DEVICE_NAME;
 
@@ -54,28 +55,38 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
 
         Moshi moshi = new Moshi.Builder().build();
         try {
-            JsonAdapter<BasketbuildJson> jsonAdapter = moshi.adapter(BasketbuildJson.class);
+            JsonAdapter<JenkinsJson> jsonAdapter = moshi.adapter(JenkinsJson.class);
             Log.v(TAG, "json : " + json);
             updates = jsonAdapter.fromJson(json);
+            if(updates.isMalformed) {
+                Log.i(TAG, "Wrong filename format for the ROM zips");
+                Intent genericToast = new Intent(Constants.GENERIC_TOAST);
+                genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "ROM filename format is wrong. Ask the maintainer to fix it.");
+                LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
+                return null;
+            }
         }
         catch(Exception e) {
             Log.e(TAG, e.toString());
         }
 
         try {
-            if (updates == null || updates.files.length == 0) {
+            if (updates == null || updates.builds.length == 0) {
                 Intent genericToast = new Intent(Constants.GENERIC_TOAST);
                 genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "ROM descriptors are wrong. Ask the maintainer to fix it.");
                 LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
                 return null;
             }
-            Log.v(TAG, "updates.files.length : " + updates.files.length);
+            Log.v(TAG, "updates.files.length : " + updates.builds.length);
             updates.process(updates);
-            for (file file : updates.files) {
-                Log.i(TAG, "File : " + file.file);
-                Log.i(TAG, "File size: " + file.filesize);
-                Log.i(TAG, "File MD5: " + file.filemd5);
-                Log.i(TAG, "File date: " + file.date);
+            for (builds builds : updates.builds) {
+                if(builds.artifacts.length == 0)
+                    continue;
+                Log.i(TAG, "Build name : " + builds.artifacts[0].fileName);
+                Log.i(TAG, "Build MD5 : " + builds.fingerprint[0].hash);
+                Log.i(TAG, "Build date : " + builds.artifacts[0].date);
+                Log.i(TAG, "Build ID : " + builds.id);
+                Log.i(TAG, "Build relative path : " + builds.artifacts[0].relativePath);
             }
         }
         catch(ArrayIndexOutOfBoundsException e){

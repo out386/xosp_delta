@@ -69,5 +69,7 @@ public class Constants {
      * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device.zip
      */
 	 
-	 final static String UPDATE_JSON_URL = "https://basketbuild.com/api4web/devs/XOSP/";
+	final static String UPDATE_JSON_URL_BASKETBUILD = "https://basketbuild.com/api4web/devs/XOSP/";
+    final static String UPDATE_JSON_URL_JENKINS_1 = "http://xosp.legacyserver.in/job/XOSP%20Weeklies%20(";
+    final static String UPDATE_JSON_URL_JENKINS_2 = ")/api/json?depth=1&tree=builds[artifacts[fileName,relativePath],id,fingerprint[hash]]";
 }
