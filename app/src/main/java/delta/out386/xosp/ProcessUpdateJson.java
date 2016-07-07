@@ -59,10 +59,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             Log.v(TAG, "json : " + json);
             updates = jsonAdapter.fromJson(json);
             if(updates.isMalformed) {
-                Log.i(TAG, "Wrong filename format for the ROM zips");
-                Intent genericToast = new Intent(Constants.GENERIC_TOAST);
-                genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "ROM filename format is wrong. Ask the maintainer to fix it.");
-                LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
+                sendGenericToast("ROM filename format is wrong. Ask the maintainer to fix it.");
                 return null;
             }
         }
@@ -72,9 +69,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
 
         try {
             if (updates == null || updates.builds.length == 0) {
-                Intent genericToast = new Intent(Constants.GENERIC_TOAST);
-                genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "ROM descriptors are wrong. Ask the maintainer to fix it.");
-                LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
+                sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.");
                 return null;
             }
             Log.v(TAG, "updates.files.length : " + updates.builds.length);
@@ -110,5 +105,10 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             return false;
         }
         return true;
+    }
+    public void sendGenericToast(String message) {
+        Intent genericToast = new Intent(Constants.GENERIC_TOAST);
+        genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, message);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
     }
 }

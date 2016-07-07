@@ -34,7 +34,7 @@ public class JenkinsJson {
     static class artifacts {
         String fileName;
         String relativePath;
-        long date;
+        int date;
         boolean isDelta;
     }
 
@@ -49,23 +49,13 @@ public class JenkinsJson {
         for(int i = 0; i < updates.builds.length; i++) {
             if(updates.builds[i].artifacts.length == 0)
                 continue;
-            int dateIndex = 0;
-            String[] fileComponents = updates.builds[i].artifacts[0].fileName.split("[" + Constants.ROM_ZIP_DELIMITER + "]");
-
-            // As deltas will have all their indices offset one place to the right
-            if(fileComponents[0].equals("delta")) {
-                dateIndex = Constants.ROM_ZIP_DATE_LOCATION;
-                updates.builds[i].artifacts[0].isDelta = true;
-            }
-            else
-                dateIndex = Constants.ROM_ZIP_DATE_LOCATION -1;
-            try {
-                updates.builds[i].artifacts[0].date = Integer.parseInt(fileComponents[dateIndex]);
-            }
-            catch (NumberFormatException e) {
-                Log.e(Constants.TAG, "JSON parsing : ", e);
+            Tools.RomDateType romType = new Tools().romZipDate(updates.builds[i].artifacts[0].fileName, false);
+            if(romType.date == -1) {
                 isMalformed = true;
+                return;
             }
+            updates.builds[i].artifacts[0].date = romType.date;
+            updates.builds[i].artifacts[0].isDelta = romType.isDelta;
         }
     }
 }

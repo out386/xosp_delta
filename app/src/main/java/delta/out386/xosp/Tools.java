@@ -44,4 +44,34 @@ public class Tools {
         }
         return (new DecimalFormat("#0.00").format(newSize) + unit);
     }
+    public RomDateType romZipDate(String romName, boolean moreInfo) {
+        int indexOffset = 0;
+        RomDateType romDate = new RomDateType();
+        String[] fileComponents = romName.split("[" + Constants.ROM_ZIP_DELIMITER + "]");
+
+        // As deltas will have all their indices offset one place to the right; indices already start from 1.
+        if(fileComponents[0].equals("delta")) {
+            indexOffset = 0;
+            romDate.isDelta = true;
+        }
+        else
+            indexOffset = 1;
+        try {
+            romDate.date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION - indexOffset]);
+        }
+        catch (NumberFormatException e) {
+            romDate.date = -1;
+        }
+
+        if(moreInfo) {
+            romDate.romName = fileComponents[Constants.ROM_ZIP_NAME_LOCATION - indexOffset];
+            romDate.deviceName = fileComponents[Constants.ROM_ZIP_DEVICE_LOCATION - indexOffset];
+        }
+        return romDate;
+    }
+    public class RomDateType {
+        boolean isDelta;
+        int date;
+        String romName, deviceName;
+    }
 }
