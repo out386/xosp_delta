@@ -35,14 +35,7 @@ class file {
     long date;
 
     public void process() {
-        StringTokenizer st = new StringTokenizer(file, Constants.ROM_ZIP_DELIMITER);
-        int location = 1;
-        while(st.hasMoreTokens()) {
-            if(location++ == Constants.ROM_ZIP_DATE_LOCATION) {
-                date = Integer.parseInt(st.nextToken());
-                break;
-            }
-            st.nextToken();
-        }
+        String [] fileComponents = file.split("[" + Constants.ROM_ZIP_DELIMITER + "]");
+        date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION - 1]);
     }
 }
