@@ -17,9 +17,11 @@
 package delta.out386.xosp;
 
 import java.text.DecimalFormat;
+import java.util.Iterator;
+import delta.out386.xosp.JenkinsJson.builds;
 
 public class Tools {
-    public String sizeFormat(long size) {
+    public static String sizeFormat(long size) {
         float newSize = size;
         String unit = " B";
         if (newSize > 1024) {
@@ -44,8 +46,8 @@ public class Tools {
         }
         return (new DecimalFormat("#0.00").format(newSize) + unit);
     }
-    public RomDateType romZipDate(String romName, boolean moreInfo) {
-        int indexOffset = 0;
+    public static RomDateType romZipDate(String romName, boolean moreInfo) {
+        int indexOffset;
         RomDateType romDate = new RomDateType();
         String[] fileComponents = romName.split("[" + Constants.ROM_ZIP_DELIMITER + "]");
 
@@ -69,9 +71,31 @@ public class Tools {
         }
         return romDate;
     }
-    public class RomDateType {
+    public static class RomDateType {
         boolean isDelta;
         int date;
         String romName, deviceName;
+    }
+
+    public static void processJenkins(JenkinsJson updates) {
+        /* Here, each build (Jenkins "job") has just one artifact. That's just how the server's set up.
+         * That is why the loop iterates over "builds" and not over both "builds" and "artifacts".
+         * This behaviour may or may not be changed later.
+         */
+        Iterator<builds> buildIterator = updates.builds.iterator();
+        while (buildIterator.hasNext()){
+            builds currentBuild = buildIterator.next();
+            if(currentBuild.artifacts.length == 0) {
+                buildIterator.remove();
+                continue;
+            }
+            RomDateType romType = romZipDate(currentBuild.artifacts[0].fileName, false);
+            if(romType.date == -1) {
+                updates.isMalformed = true;
+                return;
+            }
+            currentBuild.artifacts[0].date = romType.date;
+            currentBuild.artifacts[0].isDelta = romType.isDelta;
+        }
     }
 }

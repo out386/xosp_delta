@@ -71,7 +71,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
                 sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.");
                 return null;
             }
-            updates.process(updates);
+            Tools.processJenkins(updates);
             for (builds builds : updates.builds) {
                 Log.i(TAG, "Build name : " + builds.artifacts[0].fileName);
                 Log.i(TAG, "Build MD5 : " + builds.fingerprint[0].hash);

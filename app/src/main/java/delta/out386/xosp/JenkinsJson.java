@@ -42,25 +42,4 @@ public class JenkinsJson {
     static class fingerprint {
         String hash;
     }
-    public void process(JenkinsJson updates) {
-        /* Here, each build (Jenkins "job") has just one artifact. That's just how the server's set up.
-         * That is why the loop iterates over "builds" and not over both "builds" and "artifacts".
-         * This behaviour may or may not be changed later.
-         */
-        Iterator<builds> buildIterator = updates.builds.iterator();
-        while (buildIterator.hasNext()){
-            builds currentBuild = buildIterator.next();
-            if(currentBuild.artifacts.length == 0) {
-                buildIterator.remove();
-                continue;
-            }
-            Tools.RomDateType romType = new Tools().romZipDate(currentBuild.artifacts[0].fileName, false);
-            if(romType.date == -1) {
-                isMalformed = true;
-                return;
-            }
-            currentBuild.artifacts[0].date = romType.date;
-            currentBuild.artifacts[0].isDelta = romType.isDelta;
-        }
-    }
 }
