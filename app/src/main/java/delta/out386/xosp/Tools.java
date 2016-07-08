@@ -82,20 +82,42 @@ public class Tools {
          * That is why the loop iterates over "builds" and not over both "builds" and "artifacts".
          * This behaviour may or may not be changed later.
          */
+        int buildsSize = updates.builds.size();
+        if(buildsSize == 0)
+            return;
         Iterator<builds> buildIterator = updates.builds.iterator();
+        int  removeIndex = 0;
+        int [] remove = new int [updates.builds.size() - 1];
         while (buildIterator.hasNext()){
             builds currentBuild = buildIterator.next();
             if(currentBuild.artifacts.length == 0) {
                 buildIterator.remove();
                 continue;
             }
+
             RomDateType romType = romZipDate(currentBuild.artifacts[0].fileName, false);
             if(romType.date == -1) {
                 updates.isMalformed = true;
                 return;
             }
+
+            // Removing duplicate jobs. Just in case.
+            int currentIndex = updates.builds.indexOf(currentBuild);
+            for(int i = currentIndex + 1; i < buildsSize; i++) {
+                try {
+                    if (currentBuild.fingerprint[0].hash.equals(updates.builds.get(i).fingerprint[0].hash))
+                        remove[removeIndex++] = i;
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // Just means that it found a job with no fingerprints
+                }
+            }
             currentBuild.artifacts[0].date = romType.date;
             currentBuild.artifacts[0].isDelta = romType.isDelta;
+        }
+
+        int numberElementsRemoved = 0;
+        for(int removeCurrent = 0; removeCurrent <= removeIndex - 2; removeCurrent++) {
+            updates.builds.remove(remove[removeCurrent] - numberElementsRemoved++);
         }
     }
 }
