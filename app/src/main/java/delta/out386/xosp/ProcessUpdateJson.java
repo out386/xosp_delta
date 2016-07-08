@@ -35,11 +35,10 @@ import delta.out386.xosp.BasketbuildJson.*;
 import delta.out386.xosp.JenkinsJson.*;
 
 public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
-    String json;
+    String json, version;
     final String TAG = Constants.TAG;
     JenkinsJson updates;
     Context context;
-    final String DEVICE = Constants.ROM_ZIP_DEVICE_NAME;
 
     public ProcessUpdateJson(String json, Context context){
         this.json = json;
@@ -68,15 +67,12 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
         }
 
         try {
-            if (updates == null || updates.builds.length == 0) {
+            if (updates == null || updates.builds.size() == 0) {
                 sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.");
                 return null;
             }
-            Log.v(TAG, "updates.files.length : " + updates.builds.length);
             updates.process(updates);
             for (builds builds : updates.builds) {
-                if(builds.artifacts.length == 0)
-                    continue;
                 Log.i(TAG, "Build name : " + builds.artifacts[0].fileName);
                 Log.i(TAG, "Build MD5 : " + builds.fingerprint[0].hash);
                 Log.i(TAG, "Build date : " + builds.artifacts[0].date);

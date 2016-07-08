@@ -1,6 +1,7 @@
 package delta.out386.xosp;
 
-import android.util.Log;
+import java.util.Iterator;
+import java.util.List;
 
 /*
  * Copyright (C) 2016 Ritayan Chakraborty (out386)
@@ -22,7 +23,7 @@ import android.util.Log;
  * along with XOSPDelta. If not, see <http://www.gnu.org/licenses/>.
  */
 public class JenkinsJson {
-    builds [] builds;
+    List<builds> builds;
     boolean isMalformed;
 
     static class builds {
@@ -46,16 +47,20 @@ public class JenkinsJson {
          * That is why the loop iterates over "builds" and not over both "builds" and "artifacts".
          * This behaviour may or may not be changed later.
          */
-        for(int i = 0; i < updates.builds.length; i++) {
-            if(updates.builds[i].artifacts.length == 0)
+        Iterator<builds> buildIterator = updates.builds.iterator();
+        while (buildIterator.hasNext()){
+            builds currentBuild = buildIterator.next();
+            if(currentBuild.artifacts.length == 0) {
+                buildIterator.remove();
                 continue;
-            Tools.RomDateType romType = new Tools().romZipDate(updates.builds[i].artifacts[0].fileName, false);
+            }
+            Tools.RomDateType romType = new Tools().romZipDate(currentBuild.artifacts[0].fileName, false);
             if(romType.date == -1) {
                 isMalformed = true;
                 return;
             }
-            updates.builds[i].artifacts[0].date = romType.date;
-            updates.builds[i].artifacts[0].isDelta = romType.isDelta;
+            currentBuild.artifacts[0].date = romType.date;
+            currentBuild.artifacts[0].isDelta = romType.isDelta;
         }
     }
 }
