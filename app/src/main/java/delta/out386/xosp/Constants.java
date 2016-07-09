@@ -43,6 +43,9 @@ public class Constants {
     final static String PENDING_DOWNLOADS_INTENT = "delta.out386.xosp.PENDING_DOWNLOADS_INTENT";
     final static String PENDING_DOWNLOADS = "delta.out386.xosp.PENDING_DOWNLOADS";
 
+    final static String DOWNLOADS_JSON = "delta.out386.xosp.DOWNLOADS_JSON";
+    final static String DOWNLOADS_INTENT = "delta.out386.xosp.DOWNLOADS_INTENT";
+
     /**
      * Information about the supported rom.
      * SUPPORTED_ROM_PROP is the is the property that XOSP uses to identify itself.

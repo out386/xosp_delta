@@ -85,6 +85,15 @@ public class MainActivity extends Activity
         }
     };
 
+    BroadcastReceiver activateDownloadsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            JenkinsJson json = (JenkinsJson) intent.getSerializableExtra(Constants.DOWNLOADS_JSON);
+            download(json.builds);
+
+        }
+    };
+
     BroadcastReceiver pendingDownloadsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -118,6 +127,10 @@ public class MainActivity extends Activity
         IntentFilter pendingDownloads = new IntentFilter();
         pendingDownloads.addAction(Constants.PENDING_DOWNLOADS_INTENT);
         LocalBroadcastManager.getInstance(getApplication()).registerReceiver(pendingDownloadsReceiver, pendingDownloads);
+
+        IntentFilter activateDownloads = new IntentFilter();
+        activateDownloads.addAction(Constants.DOWNLOADS_INTENT);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(activateDownloadsReceiver, activateDownloads);
         super.onResume();
     }
     @Override
@@ -260,5 +273,9 @@ public class MainActivity extends Activity
             if(deviceName.equals(Constants.ROM_ZIP_DEVICE_NAME))
                 return true;
         return false;
+    }
+    public void download(List<JenkinsJson.builds> json) {
+        Log.i(Constants.TAG, "Recieved");
+        new DownloadBuilds(json, this).download();
     }
 }

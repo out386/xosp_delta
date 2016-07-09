@@ -20,7 +20,10 @@ package delta.out386.xosp;
  */
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,19 +36,21 @@ import android.widget.ListView;
 public class PendingDownloadsFragment extends Fragment {
     JenkinsJson json;
     View rootView;
+    Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         json = (JenkinsJson) getArguments().getSerializable("json");
         rootView = inflater.inflate(R.layout.fragment_builds, container, false);
+        context = getContext();
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        BuildsAdapter adapter = new BuildsAdapter(getContext(), R.layout.builds_item, json.builds);
+        BuildsAdapter adapter = new BuildsAdapter(context, R.layout.builds_item, json.builds);
         ListView lv = (ListView) rootView.findViewById(R.id.build_list);
         lv.setAdapter(adapter);
         Button download = (Button) rootView.findViewById(R.id.download);
@@ -56,14 +61,16 @@ public class PendingDownloadsFragment extends Fragment {
             refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    new DownloadUpdateJson(getContext(), rootView).execute();
+                    new DownloadUpdateJson(context, rootView).execute();
                 }
             });
         }
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DownloadBuilds.download(json.builds);
+                Intent download = new Intent(Constants.DOWNLOADS_INTENT);
+                download.putExtra(Constants.DOWNLOADS_JSON, json);
+                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(download);
                 Log.i(Constants.TAG, "Download tapped");
             }
         });
