@@ -52,7 +52,7 @@ public class BuildsAdapter extends ArrayAdapter<builds> {
             if(name != null)
                 name.setText(p.artifacts[0].fileName);
             if(date != null)
-                date.setText(new SimpleDateFormat("MMM d, yyyy").format(new Date(p.timestamp)));
+                date.setText(p.stringDate);
         }
         return v;
     }

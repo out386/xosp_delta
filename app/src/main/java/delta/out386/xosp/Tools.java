@@ -148,6 +148,7 @@ public class Tools {
                     + currentBuild.artifacts[0].relativePath;
             Date tempdate = new Date(currentBuild.timestamp);
             currentBuild.date = Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(tempdate));
+            currentBuild.stringDate = new SimpleDateFormat("MMM d, yyyy").format(tempdate);
 
             if(currentBuild.date <= newestAlreadyPresent) {
                 Log.i(Constants.TAG, ""+currentBuild.artifacts[0].date);

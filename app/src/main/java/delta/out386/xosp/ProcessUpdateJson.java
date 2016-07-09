@@ -81,6 +81,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             Log.i(TAG, "Build date : " + builds.artifacts[0].date);
             Log.i(TAG, "Real build date : " + builds.date);
             Log.i(TAG, "Build ID : " + builds.id);
+            Log.i(TAG, "URL : " + builds.artifacts[0].downloadUrl);
             Log.i(TAG, "Build relative path : " + builds.artifacts[0].relativePath);
         }
         Intent pendingDownloads = new Intent(Constants.PENDING_DOWNLOADS_INTENT);

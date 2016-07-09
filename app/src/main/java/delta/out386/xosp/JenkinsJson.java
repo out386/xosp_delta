@@ -33,6 +33,7 @@ public class JenkinsJson implements Serializable {
         String id;
         long timestamp;
         int date;
+        String stringDate;
         fingerprint [] fingerprint;
     }
 
