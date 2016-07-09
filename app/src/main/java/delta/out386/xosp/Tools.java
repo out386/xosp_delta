@@ -16,10 +16,14 @@
 
 package delta.out386.xosp;
 
+import android.util.Log;
+
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import delta.out386.xosp.JenkinsJson.builds;
+import eu.chainfire.libsuperuser.Shell;
 
 public class Tools {
     public static String sizeFormat(long size) {
@@ -78,17 +82,37 @@ public class Tools {
         String romName, deviceName;
     }
 
-    public static void processJenkins(JenkinsJson updates) {
+    public static boolean processJenkins(JenkinsJson updates) {
         /* Here, each build (Jenkins "job") has just one artifact. That's just how the server's set up.
          * That is why the loop iterates over "builds" and not over both "builds" and "artifacts".
          * This behaviour may or may not be changed later.
          */
         int buildsSize = updates.builds.size();
         if(buildsSize == 0)
-            return;
+            return false;
         int  removeIndex = 0, currentIndex = 0;
         int [] remove = new int [updates.builds.size()];
 
+        int installedBuildDate = Tools.romZipDate(
+                Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP)
+                        .get(0), false)
+                .date;
+        int newestBuildDate = 0;
+        for(JenkinsJson.builds currentBuild : updates.builds) {
+            if (currentBuild.artifacts.length > 0) {
+                newestBuildDate = Tools.romZipDate(currentBuild.artifacts[0].fileName, false).date;
+                break;
+            }
+        }
+        if(installedBuildDate >= newestBuildDate) {
+            // No updates needed
+            return false;
+        }
+
+        /* The builds info returned by the Jenkins API is already sorted in a reverse
+         * order. We need the oldest build to be the first element.
+         */
+        Collections.reverse(updates.builds);
         for(builds currentBuild : updates.builds) {
             // Removing duplicate jobs. Just in case.
 
@@ -110,7 +134,7 @@ public class Tools {
                 RomDateType romType = romZipDate(currentBuild.artifacts[0].fileName, false);
                 if(romType.date == -1) {
                     updates.isMalformed = true;
-                    return;
+                    return false;
                 }
                     currentBuild.artifacts[0].date = romType.date;
                     currentBuild.artifacts[0].isDelta = romType.isDelta;
@@ -121,10 +145,6 @@ public class Tools {
         int numberElementsRemoved = 0;
         for(int removeCurrent = 0; removeCurrent <= removeIndex - 1; removeCurrent++)
             updates.builds.remove(remove[removeCurrent] - numberElementsRemoved++);
-
-        /* The builds info returned by the Jenkins API is already sorted in a reverse
-         * order. We need the oldest build to be the first element.
-         */
-        Collections.reverse(updates.builds);
+        return true;
     }
 }

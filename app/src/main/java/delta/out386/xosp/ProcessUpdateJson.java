@@ -56,31 +56,30 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
         try {
             JsonAdapter<JenkinsJson> jsonAdapter = moshi.adapter(JenkinsJson.class);
             updates = jsonAdapter.fromJson(json);
-            if(updates.isMalformed) {
-                sendGenericToast("ROM filename format is wrong. Ask the maintainer to fix it.");
-                return null;
-            }
         }
         catch(Exception e) {
             Log.e(TAG, e.toString());
         }
-
-        try {
-            if (updates == null || updates.builds.size() == 0) {
-                sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.");
-                return null;
-            }
-            Tools.processJenkins(updates);
-            for (builds builds : updates.builds) {
-                Log.i(TAG, "Build name : " + builds.artifacts[0].fileName);
-                Log.i(TAG, "Build MD5 : " + builds.fingerprint[0].hash);
-                Log.i(TAG, "Build date : " + builds.artifacts[0].date);
-                Log.i(TAG, "Build ID : " + builds.id);
-                Log.i(TAG, "Build relative path : " + builds.artifacts[0].relativePath);
-            }
+        
+        if (updates == null || updates.builds.size() == 0) {
+            sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.");
+            return null;
         }
-        catch(ArrayIndexOutOfBoundsException e){
-            Log.e(TAG, e.toString());
+        boolean isUpdateNeeded = Tools.processJenkins(updates);
+        if(updates.isMalformed) {
+            sendGenericToast("ROM filename format is wrong. Ask the maintainer to fix it.");
+            return null;
+        }
+        if(!isUpdateNeeded) {
+            sendGenericToast("No updates are available.");
+            return null;
+        }
+        for (builds builds : updates.builds) {
+            Log.i(TAG, "Build name : " + builds.artifacts[0].fileName);
+            Log.i(TAG, "Build MD5 : " + builds.fingerprint[0].hash);
+            Log.i(TAG, "Build date : " + builds.artifacts[0].date);
+            Log.i(TAG, "Build ID : " + builds.id);
+            Log.i(TAG, "Build relative path : " + builds.artifacts[0].relativePath);
         }
         return null;
     }
