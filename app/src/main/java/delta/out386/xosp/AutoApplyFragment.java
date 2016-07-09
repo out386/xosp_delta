@@ -93,20 +93,23 @@ public class AutoApplyFragment extends Fragment {
         context.startService(autoApplyService);
 
         final SwipeRefreshLayout emptyRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.emptyRefresh);
-        emptyRefresh.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary);
-        emptyRefresh.post(new Runnable() {
-            @Override
-            public void run() {
-                emptyRefresh.setRefreshing(true);
-            }
-        });
-        new DownloadUpdateJson(context, rootView).execute();
-        emptyRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new DownloadUpdateJson(context, rootView).execute();
-            }
-        });
+        if(emptyRefresh != null)
+        {
+            emptyRefresh.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary);
+            emptyRefresh.post(new Runnable() {
+                @Override
+                public void run() {
+                    emptyRefresh.setRefreshing(true);
+                }
+            });
+            new DownloadUpdateJson(context, rootView).execute();
+            emptyRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new DownloadUpdateJson(context, rootView).execute();
+                }
+            });
+        }
             return rootView;
     }
     @Override

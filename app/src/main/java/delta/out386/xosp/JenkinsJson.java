@@ -1,5 +1,6 @@
 package delta.out386.xosp;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with XOSPDelta. If not, see <http://www.gnu.org/licenses/>.
  */
-public class JenkinsJson {
+public class JenkinsJson implements Serializable {
     List<builds> builds;
     boolean isMalformed;
 

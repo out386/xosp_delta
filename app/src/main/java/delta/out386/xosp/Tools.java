@@ -20,14 +20,12 @@ import android.content.Context;
 import android.util.Log;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import delta.out386.xosp.JenkinsJson.builds;
-import eu.chainfire.libsuperuser.Shell;
 
 public class Tools {
     public static String sizeFormat(long size) {

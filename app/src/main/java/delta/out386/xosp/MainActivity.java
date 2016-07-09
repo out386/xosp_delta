@@ -33,6 +33,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.content.Intent;
@@ -83,6 +84,21 @@ public class MainActivity extends Activity
             Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
         }
     };
+
+    BroadcastReceiver pendingDownloadsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            FragmentManager fragmentManager = getFragmentManager();
+            PendingDownloadsFragment frag = new PendingDownloadsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("json", intent.getSerializableExtra(Constants.PENDING_DOWNLOADS));
+            frag.setArguments(bundle);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, frag)
+                    .commit();
+        }
+    };
+
     @Override
     protected void onResume() {
         IntentFilter apply = new IntentFilter();
@@ -96,6 +112,10 @@ public class MainActivity extends Activity
         IntentFilter genericToast = new IntentFilter();
         genericToast.addAction(Constants.GENERIC_TOAST);
         LocalBroadcastManager.getInstance(getApplication()).registerReceiver(genericToastReciever, genericToast);
+
+        IntentFilter pendingDownloads = new IntentFilter();
+        pendingDownloads.addAction(Constants.PENDING_DOWNLOADS_INTENT);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(pendingDownloadsReceiver, pendingDownloads);
         super.onResume();
     }
     @Override

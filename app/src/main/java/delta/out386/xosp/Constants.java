@@ -40,6 +40,9 @@ public class Constants {
     final static String GENERIC_TOAST = "delta.out386.xosp.GENERIC_TOAST";
     final static String GENERIC_TOAST_MESSAGE = "delta.out386.xosp.GENERIC_TOAST_MESSAGE";
 
+    final static String PENDING_DOWNLOADS_INTENT = "delta.out386.xosp.PENDING_DOWNLOADS_INTENT";
+    final static String PENDING_DOWNLOADS = "delta.out386.xosp.PENDING_DOWNLOADS";
+
     /**
      * Information about the supported rom.
      * SUPPORTED_ROM_PROP is the is the property that XOSP uses to identify itself.

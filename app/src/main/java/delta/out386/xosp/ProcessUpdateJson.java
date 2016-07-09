@@ -21,6 +21,7 @@ package delta.out386.xosp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -81,6 +82,9 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             Log.i(TAG, "Build ID : " + builds.id);
             Log.i(TAG, "Build relative path : " + builds.artifacts[0].relativePath);
         }
+        Intent pendingDownloads = new Intent(Constants.PENDING_DOWNLOADS_INTENT);
+        pendingDownloads.putExtra(Constants.PENDING_DOWNLOADS, updates);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(pendingDownloads);
         return null;
     }
     public boolean readOldJson() {
