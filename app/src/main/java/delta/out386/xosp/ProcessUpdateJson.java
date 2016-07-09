@@ -65,7 +65,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.");
             return null;
         }
-        boolean isUpdateNeeded = Tools.processJenkins(updates);
+        boolean isUpdateNeeded = Tools.processJenkins(updates, context);
         if(updates.isMalformed) {
             sendGenericToast("ROM filename format is wrong. Ask the maintainer to fix it.");
             return null;

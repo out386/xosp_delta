@@ -16,12 +16,16 @@
 
 package delta.out386.xosp;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import delta.out386.xosp.JenkinsJson.builds;
 import eu.chainfire.libsuperuser.Shell;
 
@@ -82,7 +86,7 @@ public class Tools {
         String romName, deviceName;
     }
 
-    public static boolean processJenkins(JenkinsJson updates) {
+    public static boolean processJenkins(JenkinsJson updates, Context context) {
         /* Here, each build (Jenkins "job") has just one artifact. That's just how the server's set up.
          * That is why the loop iterates over "builds" and not over both "builds" and "artifacts".
          * This behaviour may or may not be changed later.
@@ -93,14 +97,14 @@ public class Tools {
         int  removeIndex = 0, currentIndex = 0;
         int [] remove = new int [updates.builds.size()];
 
-        int installedBuildDate = Tools.romZipDate(
+        int installedBuildDate = 20160500;/*romZipDate(
                 Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP)
                         .get(0), false)
-                .date;
+                .date;*/
         int newestBuildDate = 0;
         for(JenkinsJson.builds currentBuild : updates.builds) {
             if (currentBuild.artifacts.length > 0) {
-                newestBuildDate = Tools.romZipDate(currentBuild.artifacts[0].fileName, false).date;
+                newestBuildDate = romZipDate(currentBuild.artifacts[0].fileName, false).date;
                 break;
             }
         }
@@ -109,35 +113,50 @@ public class Tools {
             return false;
         }
 
+        Flashables newestDownloadedBuild = findNewestDownloadedBuild(context);
+        int downloadedBuildDate = romZipDate(newestDownloadedBuild.file.getName(), false).date;
+
+        if(downloadedBuildDate >= newestBuildDate)
+            return false;
+
+        int newestAlreadyPresent = (installedBuildDate > downloadedBuildDate) ? installedBuildDate : downloadedBuildDate;
+        Log.i(Constants.TAG, "newestAlreadyPresent " + newestAlreadyPresent);
         /* The builds info returned by the Jenkins API is already sorted in a reverse
          * order. We need the oldest build to be the first element.
          */
         Collections.reverse(updates.builds);
         for(builds currentBuild : updates.builds) {
-            // Removing duplicate jobs. Just in case.
 
+            // Removing empty jobs
             if(currentBuild.artifacts.length == 0) {
                 remove[removeIndex++] = currentIndex++;
                 continue;
             }
+
+            // This will calculate the date even for duplicates. To fix.
+            RomDateType romType = romZipDate(currentBuild.artifacts[0].fileName, false);
+            if(romType.date == -1) {
+                updates.isMalformed = true;
+                return false;
+            }
+            currentBuild.artifacts[0].date = romType.date;
+            currentBuild.artifacts[0].isDelta = romType.isDelta;
+
+            if(currentBuild.artifacts[0].date <= newestAlreadyPresent) {
+                Log.i(Constants.TAG, ""+currentBuild.artifacts[0].date);
+                remove[removeIndex++] = currentIndex++;
+                continue;
+            }
+
             for(int i = currentIndex + 1; i < buildsSize; i++) {
                 try {
+                    // Removing duplicate jobs. Just in case.
                     if (currentBuild.fingerprint[0].hash.equals(updates.builds.get(i).fingerprint[0].hash))
                         if(Arrays.binarySearch(remove, 0, removeIndex, i) < 0)
                             remove[removeIndex++] = i;
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // Just means that it found a job with no fingerprints
                 }
-            }
-            if(currentBuild.artifacts.length != 0) {
-                // This will calculate the date even for duplicates. To fix.
-                RomDateType romType = romZipDate(currentBuild.artifacts[0].fileName, false);
-                if(romType.date == -1) {
-                    updates.isMalformed = true;
-                    return false;
-                }
-                    currentBuild.artifacts[0].date = romType.date;
-                    currentBuild.artifacts[0].isDelta = romType.isDelta;
             }
             currentIndex++;
         }
@@ -146,5 +165,20 @@ public class Tools {
         for(int removeCurrent = 0; removeCurrent <= removeIndex - 1; removeCurrent++)
             updates.builds.remove(remove[removeCurrent] - numberElementsRemoved++);
         return true;
+    }
+
+    public static Flashables findNewestDownloadedBuild(Context context) {
+        List<Flashables> storedRoms = new FindZips(context, true, null, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
+                .dummyoutput()
+                //.run()
+                .roms;
+
+        Collections.sort(storedRoms, new Comparator<Flashables>() {
+            @Override
+            public int compare(Flashables o1, Flashables o2) {
+                return -(o1.file.getName().compareTo(o2.file.getName()));
+            }
+        });
+        return storedRoms.get(0);
     }
 }
