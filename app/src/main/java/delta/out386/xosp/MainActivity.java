@@ -93,9 +93,11 @@ public class MainActivity extends Activity
             Bundle bundle = new Bundle();
             bundle.putSerializable("json", intent.getSerializableExtra(Constants.PENDING_DOWNLOADS));
             frag.setArguments(bundle);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, frag)
-                    .commit();
+            try {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, frag)
+                        .commit();
+            } catch (IllegalStateException e) {}
         }
     };
 

@@ -28,7 +28,7 @@ public class JenkinsJson implements Serializable {
     List<builds> builds;
     boolean isMalformed;
 
-    static class builds {
+    static class builds implements Serializable {
         artifacts [] artifacts;
         String id;
         long timestamp;
@@ -36,14 +36,15 @@ public class JenkinsJson implements Serializable {
         fingerprint [] fingerprint;
     }
 
-    static class artifacts {
+    static class artifacts implements Serializable{
         String fileName;
         String relativePath;
         int date;
         boolean isDelta;
+        String downloadUrl;
     }
 
-    static class fingerprint {
+    static class fingerprint implements Serializable{
         String hash;
     }
 }
