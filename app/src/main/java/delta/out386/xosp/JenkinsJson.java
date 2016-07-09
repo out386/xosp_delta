@@ -1,6 +1,7 @@
 package delta.out386.xosp;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class JenkinsJson implements Serializable {
     static class builds {
         artifacts [] artifacts;
         String id;
+        long timestamp;
+        int date;
         fingerprint [] fingerprint;
     }
 

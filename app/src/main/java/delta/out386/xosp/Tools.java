@@ -20,9 +20,11 @@ import android.content.Context;
 import android.util.Log;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import delta.out386.xosp.JenkinsJson.builds;
@@ -139,8 +141,15 @@ public class Tools {
             }
             currentBuild.artifacts[0].date = romType.date;
             currentBuild.artifacts[0].isDelta = romType.isDelta;
+            currentBuild.artifacts[0].downloadUrl = Constants.UPDATE_JSON_URL_JENKINS_1
+                    + Constants.ROM_ZIP_DEVICE_NAME + ")/"
+                    + currentBuild.id
+                    + "/artifact/"
+                    + currentBuild.artifacts[0].relativePath;
+            Date tempdate = new Date(currentBuild.timestamp);
+            currentBuild.date = Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(tempdate));
 
-            if(currentBuild.artifacts[0].date <= newestAlreadyPresent) {
+            if(currentBuild.date <= newestAlreadyPresent) {
                 Log.i(Constants.TAG, ""+currentBuild.artifacts[0].date);
                 remove[removeIndex++] = currentIndex++;
                 continue;

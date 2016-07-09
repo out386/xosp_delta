@@ -9,6 +9,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -50,7 +52,7 @@ public class BuildsAdapter extends ArrayAdapter<builds> {
             if(name != null)
                 name.setText(p.artifacts[0].fileName);
             if(date != null)
-                date.setText(Integer.toString(p.artifacts[0].date));
+                date.setText(new SimpleDateFormat("MMM d, yyyy").format(new Date(p.timestamp)));
         }
         return v;
     }

@@ -79,6 +79,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             Log.i(TAG, "Build name : " + builds.artifacts[0].fileName);
             Log.i(TAG, "Build MD5 : " + builds.fingerprint[0].hash);
             Log.i(TAG, "Build date : " + builds.artifacts[0].date);
+            Log.i(TAG, "Real build date : " + builds.date);
             Log.i(TAG, "Build ID : " + builds.id);
             Log.i(TAG, "Build relative path : " + builds.artifacts[0].relativePath);
         }
