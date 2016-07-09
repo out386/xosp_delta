@@ -79,7 +79,6 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(jsonStore)));
             bw.write(json);
             bw.close();
-            Log.i(TAG, jsonStore.toString());
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         } finally {

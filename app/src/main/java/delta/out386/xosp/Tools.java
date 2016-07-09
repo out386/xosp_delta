@@ -17,7 +17,8 @@
 package delta.out386.xosp;
 
 import java.text.DecimalFormat;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.Collections;
 import delta.out386.xosp.JenkinsJson.builds;
 
 public class Tools {
@@ -85,39 +86,45 @@ public class Tools {
         int buildsSize = updates.builds.size();
         if(buildsSize == 0)
             return;
-        Iterator<builds> buildIterator = updates.builds.iterator();
-        int  removeIndex = 0;
-        int [] remove = new int [updates.builds.size() - 1];
-        while (buildIterator.hasNext()){
-            builds currentBuild = buildIterator.next();
+        int  removeIndex = 0, currentIndex = 0;
+        int [] remove = new int [updates.builds.size()];
+
+        for(builds currentBuild : updates.builds) {
+            // Removing duplicate jobs. Just in case.
+
             if(currentBuild.artifacts.length == 0) {
-                buildIterator.remove();
+                remove[removeIndex++] = currentIndex++;
                 continue;
             }
-
-            RomDateType romType = romZipDate(currentBuild.artifacts[0].fileName, false);
-            if(romType.date == -1) {
-                updates.isMalformed = true;
-                return;
-            }
-
-            // Removing duplicate jobs. Just in case.
-            int currentIndex = updates.builds.indexOf(currentBuild);
             for(int i = currentIndex + 1; i < buildsSize; i++) {
                 try {
                     if (currentBuild.fingerprint[0].hash.equals(updates.builds.get(i).fingerprint[0].hash))
-                        remove[removeIndex++] = i;
+                        if(Arrays.binarySearch(remove, 0, removeIndex, i) < 0)
+                            remove[removeIndex++] = i;
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // Just means that it found a job with no fingerprints
                 }
             }
-            currentBuild.artifacts[0].date = romType.date;
-            currentBuild.artifacts[0].isDelta = romType.isDelta;
+            if(currentBuild.artifacts.length != 0) {
+                // This will calculate the date even for duplicates. To fix.
+                RomDateType romType = romZipDate(currentBuild.artifacts[0].fileName, false);
+                if(romType.date == -1) {
+                    updates.isMalformed = true;
+                    return;
+                }
+                    currentBuild.artifacts[0].date = romType.date;
+                    currentBuild.artifacts[0].isDelta = romType.isDelta;
+            }
+            currentIndex++;
         }
 
         int numberElementsRemoved = 0;
-        for(int removeCurrent = 0; removeCurrent <= removeIndex - 2; removeCurrent++) {
+        for(int removeCurrent = 0; removeCurrent <= removeIndex - 1; removeCurrent++)
             updates.builds.remove(remove[removeCurrent] - numberElementsRemoved++);
-        }
+
+        /* The builds info returned by the Jenkins API is already sorted in a reverse
+         * order. We need the oldest build to be the first element.
+         */
+        Collections.reverse(updates.builds);
     }
 }

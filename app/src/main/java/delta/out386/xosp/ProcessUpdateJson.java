@@ -55,7 +55,6 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
         Moshi moshi = new Moshi.Builder().build();
         try {
             JsonAdapter<JenkinsJson> jsonAdapter = moshi.adapter(JenkinsJson.class);
-            Log.v(TAG, "json : " + json);
             updates = jsonAdapter.fromJson(json);
             if(updates.isMalformed) {
                 sendGenericToast("ROM filename format is wrong. Ask the maintainer to fix it.");
