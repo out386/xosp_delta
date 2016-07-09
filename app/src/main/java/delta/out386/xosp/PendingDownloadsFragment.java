@@ -21,6 +21,7 @@ package delta.out386.xosp;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,5 +46,16 @@ public class PendingDownloadsFragment extends Fragment {
         BuildsAdapter adapter = new BuildsAdapter(getContext(), R.layout.builds_item, json.builds);
         ListView lv = (ListView) rootView.findViewById(R.id.build_list);
         lv.setAdapter(adapter);
+        final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.buildsRefresh);
+        if(refreshLayout != null)
+        {
+            refreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary);
+            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new DownloadUpdateJson(getContext(), rootView).execute();
+                }
+            });
+        }
     }
 }

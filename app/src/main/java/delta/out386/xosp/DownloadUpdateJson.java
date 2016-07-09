@@ -91,12 +91,14 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
 
     @Override
     public void onPostExecute(Void v){
-        emptyRefresh.post(new Runnable() {
-            @Override
-            public void run() {
-                emptyRefresh.setRefreshing(false);
-            }
-        });
+        if(emptyRefresh != null) {
+            emptyRefresh.post(new Runnable() {
+                @Override
+                public void run() {
+                    emptyRefresh.setRefreshing(false);
+                }
+            });
+        }
             new ProcessUpdateJson(json, context).execute();
     }
     private HttpURLConnection setupHttpRequest(String urlStr){
