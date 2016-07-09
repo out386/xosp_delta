@@ -22,9 +22,11 @@ package delta.out386.xosp;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 
@@ -46,6 +48,7 @@ public class PendingDownloadsFragment extends Fragment {
         BuildsAdapter adapter = new BuildsAdapter(getContext(), R.layout.builds_item, json.builds);
         ListView lv = (ListView) rootView.findViewById(R.id.build_list);
         lv.setAdapter(adapter);
+        Button download = (Button) rootView.findViewById(R.id.download);
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.buildsRefresh);
         if(refreshLayout != null)
         {
@@ -57,5 +60,12 @@ public class PendingDownloadsFragment extends Fragment {
                 }
             });
         }
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DownloadBuilds.download(json.builds);
+                Log.i(Constants.TAG, "Download tapped");
+            }
+        });
     }
 }

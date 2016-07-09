@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,21 +11,45 @@
         android:background="@color/colorPrimary"
         android:id="@+id/linearLayout">
     </LinearLayout>
+    <android.support.v7.widget.CardView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:id="@+id/about_download"
+        card_view:cardElevation="3dip"
+        card_view:cardCornerRadius="2dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="5dp"
+        android:paddingBottom="5dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:text="@string/updates_text" />
+    </android.support.v7.widget.CardView>
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/buildsRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:layout_above="@+id/download"
+        android:layout_below="@id/about_download">
         <ListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/build_list"
-            android:layout_marginBottom="10dip"
             android:divider="@null"
-            android:scrollbars="none"
-            android:layout_marginLeft="0dip"
-            android:layout_marginRight="0dip"/>
+            android:scrollbars="none"/>
     </android.support.v4.widget.SwipeRefreshLayout>
-
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Download available updates"
+        android:id="@+id/download"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

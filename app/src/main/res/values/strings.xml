@@ -8,4 +8,5 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="author">Written by Ritayan Chakraborty (out386), for the Xperia Open Source Project. Intro images by Miradutta Pradhan.\nBased on OpenDelta by Chainfire and OmniROM.\nLibraries used:</string>
     <string name="locationText">This is the root of the location which the app will use as the working directory. Examples are:\n/storage/emulated/0\n/storage/BABB-4782\nThe app will not work if you select a location that needs root access to write to. Existing subdirectories are also allowed. You need at least 2 GiB free here.</string>
+    <string name="updates_text">The following updates are available. They are all deltas, so you need a base ROM to apply them to. Download whatever is needed, then move whichever XOSP ROM zip you flashed last to the "XOSPDelta" directory, in the root of storage. You need to do this only the first time. Also, the real ROM date is written below the filename. The file name is always the name of the last build.</string>
 </resources>
