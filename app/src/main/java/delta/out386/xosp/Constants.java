@@ -65,17 +65,16 @@ public class Constants {
     final static int ROM_ZIP_DATE_LOCATION = 5;
     final static int ROM_ZIP_DEVICE_LOCATION = 6;
     final static String ROM_ZIP_NAME = "XOSP";
-    final static String ROM_ZIP_DEVICE_NAME = "angler";//Shell.SH.run("getprop ro.xosp.device").get(0);
+    final static String ROM_ZIP_DEVICE_NAME = Shell.SH.run("getprop ro.xosp.device").get(0);
+    /**
+     * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device
+     */
 
     final static String [] OFFICIAL_LIST = {
             "angler", "armani", "bullhead", "d802", "d850", "d851", "d855", "falcon", "h811", "h815", "hammerhead",
             "kenzo", "lettuce", "lux", "mako", "oneplus2", "onyx", "osprey", "shamu", "shieldtablet", "sprout4",
             "sprout8", "surnia", "titan", "tomato", "wt88047", "vs985", "Z008", "Z00A"
     };
-
-    /**
-     * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device.zip
-     */
 	 
 	final static String UPDATE_JSON_URL_BASKETBUILD = "https://basketbuild.com/api4web/devs/XOSP/";
     final static String UPDATE_JSON_URL_JENKINS_1 = "http://jenkins.xosp.org/job/XOSPWeeklies(";

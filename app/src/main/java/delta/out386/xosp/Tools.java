@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 import delta.out386.xosp.JenkinsJson.builds;
+import eu.chainfire.libsuperuser.Shell;
 
 public class Tools {
     public static String sizeFormat(long size) {
@@ -97,10 +98,10 @@ public class Tools {
         int  removeIndex = 0, currentIndex = 0;
         int [] remove = new int [updates.builds.size()];
 
-        int installedBuildDate = 20160500;/*romZipDate(
+        int installedBuildDate = romZipDate(
                 Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP)
                         .get(0), false)
-                .date;*/
+                .date;
         int newestBuildDate = 0;
         for(JenkinsJson.builds currentBuild : updates.builds) {
             if (currentBuild.artifacts.length > 0) {
@@ -177,8 +178,7 @@ public class Tools {
 
     public static Flashables findNewestDownloadedBuild(Context context) {
         List<Flashables> storedRoms = new FindZips(context, true, null, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
-                .dummyoutput()
-                //.run()
+                .run()
                 .roms;
 
         Collections.sort(storedRoms, new Comparator<Flashables>() {
