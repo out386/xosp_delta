@@ -115,7 +115,9 @@ public class Tools {
         }
 
         Flashables newestDownloadedBuild = findNewestDownloadedBuild(context);
-        int downloadedBuildDate = romZipDate(newestDownloadedBuild.file.getName(), false).date;
+        int downloadedBuildDate = 0;
+        if(newestDownloadedBuild != null)
+             downloadedBuildDate = romZipDate(newestDownloadedBuild.file.getName(), false).date;
 
         if(downloadedBuildDate >= newestBuildDate)
             return false;
@@ -180,7 +182,8 @@ public class Tools {
         List<Flashables> storedRoms = new FindZips(context, true, null, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
                 .run()
                 .roms;
-
+        if(storedRoms.size() == 0)
+            return null;
         Collections.sort(storedRoms, new Comparator<Flashables>() {
             @Override
             public int compare(Flashables o1, Flashables o2) {
