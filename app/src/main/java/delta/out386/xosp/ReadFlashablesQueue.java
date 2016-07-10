@@ -95,25 +95,25 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         Button queueApplyButton = (Button)view.findViewById(R.id.queueApplyButton);
 
         if(output == null || output.roms.isEmpty() && output.deltas.isEmpty()) {
-            queueEmptyTextview.setText("No base ROM and no deltas found. Please download a base ROM and a delta from the XOSP Basketbuild.");
+            queueEmptyTextview.setText("No base ROM and no deltas found. Please download a base ROM from the XOSP website.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
         if(output.roms.isEmpty()) {
-            queueEmptyTextview.setText("No base ROM found. Please download a base ROM from the ROMs XOSP Basketbuild.");
+            queueEmptyTextview.setText("No base ROM found. Please download a base ROM from the XOSP website.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
         if(output.deltas.isEmpty()) {
-            queueEmptyTextview.setText("No deltas found. Please download a delta to apply from the deltas XOSP Basketbuild.");
+            queueEmptyTextview.setText("No updates available. Pull down to update the list.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
         if(! output.deltas.get(0).file.exists()) {
-            queueEmptyTextview.setText("No suitable delta found. Update not required, or you don't have the newest delta. Alternatively, select a ROM and a delta to apply manually. You can find new deltas on the XOSP Basketbuild.");
+            queueEmptyTextview.setText("No suitable delta found. Update not required, or you don't have the newest delta. Pull down to update the list.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
