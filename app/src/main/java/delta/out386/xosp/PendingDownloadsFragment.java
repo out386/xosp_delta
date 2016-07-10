@@ -19,7 +19,11 @@ package delta.out386.xosp;
  * along with XOSPDelta. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Fragment;
+
+import br.com.bemobi.medescope.Medescope;
 import delta.out386.xosp.JenkinsJson.builds;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -33,7 +37,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 
 public class PendingDownloadsFragment extends Fragment {
@@ -66,7 +72,8 @@ public class PendingDownloadsFragment extends Fragment {
         adapter = new BuildsAdapter(context, R.layout.builds_item, json.builds);
         ListView lv = (ListView) rootView.findViewById(R.id.build_list);
         lv.setAdapter(adapter);
-        Button download = (Button) rootView.findViewById(R.id.download);
+        final ImageButton download = (ImageButton) rootView.findViewById(R.id.download);
+        final ImageButton cancel = (ImageButton) rootView.findViewById(R.id.cancel);
 
         IntentFilter progressFilter = new IntentFilter();
         progressFilter.addAction(Constants.DOWNLOADS_PROGRESS);
@@ -86,9 +93,67 @@ public class PendingDownloadsFragment extends Fragment {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                download.animate()
+                        .translationY(60)
+                        .setDuration(500)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                download.setVisibility(View.GONE);
+                                cancel.animate()
+                                        .translationY(60)
+                                        .setDuration(0)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        cancel.setVisibility(View.VISIBLE);
+                                        cancel.animate()
+                                                .translationY(0)
+                                                .setDuration(500);
+                                    }
+                                });
+
+                            }
+                        });
                 Intent download = new Intent(Constants.DOWNLOADS_INTENT);
                 download.putExtra(Constants.DOWNLOADS_JSON, json);
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(download);
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(builds current : json.builds) {
+                    Medescope.getInstance(context).cancel(current.id);
+                    Log.i(Constants.TAG, "CANCEL DOWNLOAD  " + current.id);
+                }
+                /*cancel.animate()
+                        .translationY(60)
+                        .setDuration(500)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                cancel.setVisibility(View.GONE);
+                                download.animate()
+                                        .translationY(60)
+                                        .setDuration(0)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                super.onAnimationEnd(animation);
+                                                download.setVisibility(View.VISIBLE);
+                                                download.animate()
+                                                        .translationY(0)
+                                                        .setDuration(500);
+                                            }
+                                        });
+
+                            }
+                        });*/
             }
         });
     }

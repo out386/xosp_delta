@@ -34,7 +34,7 @@
         android:id="@+id/buildsRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/download"
+        android:layout_above="@+id/downloadControlsView"
         android:layout_below="@id/about_download">
         <ListView
             android:layout_width="fill_parent"
@@ -43,13 +43,28 @@
             android:divider="@null"
             android:scrollbars="none"/>
     </android.support.v4.widget.SwipeRefreshLayout>
-    <Button
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/downloadControlsView"
+        android:background="@color/colorPrimary">
+    <ImageButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Download available updates"
+        android:background="@drawable/ic_file_download_black_48dp"
         android:id="@+id/download"
         android:layout_alignParentBottom="true"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
         android:layout_centerHorizontal="true" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_cancel_black_48dp"
+            android:id="@+id/cancel"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 </RelativeLayout>

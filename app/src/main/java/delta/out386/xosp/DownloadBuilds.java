@@ -1,8 +1,10 @@
 package delta.out386.xosp;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -50,12 +52,13 @@ public class DownloadBuilds {
                 .getString("location", Environment.getExternalStorageDirectory()
                         .getAbsolutePath())
                 + "/XOSPDelta";
+        medescope = Medescope.getInstance(mainActivity);
     }
+
     public void download(final int i) {
         if(i >= json.size())
             return;
 
-        medescope = Medescope.getInstance(mainActivity);
         final builds current = json.get(i);
         medescope.setApplicationName(mainActivity.getString(R.string.app_name));
         if(! current.isDownloaded) {
@@ -71,7 +74,9 @@ public class DownloadBuilds {
             @Override
             public void onDownloadNotEnqueued(String downloadId) {
                 Log.i(TAG, "not enqueued " + downloadId);
-                medescope.unsubscribeStatus(mainActivity);
+                try {
+                    medescope.unsubscribeStatus(mainActivity);
+                } catch(IllegalArgumentException e) {}
                 current.downloadProgress = -2;
                 progress(-1, downloadId);
                 download(i + 1);
@@ -90,7 +95,9 @@ public class DownloadBuilds {
             @Override
             public void onDownloadOnFinishedWithError(String downloadId, int reason, String data) {
                 Log.i(TAG, "Error " + downloadId + "  " + reason + "  " + data);
-                medescope.unsubscribeStatus(mainActivity);
+                try {
+                    medescope.unsubscribeStatus(mainActivity);
+                } catch(IllegalArgumentException e) {}
                 progress(-1, downloadId);
                 current.downloadProgress = -2;
                 download(i + 1);
@@ -99,7 +106,9 @@ public class DownloadBuilds {
             @Override
             public void onDownloadOnFinishedWithSuccess(String downloadId, String filePath, String data) {
                 Log.i(TAG, "Done " + downloadId);
-                medescope.unsubscribeStatus(mainActivity);
+                try {
+                    medescope.unsubscribeStatus(mainActivity);
+                } catch(IllegalArgumentException e) {}
                 current.isDownloaded = true;
                 moveFile(current.artifacts[0].fileName);
                 download(i + 1);
