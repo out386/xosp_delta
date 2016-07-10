@@ -32,8 +32,9 @@ public class JenkinsJson implements Serializable {
         artifacts [] artifacts;
         String id;
         long timestamp;
-        int date;
+        int date, downloadProgress = -2;
         String stringDate;
+        boolean isDownloaded = false;
         fingerprint [] fingerprint;
     }
 

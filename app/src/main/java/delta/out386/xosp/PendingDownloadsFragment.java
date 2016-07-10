@@ -20,8 +20,11 @@ package delta.out386.xosp;
  */
 
 import android.app.Fragment;
+import delta.out386.xosp.JenkinsJson.builds;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,6 +40,16 @@ public class PendingDownloadsFragment extends Fragment {
     JenkinsJson json;
     View rootView;
     Context context;
+    BuildsAdapter adapter;
+    BroadcastReceiver progressReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            int i = intent.getIntExtra(Constants.DOWNLOADS_PROGRESS_VALUE, 0);
+            String id = intent.getStringExtra(Constants.DOWNLOADS_PROGRESS_ID);
+            progress(i, id);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,10 +63,15 @@ public class PendingDownloadsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        BuildsAdapter adapter = new BuildsAdapter(context, R.layout.builds_item, json.builds);
+        adapter = new BuildsAdapter(context, R.layout.builds_item, json.builds);
         ListView lv = (ListView) rootView.findViewById(R.id.build_list);
         lv.setAdapter(adapter);
         Button download = (Button) rootView.findViewById(R.id.download);
+
+        IntentFilter progressFilter = new IntentFilter();
+        progressFilter.addAction(Constants.DOWNLOADS_PROGRESS);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(progressReceiver, progressFilter);
+
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.buildsRefresh);
         if(refreshLayout != null)
         {
@@ -71,8 +89,16 @@ public class PendingDownloadsFragment extends Fragment {
                 Intent download = new Intent(Constants.DOWNLOADS_INTENT);
                 download.putExtra(Constants.DOWNLOADS_JSON, json);
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(download);
-                Log.i(Constants.TAG, "Download tapped");
             }
         });
+    }
+    public void progress(int progress, String id) {
+        for(builds current : json.builds) {
+            if(current.id.equals(id)) {
+                current.downloadProgress = progress;
+                break;
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 }

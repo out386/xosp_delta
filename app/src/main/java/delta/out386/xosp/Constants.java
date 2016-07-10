@@ -45,7 +45,9 @@ public class Constants {
 
     final static String DOWNLOADS_JSON = "delta.out386.xosp.DOWNLOADS_JSON";
     final static String DOWNLOADS_INTENT = "delta.out386.xosp.DOWNLOADS_INTENT";
-
+    final static String DOWNLOADS_PROGRESS = "delta.out386.xosp.DOWNLOADS_PROGRESS";
+    final static String DOWNLOADS_PROGRESS_VALUE = "delta.out386.xosp.DOWNLOADS_PROGRESS_VALUE";
+    final static String DOWNLOADS_PROGRESS_ID = "delta.out386.xosp.DOWNLOADS_PROGRESS_ID";
     /**
      * Information about the supported rom.
      * SUPPORTED_ROM_PROP is the is the property that XOSP uses to identify itself.

@@ -110,6 +110,7 @@ public class MainActivity extends Activity
         }
     };
 
+
     @Override
     protected void onResume() {
         IntentFilter apply = new IntentFilter();
@@ -276,6 +277,6 @@ public class MainActivity extends Activity
     }
     public void download(List<JenkinsJson.builds> json) {
         Log.i(Constants.TAG, "Recieved");
-        new DownloadBuilds(json, this).download();
+        new DownloadBuilds(json, this).download(0);
     }
 }

@@ -1,13 +1,21 @@
 package delta.out386.xosp;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.daimajia.numberprogressbar.NumberProgressBar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,6 +44,9 @@ import java.util.List;
 import delta.out386.xosp.JenkinsJson.builds;
 
 public class BuildsAdapter extends ArrayAdapter<builds> {
+    NumberProgressBar progress;
+    builds current;
+
     public BuildsAdapter(Context context, int resource, List<builds> items) {
         super(context,resource,items);
     }
@@ -43,16 +54,44 @@ public class BuildsAdapter extends ArrayAdapter<builds> {
     @Override
     public View getView(int position, final View convertView, ViewGroup parent) {
         View v = convertView;
+
         if(v == null)
             v= LayoutInflater.from(getContext()).inflate(R.layout.builds_item,null);
-        final builds p = getItem(position);
-        if(p != null) {
+        current = getItem(position);
+        if(current != null) {
             TextView name = (TextView) v.findViewById(R.id.build_name);
             TextView date = (TextView) v.findViewById(R.id.build_date);
+            TextView status = (TextView) v.findViewById(R.id.download_status);
+            progress = (NumberProgressBar) v.findViewById(R.id.download_progress);
+
             if(name != null)
-                name.setText(p.artifacts[0].fileName);
+                name.setText(current.artifacts[0].fileName);
             if(date != null)
-                date.setText(p.stringDate);
+                date.setText(current.stringDate);
+
+            if(current.downloadProgress == -2)
+                return v;
+            progress.setVisibility(View.VISIBLE);
+            if (current.downloadProgress == -1) {
+                progress.setProgress(50);
+                status.setVisibility(View.VISIBLE);
+                status.setText("Failed");
+                progress.setReachedBarColor(0xFFFF0000);
+            }
+            else if (current.downloadProgress == Integer.MAX_VALUE) {
+                status.setVisibility(View.VISIBLE);
+                status.setText("Paused");
+            }
+            else if (current.downloadProgress == 100) {
+                progress.setReachedBarColor(0xFF00FF00);
+                status.setVisibility(View.VISIBLE);
+                status.setText("Complete");
+            }
+            else {
+                progress.setProgress(current.downloadProgress);
+                status.setVisibility(View.VISIBLE);
+                status.setText("Downloading");
+            }
         }
         return v;
     }
