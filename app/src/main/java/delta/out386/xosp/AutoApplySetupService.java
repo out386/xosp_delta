@@ -48,7 +48,7 @@ public class AutoApplySetupService extends IntentService {
             return;
         }
         for(Flashables current : flashablesList.roms) {
-            Tools.RomDateType romInfo = new Tools().romZipDate(current.file.getName(), true);
+            Tools.RomDateType romInfo = Tools.romZipDate(current.file.getName(), true);
             romName = romInfo.romName;
             date = romInfo.date;
             deviceName = romInfo.deviceName;
