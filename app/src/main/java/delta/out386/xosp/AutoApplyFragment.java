@@ -48,15 +48,16 @@ public class AutoApplyFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             Flashables base = (Flashables) intent.getSerializableExtra(Constants.AUTO_UPDATE_BASE);
             Flashables delta = (Flashables) intent.getSerializableExtra(Constants.AUTO_UPDATE_DELTA);
-            new WriteFlashablesQueue(base, context, true).execute();
-            new WriteFlashablesQueue(delta, context, false).execute();
-            new ReadFlashablesQueue(context, rootView).execute();
+            FlashablesTypeList list = new FlashablesTypeList();
+            list.addFlashable(base);
+            list.addFlashable(delta);
+            new ReadFlashablesQueue(context, rootView, list).execute();
         }
     };
     BroadcastReceiver noRomsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            new ReadFlashablesQueue(context, rootView).execute();
+            new ReadFlashablesQueue(context, rootView, null).execute();
         }
     };
 

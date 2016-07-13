@@ -46,33 +46,18 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
     File delta, source;
     DeltaData deltaJson;
     final String TAG = Constants.TAG;
+    FlashablesTypeList flashablesTypeList;
     Intent closeDialog=new Intent(), messageDialog = new Intent(Constants.GENERIC_DIALOG);
 
-    public ReadFlashablesQueue(Context context, View view) {
+    public ReadFlashablesQueue(Context context, View view, FlashablesTypeList flashablesTypeList) {
         this.context = context;
         this.view = view;
+        this.flashablesTypeList = flashablesTypeList;
         closeDialog.setAction(Constants.ACTION_CLOSE_DIALOG);
     }
     @Override
     public FlashablesTypeList doInBackground(Void... v) {
-
-        File f = new File(context.getFilesDir().toString() + "/queue");
-        FlashablesTypeList flashablesTypeList = null;
-        if(f.exists()) {
-            try {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-                flashablesTypeList = (FlashablesTypeList) ois.readObject();
-                ois.close();
-            }
-            catch(Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            if(flashablesTypeList == null) {
-                f.delete();
-                return null;
-            }
-        }
-        else
+        if(flashablesTypeList == null)
             return null;
         if(!flashablesTypeList.deltas.isEmpty()) {
             delta = flashablesTypeList.deltas.get(0).file;
@@ -94,8 +79,11 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         Button queueClearButton = (Button)view.findViewById(R.id.queueClearButton);
         Button queueApplyButton = (Button)view.findViewById(R.id.queueApplyButton);
 
-        if(output == null || (output.roms.size() == 0 && output.deltas.size() == 0)) {
-            queueEmptyTextview.setText("No base ROM and no deltas found. Please download a base ROM from the XOSP website.");
+        if(output == null
+                || output.roms == null
+                || output.deltas == null
+                || (output.roms.size() == 0 && output.deltas.size() == 0)) {
+            queueEmptyTextview.setText("No base ROM and no deltas found. Please move the zip of whichever version of XOSP you have to the XOSPDelta directory in root of storage.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
@@ -127,10 +115,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         queueClearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                File f = new File(context.getFilesDir().toString() + "/queue");
-                if (f.exists())
-                    f.delete();
-                new ReadFlashablesQueue(context, view).execute();
+                new ReadFlashablesQueue(context, view, null).execute();
             }
         });
         queueApplyButton.setOnClickListener(new View.OnClickListener(){

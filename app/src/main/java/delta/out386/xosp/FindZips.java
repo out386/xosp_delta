@@ -38,35 +38,23 @@ import java.util.Collection;
 
 public class FindZips {
     Context context;
-    boolean isReload=false, isLoading = false;
     final String TAG = Constants.TAG;
-    File f = null;
     MaterialRefreshLayout refresh;
     SharedPreferences preferences;
 
-    public FindZips(Context context, boolean isReload, MaterialRefreshLayout refresh, SharedPreferences preferences){
-        this.isReload = isReload;
+    public FindZips(Context context, MaterialRefreshLayout refresh, SharedPreferences preferences){
         this.refresh = refresh;
         this.context = context;
         this.preferences = preferences;
     }
 
     public FlashablesTypeList run() {
-        FlashablesTypeList output = null;
+        FlashablesTypeList output;
         File directory = null;
         boolean directoryExists = true;
         String location = preferences.getString("location", Environment.getExternalStorageDirectory().getAbsolutePath());
         Log.v(TAG, location);
         File storage = new File(location);
-        f = new File(context.getFilesDir().toString() + "/FlashablesTypeList");
-        if (!isReload && !f.exists()) {
-            isLoading = true;
-            // Get the fake dialog up
-            context.startActivity(new Intent(context, DeltaDialogActivity.class)
-                    .setAction(Constants.ACTION_APPLY_DIALOG)
-                    .putExtra(Constants.DIALOG_MESSAGE, "Loading list of files")
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        }
 
         try {
             if(!storage.exists()) {
@@ -88,35 +76,9 @@ public class FindZips {
             Log.e(TAG, "Couldn't create storage directory");
             return null;
         }
-        if (!f.exists() || isReload) {
-            Collection<File> zipsCollection;
-            if (f.exists())
-                f.delete();
-            zipsCollection = FileUtils.listFiles(directory, new String[]{"zip"}, false);
-            output = new FilesCategorize().run(zipsCollection);
-            ObjectOutputStream oos;
-            if (output != null) {
-                try {
-                    oos = new ObjectOutputStream(new FileOutputStream(f));
-                    oos.writeObject(output);
-                    oos.close();
-                } catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                }
-                refreshDone();
-                return output;
-            }
-        } else {
-
-            try {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-                output = (FlashablesTypeList) ois.readObject();
-                ois.close();
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-                refreshDone();
-            }
-        }
+        Collection<File> zipsCollection;
+        zipsCollection = FileUtils.listFiles(directory, new String[]{"zip"}, false);
+        output = new FilesCategorize().run(zipsCollection);
         refreshDone();
         return output;
     }

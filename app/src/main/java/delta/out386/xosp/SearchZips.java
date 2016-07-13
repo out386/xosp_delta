@@ -45,13 +45,12 @@ import java.util.Collection;
 public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
 
     Context context;
-    boolean isReload=false, isLoading = false;
+    boolean isLoading = false;
     View rootView;
     String typeToDisplay = "roms";
     MaterialRefreshLayout refresh;
     Intent closeDialog = new Intent(Constants.ACTION_CLOSE_DIALOG);
-    public SearchZips(Context context, boolean isReload, View rootView, String typeToDisplay, MaterialRefreshLayout refresh){
-        this.isReload = isReload;
+    public SearchZips(Context context, View rootView, String typeToDisplay, MaterialRefreshLayout refresh){
         this.typeToDisplay = typeToDisplay;
         this.rootView = rootView;
         this.refresh = refresh;
@@ -60,7 +59,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
     
     @Override
     protected FlashablesTypeList doInBackground(Void... params){
-        return new FindZips(context,isReload,refresh, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
+        return new FindZips(context,refresh, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
                 .run();
     }
 
@@ -71,7 +70,7 @@ public class SearchZips extends AsyncTask<Void, Void,FlashablesTypeList > {
         refresh.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
             public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
-                new SearchZips(context, true, rootView, typeToDisplay, refresh).execute();
+                new SearchZips(context, rootView, typeToDisplay, refresh).execute();
             }
         });
         if(output == null)

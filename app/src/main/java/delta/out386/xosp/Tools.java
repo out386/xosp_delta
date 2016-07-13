@@ -183,7 +183,7 @@ public class Tools {
     }
 
     public static Flashables findNewestDownloadedDelta(Context context) {
-        List<Flashables> storedRoms = new FindZips(context, true, null, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
+        List<Flashables> storedRoms = new FindZips(context, null, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
                 .run()
                 .deltas;
         if(storedRoms.size() == 0)

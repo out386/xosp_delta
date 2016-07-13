@@ -39,9 +39,9 @@ public class AutoApplySetupService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        FlashablesTypeList flashablesList = new FindZips(getApplication(), true, null, getSharedPreferences("settings", Context.MODE_PRIVATE)).run();
-        String romName = null, deviceName = null;
-        int date = 0, maxDate = 0;
+        FlashablesTypeList flashablesList = new FindZips(getApplication(), null, getSharedPreferences("settings", Context.MODE_PRIVATE)).run();
+        String romName, deviceName;
+        int date, maxDate = 0;
         File newestRom = null;
         if(flashablesList == null || flashablesList.roms == null || flashablesList.roms.size() == 0) {
             LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(noRoms);
