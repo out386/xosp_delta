@@ -94,19 +94,19 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         Button queueClearButton = (Button)view.findViewById(R.id.queueClearButton);
         Button queueApplyButton = (Button)view.findViewById(R.id.queueApplyButton);
 
-        if(output == null || output.roms.isEmpty() && output.deltas.isEmpty()) {
+        if(output == null || (output.roms.size() == 0 && output.deltas.size() == 0)) {
             queueEmptyTextview.setText("No base ROM and no deltas found. Please download a base ROM from the XOSP website.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
-        if(output.roms.isEmpty()) {
-            queueEmptyTextview.setText("No base ROM found. Please download a base ROM from the XOSP website.");
+        if(output.roms.size() == 0) {
+            queueEmptyTextview.setText("No base ROM found. Please move the zip of whichever version of XOSP you have to the XOSPDelta directory in root of storage.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
         }
-        if(output.deltas.isEmpty()) {
+        if(output.deltas.size() == 0) {
             queueEmptyTextview.setText("No updates available. Pull down to update the list.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
