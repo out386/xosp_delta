@@ -109,17 +109,19 @@ public class Tools {
                 break;
             }
         }
-        if(installedBuildDate >= newestBuildDate) {
+
+        // As the update to installedBuildDate will have the same number
+        if(installedBuildDate > newestBuildDate) {
             // No updates needed
             return false;
         }
 
-        Flashables newestDownloadedBuild = findNewestDownloadedBuild(context);
+        Flashables newestDownloadedDelta = findNewestDownloadedDelta(context);
         int downloadedBuildDate = 0;
-        if(newestDownloadedBuild != null)
-             downloadedBuildDate = romZipDate(newestDownloadedBuild.file.getName(), false).date;
+        if(newestDownloadedDelta != null)
+             downloadedBuildDate = romZipDate(newestDownloadedDelta.file.getName(), false).date;
 
-        if(downloadedBuildDate >= newestBuildDate)
+        if(downloadedBuildDate > newestBuildDate)
             return false;
 
         int newestAlreadyPresent = (installedBuildDate > downloadedBuildDate) ? installedBuildDate : downloadedBuildDate;
@@ -151,10 +153,10 @@ public class Tools {
                     + currentBuild.artifacts[0].relativePath;
             Date tempdate = new Date(currentBuild.timestamp);
             currentBuild.date = Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(tempdate));
-            currentBuild.stringDate = new SimpleDateFormat("MMM dd").format(tempdate);
+            currentBuild.stringDate = new SimpleDateFormat("MMM dd yyyy").format(tempdate);
 
             if(currentBuild.date <= newestAlreadyPresent) {
-                Log.i(Constants.TAG, ""+currentBuild.artifacts[0].date);
+                Log.i(Constants.TAG, ""+currentBuild.date);
                 remove[removeIndex++] = currentIndex++;
                 continue;
             }
@@ -175,10 +177,12 @@ public class Tools {
         int numberElementsRemoved = 0;
         for(int removeCurrent = 0; removeCurrent <= removeIndex - 1; removeCurrent++)
             updates.builds.remove(remove[removeCurrent] - numberElementsRemoved++);
-        return true;
+        if(updates.builds.size() > 0)
+            return true;
+        return false;
     }
 
-    public static Flashables findNewestDownloadedBuild(Context context) {
+    public static Flashables findNewestDownloadedDelta(Context context) {
         List<Flashables> storedRoms = new FindZips(context, true, null, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
                 .run()
                 .roms;
