@@ -54,14 +54,14 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_file_download_black_48dp"
+        android:background="@drawable/ic_file_download_white_48dp"
         android:id="@+id/download"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_cancel_black_48dp"
+            android:background="@drawable/ic_cancel_white_48dp"
             android:id="@+id/cancel"
             android:visibility="gone"
             android:layout_alignParentBottom="true"
