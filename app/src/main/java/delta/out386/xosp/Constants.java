@@ -64,6 +64,9 @@ public class Constants {
     final static String ROM_ZIP_DELIMITER = "-.";
     final static int ROM_ZIP_NAME_LOCATION = 1;
     final static int ROM_ZIP_DATE_LOCATION = 5;
+
+    // Used if the naming format changes (Which it did, for XOSP)
+    final static int ROM_ZIP_DATE_LOCATION_2 = 7;
     final static int ROM_ZIP_DEVICE_LOCATION = 6;
     final static String ROM_ZIP_NAME = "XOSP";
     final static String ROM_ZIP_DEVICE_NAME = Shell.SH.run("getprop ro.xosp.device").get(0);

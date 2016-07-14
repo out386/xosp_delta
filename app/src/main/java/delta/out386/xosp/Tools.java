@@ -74,7 +74,12 @@ public class Tools {
             romDate.date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION - indexOffset]);
         }
         catch (NumberFormatException e) {
-            romDate.date = -1;
+            try {
+                romDate.date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION_2 - indexOffset]);
+            }
+            catch (NumberFormatException e2) {
+                romDate.date = -1;
+            }
         }
 
         if(moreInfo) {
@@ -112,6 +117,13 @@ public class Tools {
             }
         }
 
+        if(installedBuildDate == -1 || newestBuildDate == -1)
+        {
+            Log.i(Constants.TAG, "Kill the guy who changed the filename. Malformed ROM name.");
+            sendGenericToast("Malformed ROM name. Please contact your devices' maintainer.", context);
+            return false;
+        }
+
         // As the update to installedBuildDate will have the same number
         if(installedBuildDate > newestBuildDate) {
             // No updates needed
@@ -122,6 +134,13 @@ public class Tools {
         int downloadedBuildDate = 0;
         if(newestDownloadedDelta != null)
              downloadedBuildDate = romZipDate(newestDownloadedDelta.file.getName(), false).date;
+
+        if(downloadedBuildDate == -1)
+        {
+            Log.i(Constants.TAG, "Kill the guy who changed the file name. Malformed ROM name.");
+            sendGenericToast("Malformed ROM name. Please contact your devices' maintainer.", context);
+            return false;
+        }
 
         if(downloadedBuildDate > newestBuildDate)
             return false;
