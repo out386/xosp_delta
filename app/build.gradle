@@ -7,8 +7,8 @@ android {
         applicationId "delta.out386.xosp"
         minSdkVersion 23
         targetSdkVersion 23
-        versionCode 28
-        versionName "3.0.1"
+        versionCode 29
+        versionName "3.0.2"
     }
     buildTypes {
         release {

@@ -110,6 +110,19 @@ public class MainActivity extends Activity
         }
     };
 
+    BroadcastReceiver downloadsDoneReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            FragmentManager fragmentManager = getFragmentManager();
+            AutoApplyFragment frag = AutoApplyFragment.newInstance();
+            try {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, frag)
+                        .commit();
+            } catch (IllegalStateException e) {}
+            removeStickyBroadcast(intent);
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -132,6 +145,10 @@ public class MainActivity extends Activity
         IntentFilter activateDownloads = new IntentFilter();
         activateDownloads.addAction(Constants.DOWNLOADS_INTENT);
         LocalBroadcastManager.getInstance(getApplication()).registerReceiver(activateDownloadsReceiver, activateDownloads);
+
+        IntentFilter downloadsDone = new IntentFilter();
+        downloadsDone.addAction(Constants.DOWNLOADS_DONE_INTENT);
+        registerReceiver(downloadsDoneReceiver, downloadsDone);
         super.onResume();
     }
     @Override

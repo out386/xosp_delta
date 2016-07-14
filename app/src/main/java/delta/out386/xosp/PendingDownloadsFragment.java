@@ -130,30 +130,6 @@ public class PendingDownloadsFragment extends Fragment {
                     Medescope.getInstance(context).cancel(current.id);
                     Log.i(Constants.TAG, "CANCEL DOWNLOAD  " + current.id);
                 }
-                /*cancel.animate()
-                        .translationY(60)
-                        .setDuration(500)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                cancel.setVisibility(View.GONE);
-                                download.animate()
-                                        .translationY(60)
-                                        .setDuration(0)
-                                        .setListener(new AnimatorListenerAdapter() {
-                                            @Override
-                                            public void onAnimationEnd(Animator animation) {
-                                                super.onAnimationEnd(animation);
-                                                download.setVisibility(View.VISIBLE);
-                                                download.animate()
-                                                        .translationY(0)
-                                                        .setDuration(500);
-                                            }
-                                        });
-
-                            }
-                        });*/
             }
         });
     }

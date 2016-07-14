@@ -44,14 +44,18 @@ public class DownloadBuilds {
     String TAG = Constants.TAG;
     Medescope medescope;
     String targetDir;
+    int queueSize;
+    Intent downloadsDoneIntent;
     public DownloadBuilds(List<builds> json, MainActivity mainActivity) {
         this.json = json;
+        queueSize = json.size();
         this.mainActivity = mainActivity;
         targetDir = mainActivity
                 .getSharedPreferences("settings", Context.MODE_PRIVATE)
                 .getString("location", Environment.getExternalStorageDirectory()
                         .getAbsolutePath())
                 + "/XOSPDelta";
+        downloadsDoneIntent = new Intent(Constants.DOWNLOADS_DONE_INTENT);
         medescope = Medescope.getInstance(mainActivity);
     }
 
@@ -77,6 +81,7 @@ public class DownloadBuilds {
                 try {
                     medescope.unsubscribeStatus(mainActivity);
                 } catch(IllegalArgumentException e) {}
+                queueSize --;
                 current.downloadProgress = -2;
                 progress(-1, downloadId);
                 download(i + 1);
@@ -100,6 +105,7 @@ public class DownloadBuilds {
                 } catch(IllegalArgumentException e) {}
                 progress(-1, downloadId);
                 current.downloadProgress = -2;
+                queueSize --;
                 download(i + 1);
             }
 
@@ -111,12 +117,16 @@ public class DownloadBuilds {
                 } catch(IllegalArgumentException e) {}
                 current.isDownloaded = true;
                 moveFile(current.artifacts[0].fileName);
+                queueSize --;
+                if(queueSize <= 0)
+                    mainActivity.getApplicationContext().sendStickyBroadcast(downloadsDoneIntent);
                 download(i + 1);
             }
 
             @Override
             public void onDownloadCancelled(String downloadId) {
                 current.downloadProgress = -2;
+                queueSize --;
                 Log.i(TAG, "Cancelled" + downloadId);
             }
         });
