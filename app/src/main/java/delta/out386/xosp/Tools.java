@@ -17,6 +17,8 @@
 package delta.out386.xosp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.text.DecimalFormat;
@@ -195,5 +197,11 @@ public class Tools {
             }
         });
         return storedRoms.get(0);
+    }
+
+    public static void sendGenericToast(String message, Context context) {
+        Intent genericToast = new Intent(Constants.GENERIC_TOAST);
+        genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, message);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
     }
 }

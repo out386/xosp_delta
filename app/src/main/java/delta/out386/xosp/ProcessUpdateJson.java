@@ -63,16 +63,16 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
         }
         
         if (updates == null || updates.builds.size() == 0) {
-            sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.");
+            Tools.sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.", context);
             return null;
         }
         boolean isUpdateNeeded = Tools.processJenkins(updates, context);
         if(updates.isMalformed) {
-            sendGenericToast("ROM filename format is wrong. Ask the maintainer to fix it.");
+            Tools.sendGenericToast("ROM filename format is wrong. Ask the maintainer to fix it.", context);
             return null;
         }
         if(!isUpdateNeeded) {
-            sendGenericToast("No updates are available.");
+            Tools.sendGenericToast("No updates are available.", context);
             return null;
         }
         for (builds builds : updates.builds) {
@@ -105,10 +105,5 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             return false;
         }
         return true;
-    }
-    public void sendGenericToast(String message) {
-        Intent genericToast = new Intent(Constants.GENERIC_TOAST);
-        genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, message);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
     }
 }
