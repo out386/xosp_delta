@@ -85,6 +85,14 @@ public class Tools {
         if(moreInfo) {
             romDate.romName = fileComponents[Constants.ROM_ZIP_NAME_LOCATION - indexOffset];
             romDate.deviceName = fileComponents[Constants.ROM_ZIP_DEVICE_LOCATION - indexOffset];
+            boolean isOfficial = false;
+            for(String deviceCurrent : Constants.OFFICIAL_LIST) {
+                if(romDate.deviceName.equals(deviceCurrent))
+                    isOfficial = true;
+                break;
+            }
+            if(! isOfficial)
+                romDate.deviceName = fileComponents[Constants.ROM_ZIP_DEVICE_LOCATION_2 - indexOffset];
         }
         return romDate;
     }
