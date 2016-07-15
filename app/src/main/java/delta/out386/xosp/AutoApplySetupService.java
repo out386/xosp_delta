@@ -57,8 +57,8 @@ public class AutoApplySetupService extends IntentService {
             Log.v(TAG,"date " + date);
             if(romName == null || deviceName == null)
                 continue;
-            if(deviceName.equalsIgnoreCase(Constants.ROM_ZIP_DEVICE_NAME))
-                if(romName.equalsIgnoreCase(Constants.ROM_ZIP_NAME))
+            if(deviceName.equals(Constants.ROM_ZIP_DEVICE_NAME))
+                if(romName.equals(Constants.ROM_ZIP_NAME))
                     if(date > maxDate) {
                         maxDate = date;
                         newestRom = current.file;

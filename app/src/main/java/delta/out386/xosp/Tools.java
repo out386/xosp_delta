@@ -59,7 +59,7 @@ public class Tools {
         return (new DecimalFormat("#0.00").format(newSize) + unit);
     }
     public static RomDateType romZipDate(String romName, boolean moreInfo) {
-        int indexOffset;
+        int indexOffset = 1;
         RomDateType romDate = new RomDateType();
         String[] fileComponents = romName.split("[" + Constants.ROM_ZIP_DELIMITER + "]");
 
@@ -68,8 +68,7 @@ public class Tools {
             indexOffset = 0;
             romDate.isDelta = true;
         }
-        else
-            indexOffset = 1;
+
         try {
             romDate.date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION - indexOffset]);
         }
@@ -82,16 +81,14 @@ public class Tools {
             }
         }
 
+        // Rough date after which deltas were introduced in XOSP
+        if(romDate.date < 20160501)
+            romDate.date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION_2 - indexOffset]);
+
         if(moreInfo) {
             romDate.romName = fileComponents[Constants.ROM_ZIP_NAME_LOCATION - indexOffset];
             romDate.deviceName = fileComponents[Constants.ROM_ZIP_DEVICE_LOCATION - indexOffset];
-            boolean isOfficial = false;
-            for(String deviceCurrent : Constants.OFFICIAL_LIST) {
-                if(romDate.deviceName.equals(deviceCurrent))
-                    isOfficial = true;
-                break;
-            }
-            if(! isOfficial)
+            if(! romDate.deviceName.equals(Constants.ROM_ZIP_DEVICE_NAME))
                 romDate.deviceName = fileComponents[Constants.ROM_ZIP_DEVICE_LOCATION_2 - indexOffset];
         }
         return romDate;
