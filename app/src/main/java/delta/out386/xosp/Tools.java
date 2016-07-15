@@ -158,8 +158,6 @@ public class Tools {
         if(downloadedBuildDate > newestBuildDate)
             return false;
 
-        int newestAlreadyPresent = (installedBuildDate > downloadedBuildDate) ? installedBuildDate : downloadedBuildDate;
-        Log.i(Constants.TAG, "newestAlreadyPresent " + newestAlreadyPresent);
         /* The builds info returned by the Jenkins API is already sorted in a reverse
          * order. We need the oldest build to be the first element.
          */
@@ -181,14 +179,14 @@ public class Tools {
             currentBuild.artifacts[0].date = romType.date;
             currentBuild.artifacts[0].isDelta = romType.isDelta;
             Date tempdate = new Date(currentBuild.timestamp);
-            currentBuild.date = Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(tempdate));
             currentBuild.stringDate = new SimpleDateFormat("MMM dd yyyy").format(tempdate);
 
-            if(currentBuild.date <= newestAlreadyPresent) {
-                Log.i(Constants.TAG, ""+currentBuild.date);
-                remove[removeIndex++] = currentIndex++;
-                continue;
-            }
+            if(currentBuild.artifacts.length > 0)
+                if(currentBuild.artifacts[0].date <= downloadedBuildDate || currentBuild.artifacts[0].date < installedBuildDate) {
+                    Log.i(Constants.TAG, "removing "+currentBuild.artifacts[0].date);
+                    remove[removeIndex++] = currentIndex++;
+                    continue;
+                }
 
             for(int i = currentIndex + 1; i < buildsSize; i++) {
                 try {
@@ -206,7 +204,7 @@ public class Tools {
         int numberElementsRemoved = 0;
         for(int removeCurrent = 0; removeCurrent <= removeIndex - 1; removeCurrent++)
             updates.builds.remove(remove[removeCurrent] - numberElementsRemoved++);
-        if(updates.builds.size() < 0)
+        if(updates.builds.size() == 0)
             return false;
 
         for(builds currentBuild : updates.builds) {
