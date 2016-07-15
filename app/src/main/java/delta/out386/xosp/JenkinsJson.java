@@ -41,6 +41,7 @@ public class JenkinsJson implements Serializable {
     static class artifacts implements Serializable{
         String fileName;
         String relativePath;
+        String size;
         int date;
         boolean isDelta;
         String downloadUrl;

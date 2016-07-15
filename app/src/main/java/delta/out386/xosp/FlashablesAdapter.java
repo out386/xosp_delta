@@ -62,7 +62,9 @@ public class FlashablesAdapter extends ArrayAdapter<Flashables> {
                 name.setText(p.file.getName());
             if(type != null)
                 type.setText(p.type);
-            size.setText(Tools.sizeFormat(p.size));
+            String s = Tools.sizeFormat(p.size);
+            if(s != null)
+            size.setText(s);
 
         }
         return v;

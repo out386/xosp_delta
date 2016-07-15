@@ -83,6 +83,8 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             Log.i(TAG, "Build ID : " + builds.id);
             Log.i(TAG, "URL : " + builds.artifacts[0].downloadUrl);
             Log.i(TAG, "Build relative path : " + builds.artifacts[0].relativePath);
+            if(builds.artifacts[0].size != null)
+            Log.i(TAG, "File size : " + builds.artifacts[0].size);
         }
         Intent pendingDownloads = new Intent(Constants.PENDING_DOWNLOADS_INTENT);
         pendingDownloads.putExtra(Constants.PENDING_DOWNLOADS, updates);

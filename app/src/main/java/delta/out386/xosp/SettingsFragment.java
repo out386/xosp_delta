@@ -53,7 +53,9 @@ public class SettingsFragment extends Fragment {
         final String defaultDir = Environment.getExternalStorageDirectory().getAbsolutePath();
         String loc = preferences.getString("location", defaultDir);
 
-        freeSpace.setText(Tools.sizeFormat(new File(loc).getFreeSpace()) + " free");
+        final String tempSpace = Tools.sizeFormat(new File(loc).getFreeSpace());
+        if(tempSpace != null)
+            freeSpace.setText(tempSpace + " free");
         location.setText(loc);
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +78,9 @@ public class SettingsFragment extends Fragment {
                     selectedLocation = storage;
                     Toast.makeText(getContext(), "Storage location changed", Toast.LENGTH_SHORT).show();
                 }
-                freeSpace.setText(Tools.sizeFormat(new File(selectedLocation).getFreeSpace()) + " free");
+                final String tempSpace2 = Tools.sizeFormat(new File(selectedLocation).getFreeSpace());
+                if(tempSpace2 != null)
+                freeSpace.setText(tempSpace2 + " free");
             }
         });
         return rootView;

@@ -21,6 +21,12 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -34,6 +40,8 @@ import eu.chainfire.libsuperuser.Shell;
 
 public class Tools {
     public static String sizeFormat(long size) {
+        if(size <= 0)
+            return null;
         float newSize = size;
         String unit = " B";
         if (newSize > 1024) {
@@ -172,11 +180,6 @@ public class Tools {
             }
             currentBuild.artifacts[0].date = romType.date;
             currentBuild.artifacts[0].isDelta = romType.isDelta;
-            currentBuild.artifacts[0].downloadUrl = Constants.UPDATE_JSON_URL_JENKINS_1
-                    + Constants.ROM_ZIP_DEVICE_NAME + ")/"
-                    + currentBuild.id
-                    + "/artifact/"
-                    + currentBuild.artifacts[0].relativePath;
             Date tempdate = new Date(currentBuild.timestamp);
             currentBuild.date = Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(tempdate));
             currentBuild.stringDate = new SimpleDateFormat("MMM dd yyyy").format(tempdate);
@@ -203,9 +206,19 @@ public class Tools {
         int numberElementsRemoved = 0;
         for(int removeCurrent = 0; removeCurrent <= removeIndex - 1; removeCurrent++)
             updates.builds.remove(remove[removeCurrent] - numberElementsRemoved++);
-        if(updates.builds.size() > 0)
-            return true;
-        return false;
+        if(updates.builds.size() < 0)
+            return false;
+
+        for(builds currentBuild : updates.builds) {
+            currentBuild.artifacts[0].downloadUrl = Constants.UPDATE_JSON_URL_JENKINS_1
+                    + Constants.ROM_ZIP_DEVICE_NAME + ")/"
+                    + currentBuild.id
+                    + "/artifact/"
+                    + currentBuild.artifacts[0].relativePath;
+            String size = sizeFormat(getUrlSize(currentBuild.artifacts[0].downloadUrl));
+            currentBuild.artifacts[0].size = size;
+        }
+        return true;
     }
 
     public static Flashables findNewestDownloadedDelta(Context context) {
@@ -227,5 +240,18 @@ public class Tools {
         Intent genericToast = new Intent(Constants.GENERIC_TOAST);
         genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, message);
         LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
+    }
+
+    public static int getUrlSize(String url) {
+        // int can hold sizes of over 1.8GiB; let's hope that no one makes a ROM that big.
+        URLConnection connection;
+        try {
+            connection = new URL(url).openConnection();
+            return connection.getContentLength();
+        }
+        catch(Exception e) {
+            // Let Medescope take care of this
+        }
+        return -1;
     }
 }

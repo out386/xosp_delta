@@ -61,17 +61,18 @@ public class BuildsAdapter extends ArrayAdapter<builds> {
         if(current != null) {
             TextView name = (TextView) v.findViewById(R.id.build_name);
             TextView date = (TextView) v.findViewById(R.id.build_date);
+            TextView size = (TextView) v.findViewById(R.id.build_size);
             TextView status = (TextView) v.findViewById(R.id.download_status);
             progress = (NumberProgressBar) v.findViewById(R.id.download_progress);
+            if (current.artifacts[0].isDelta)
+                name.setText("XOSP delta");
+            else
+                name.setText("XOSP full ROM");
+            date.setText("Build date : " + current.stringDate);
+            if(current.artifacts[0].size != null)
+                size.setText(current.artifacts[0].size);
 
-            if(name != null) {
-                if (current.artifacts[0].isDelta)
-                    name.setText("XOSP delta");
-                else
-                    name.setText("XOSP full ROM");
-            }
-            if(date != null)
-                date.setText("Build date : " + current.stringDate);
+
 
             if(current.downloadProgress == -2)
                 return v;
