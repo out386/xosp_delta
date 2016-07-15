@@ -290,6 +290,11 @@ public class MainActivity extends Activity
     protected void onPause() {
         LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(applyReciever);
         LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(genericMessageReciever);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(genericToastReciever);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(activateDownloadsReceiver);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(activateDownloadsReceiver);
+        LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(pendingDownloadsReceiver);
+        unregisterReceiver(downloadsDoneReceiver);
         super.onPause();
     }
 
