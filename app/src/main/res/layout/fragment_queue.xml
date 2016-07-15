@@ -180,14 +180,6 @@
                         android:id="@+id/queueApplyButton"
                         android:text="Apply"
                         android:layout_marginRight="5dp"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/queueApplyButton"
-                        android:layout_centerHorizontal="true"
-                        android:id="@+id/queueClearButton"
-                        android:text="Clear queue"
-                        android:layout_marginLeft="5dp"/>
                         </RelativeLayout>
                 </RelativeLayout>
                 <RelativeLayout

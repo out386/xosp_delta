@@ -76,7 +76,6 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         TextView queueEmptyTextview = (TextView)view.findViewById(R.id.queueEmptyTextview);
         RelativeLayout queueEmptyLayout = (RelativeLayout)view.findViewById(R.id.queueEmptyLayout);
         RelativeLayout queueReadyLayout = (RelativeLayout)view.findViewById(R.id.queueReadyLayout);
-        Button queueClearButton = (Button)view.findViewById(R.id.queueClearButton);
         Button queueApplyButton = (Button)view.findViewById(R.id.queueApplyButton);
 
         if(output == null
@@ -101,7 +100,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             return;
         }
         if(! output.deltas.get(0).file.exists()) {
-            queueEmptyTextview.setText("No suitable delta found. Update not required, or you don't have the newest delta. Pull down to update the list.");
+            queueEmptyTextview.setText("No suitable delta found. Update not required, or you don't have the newest delta. Pull down to update the list. Also, please move the zip of whichever version of XOSP you have to the XOSPDelta directory in root of storage.");
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyLayout.setVisibility(View.VISIBLE);
             return;
@@ -111,13 +110,6 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
 
         source = output.roms.get(0).file;
 
-
-        queueClearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new ReadFlashablesQueue(context, view, null).execute();
-            }
-        });
         queueApplyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
