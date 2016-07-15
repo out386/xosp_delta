@@ -106,6 +106,7 @@ public class MainActivity extends Activity
                 fragmentManager.beginTransaction()
                         .replace(R.id.content_frame, frag)
                         .commit();
+                getActionBar().setTitle(R.string.downloads);
             } catch (IllegalStateException e) {}
         }
     };
@@ -119,6 +120,7 @@ public class MainActivity extends Activity
                 fragmentManager.beginTransaction()
                         .replace(R.id.content_frame, frag)
                         .commit();
+                getActionBar().setTitle(R.string.drawer_item1);
             } catch (IllegalStateException e) {}
             removeStickyBroadcast(intent);
         }
@@ -168,6 +170,11 @@ public class MainActivity extends Activity
                 R.layout.drawer_list_item, mDrawerItems));
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        // Set up the look of the statusbar
+        int sbHeight = getStatusBarHeight();
+        toolbar.setPadding(0, sbHeight, 0, 0);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         if(Constants.SUPPORTED_ROM_PROP != null) {
             List<String> romVersion = Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP);
@@ -295,5 +302,13 @@ public class MainActivity extends Activity
     public void download(List<JenkinsJson.builds> json) {
         Log.i(Constants.TAG, "Recieved");
         new DownloadBuilds(json, this).download(0);
+    }
+    public int getStatusBarHeight()
+    {
+        int height = 0;
+        int id = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if(id > 0)
+            height = getResources().getDimensionPixelSize(id);
+        return height;
     }
 }

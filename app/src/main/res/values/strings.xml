@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">XOSPDelta</string>
 
-    <string name="drawer_item1">Apply</string>
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
+    <string name="drawer_item1">Updates</string>
     <string name="drawer_item7">About</string>
     <string name="drawer_item8">Settings</string>
+    <string name="downloads">Downloads</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="author">Written by Ritayan Chakraborty (out386), for the Xperia Open Source Project. Intro images by Miradutta Pradhan.\nBased on OpenDelta by Chainfire and OmniROM.\nLibraries used:</string>
