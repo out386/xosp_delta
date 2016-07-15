@@ -29,6 +29,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -143,19 +144,22 @@ public class Tools {
             return false;
         }
 
-        Flashables newestDownloadedDelta = findNewestDownloadedDelta(context);
-        int downloadedBuildDate = 0;
-        if(newestDownloadedDelta != null)
-             downloadedBuildDate = romZipDate(newestDownloadedDelta.file.getName(), false).date;
+        List<Flashables> newestDownloadedDelta = findNewestDownloadedDelta(context);
+        int downloadedRomBuildDate = 0, downloadedDeltaBuildDate = 0;
+        if(newestDownloadedDelta != null) {
+            downloadedDeltaBuildDate = romZipDate(newestDownloadedDelta.get(0).file.getName(), false).date;
+            if(newestDownloadedDelta.size() == 2)
+                downloadedRomBuildDate = romZipDate(newestDownloadedDelta.get(1).file.getName(), false).date;
+        }
 
-        if(downloadedBuildDate == -1)
+        if(downloadedRomBuildDate == -1 || downloadedDeltaBuildDate == -1)
         {
             Log.i(Constants.TAG, "Kill the guy who changed the file name. Malformed ROM name.");
             sendGenericToast("Malformed ROM name. Please contact your devices' maintainer.", context);
             return false;
         }
 
-        if(downloadedBuildDate > newestBuildDate)
+        if(downloadedRomBuildDate > newestBuildDate || downloadedDeltaBuildDate >= newestBuildDate)
             return false;
 
         /* The builds info returned by the Jenkins API is already sorted in a reverse
@@ -182,7 +186,7 @@ public class Tools {
             currentBuild.stringDate = new SimpleDateFormat("MMM dd yyyy").format(tempdate);
 
             if(currentBuild.artifacts.length > 0)
-                if(currentBuild.artifacts[0].date <= downloadedBuildDate || currentBuild.artifacts[0].date < installedBuildDate) {
+                if(currentBuild.artifacts[0].date < downloadedRomBuildDate || currentBuild.artifacts[0].date <= downloadedDeltaBuildDate|| currentBuild.artifacts[0].date < installedBuildDate) {
                     Log.i(Constants.TAG, "removing "+currentBuild.artifacts[0].date);
                     remove[removeIndex++] = currentIndex++;
                     continue;
@@ -219,10 +223,21 @@ public class Tools {
         return true;
     }
 
-    public static Flashables findNewestDownloadedDelta(Context context) {
-        List<Flashables> storedRoms = new FindZips(context, null, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
-                .run()
-                .deltas;
+    public static List<Flashables> findNewestDownloadedDelta(Context context) {
+        FlashablesTypeList zips = new FindZips(context, null, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
+                .run();
+        List<Flashables> storedDeltas = zips.deltas;
+        List<Flashables> storedRoms = zips.roms;
+        List<Flashables> output = new ArrayList<>();
+        if(storedDeltas.size() == 0)
+            return null;
+        Collections.sort(storedDeltas, new Comparator<Flashables>() {
+            @Override
+            public int compare(Flashables o1, Flashables o2) {
+                return -(o1.file.getName().compareTo(o2.file.getName()));
+            }
+        });
+
         if(storedRoms.size() == 0)
             return null;
         Collections.sort(storedRoms, new Comparator<Flashables>() {
@@ -231,7 +246,10 @@ public class Tools {
                 return -(o1.file.getName().compareTo(o2.file.getName()));
             }
         });
-        return storedRoms.get(0);
+
+        output.add(storedDeltas.get(0));
+        output.add(storedRoms.get(0));
+        return output;
     }
 
     public static void sendGenericToast(String message, Context context) {
