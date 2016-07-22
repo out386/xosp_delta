@@ -82,6 +82,6 @@ public class Constants {
     };
 	 
 	final static String UPDATE_JSON_URL_BASKETBUILD = "https://basketbuild.com/api4web/devs/XOSP/";
-    final static String UPDATE_JSON_URL_JENKINS_1 = "http://jenkins.xosp.org/job/XOSPWeeklies(";
+    final static String UPDATE_JSON_URL_JENKINS_1 = "http://144.76.38.141:8090/job/XOSPWeeklies(";
     final static String UPDATE_JSON_URL_JENKINS_2 = ")/api/json?depth=1&tree=builds[artifacts[fileName,relativePath],id,timestamp,fingerprint[hash]]";
 }
