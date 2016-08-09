@@ -62,7 +62,7 @@ public class Tools {
             newSize = newSize / 1024;
         }
         if (newSize >= 1024) {
-            unit = " Your phone is insanE(iB)";
+            unit = " PiB";
             newSize = 0;
         }
         return (new DecimalFormat("#0.00").format(newSize) + unit);
@@ -218,7 +218,10 @@ public class Tools {
                     + "/artifact/"
                     + currentBuild.artifacts[0].relativePath;
             String size = sizeFormat(getUrlSize(currentBuild.artifacts[0].downloadUrl));
-            currentBuild.artifacts[0].size = size;
+            if(size != null)
+                currentBuild.artifacts[0].size = size;
+            else
+                currentBuild.artifacts[0].size = "Size unavailable";
         }
         return true;
     }

@@ -55,7 +55,7 @@ public class SettingsFragment extends Fragment {
 
         final String tempSpace = Tools.sizeFormat(new File(loc).getFreeSpace());
         if(tempSpace != null)
-            freeSpace.setText(tempSpace + " free");
+            freeSpace.setText(tempSpace + " is free in the selected location");
         location.setText(loc);
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,18 +4,29 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="80dip"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="160dip"
+        android:id="@+id/blankLayout"
         android:background="@color/colorPrimary">
-    </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:id="@+id/queueEmptyTextview"
+            android:padding="20dip"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:visibility="gone"/>
+    </ScrollView>
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/emptyRefresh"
+        android:layout_below="@id/blankLayout"
+        android:layout_marginTop="-20dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-         >
+        android:layout_height="match_parent">
         <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -30,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                card_view:cardElevation="3dip">
+                card_view:cardElevation="2dip">
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -181,19 +192,6 @@
                         android:text="Apply"
                         android:layout_marginRight="5dp"/>
                         </RelativeLayout>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="160dp"
-                    android:id="@+id/queueEmptyLayout"
-                    android:visibility="gone">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="17sp"
-                        android:id="@+id/queueEmptyTextview"
-                        android:padding="20dip"
-                        android:layout_centerVertical="true" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="fill_parent"

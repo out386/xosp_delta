@@ -65,7 +65,7 @@ public class BuildsAdapter extends ArrayAdapter<builds> {
             TextView status = (TextView) v.findViewById(R.id.download_status);
             progress = (NumberProgressBar) v.findViewById(R.id.download_progress);
             if (current.artifacts[0].isDelta)
-                name.setText("XOSP delta");
+                name.setText("XOSP delta for " + Constants.ROM_ZIP_DEVICE_NAME);
             else
                 name.setText("XOSP full ROM");
             date.setText("Build date : " + current.stringDate);

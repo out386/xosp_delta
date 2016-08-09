@@ -4,14 +4,29 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="80dip"
-        android:background="@color/colorPrimary">
-    </LinearLayout>
+        android:layout_height="160dip"
+        android:id="@+id/blankLayout"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:id="@+id/locationSpace"
+            android:paddingRight="25dp"
+            android:paddingLeft="25dp"
+            android:layout_centerInParent="true"
+            android:paddingTop="-20dp"
+            android:gravity="center"/>
+    </RelativeLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/blankLayout"
+        android:layout_marginTop="-20dp">
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,22 +57,11 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/storageLocation"
                     android:layout_marginTop="20dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
                     android:id="@+id/locationButton"
                     android:text="OK"
                     android:layout_marginBottom="20dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    android:id="@+id/locationSpace"
-                    android:paddingRight="25dp"
-                    android:paddingLeft="25dp"
-                    android:layout_alignBottom="@id/locationButton"
-                    android:layout_alignTop="@+id/locationButton"
-                    android:layout_alignParentRight="true"
-                    android:paddingTop="15dp"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

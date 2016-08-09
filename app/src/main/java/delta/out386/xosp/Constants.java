@@ -73,6 +73,8 @@ public class Constants {
     final static String ROM_ZIP_DEVICE_NAME = Shell.SH.run("getprop ro.xosp.device").get(0);
     /**
      * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device
+     *           ROMName-VersionMajor.VersionMinor-FINAL-MM-OFFICIAL-Date-Device
+     * Date is assumed to be in the format YYYYMMDD
      */
 
     final static String [] OFFICIAL_LIST = {

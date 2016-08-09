@@ -74,7 +74,6 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         TextView targetName = (TextView)view.findViewById(R.id.queueTargetNameText);
         TextView targetPathDir = (TextView)view.findViewById(R.id.queueTargetPathText);
         TextView queueEmptyTextview = (TextView)view.findViewById(R.id.queueEmptyTextview);
-        RelativeLayout queueEmptyLayout = (RelativeLayout)view.findViewById(R.id.queueEmptyLayout);
         RelativeLayout queueReadyLayout = (RelativeLayout)view.findViewById(R.id.queueReadyLayout);
         Button queueApplyButton = (Button)view.findViewById(R.id.queueApplyButton);
 
@@ -84,28 +83,28 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
                 || (output.roms.size() == 0 && output.deltas.size() == 0)) {
             queueEmptyTextview.setText("No base ROM and no deltas found. Please move the zip of whichever version of XOSP you have to the XOSPDelta directory in root of storage.");
             queueReadyLayout.setVisibility(View.GONE);
-            queueEmptyLayout.setVisibility(View.VISIBLE);
+            queueEmptyTextview.setVisibility(View.VISIBLE);
             return;
         }
         if(output.roms.size() == 0) {
             queueEmptyTextview.setText("No base ROM found. Please move the zip of whichever version of XOSP you have to the XOSPDelta directory in root of storage.");
             queueReadyLayout.setVisibility(View.GONE);
-            queueEmptyLayout.setVisibility(View.VISIBLE);
+            queueEmptyTextview.setVisibility(View.VISIBLE);
             return;
         }
         if(output.deltas.size() == 0) {
             queueEmptyTextview.setText("No updates available. Pull down to update the list.");
             queueReadyLayout.setVisibility(View.GONE);
-            queueEmptyLayout.setVisibility(View.VISIBLE);
+            queueEmptyTextview.setVisibility(View.VISIBLE);
             return;
         }
         if(! output.deltas.get(0).file.exists()) {
             queueEmptyTextview.setText("No suitable delta found. Update not required, or you don't have the newest delta. Pull down to update the list. Also, please move the zip of whichever version of XOSP you have to the XOSPDelta directory in root of storage.");
             queueReadyLayout.setVisibility(View.GONE);
-            queueEmptyLayout.setVisibility(View.VISIBLE);
+            queueEmptyTextview.setVisibility(View.VISIBLE);
             return;
         }
-        queueEmptyLayout.setVisibility(View.GONE);
+        queueEmptyTextview.setVisibility(View.GONE);
         queueReadyLayout.setVisibility(View.VISIBLE);
 
         source = output.roms.get(0).file;

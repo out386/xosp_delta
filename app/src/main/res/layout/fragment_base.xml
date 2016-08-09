@@ -6,13 +6,17 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="80dip"
+        android:layout_height="160dip"
+        android:id="@+id/blankLayout"
+        android:orientation="horizontal"
         android:background="@color/colorPrimary">
     </LinearLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/baseEmptyLayout"
+        android:layout_below="@id/blankLayout"
+        android:paddingTop="-20dp"
         android:visibility="gone">
         <android.support.v7.widget.CardView
             android:layout_width="fill_parent"
@@ -34,21 +38,23 @@
             </RelativeLayout>
         </android.support.v7.widget.CardView>
     </RelativeLayout>
-        <com.cjj.MaterialRefreshLayout
+    <com.cjj.MaterialRefreshLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/refresh"
+        android:layout_below="@id/blankLayout"
+        android:paddingTop="-20dp"
+        app:overlay="true"
+        app:wave_color="@color/colorAccent">
+        <ListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/refresh"
-            app:overlay="true"
-            app:wave_color="@color/colorAccent">
-            <ListView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/listView"
-                android:layout_marginBottom="10dip"
-                android:divider="@null"
-                android:scrollbars="none"
-                android:layout_marginLeft="0dip"
-                android:layout_marginRight="0dip"/>
-        </com.cjj.MaterialRefreshLayout>
+            android:id="@+id/listView"
+            android:layout_marginBottom="10dip"
+            android:divider="@null"
+            android:scrollbars="none"
+            android:layout_marginLeft="0dip"
+            android:layout_marginRight="0dip"/>
+    </com.cjj.MaterialRefreshLayout>
 
 </RelativeLayout>
