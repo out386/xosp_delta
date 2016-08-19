@@ -12,4 +12,5 @@
     <string name="author">Written by Ritayan Chakraborty (out386), for the Xperia Open Source Project. Intro images by Miradutta Pradhan.\nBased on OpenDelta by Chainfire and OmniROM.\nLibraries used:</string>
     <string name="locationText">This is the root of the location which the app will use as the working directory. Examples are:\n/storage/emulated/0\n/storage/BABB-4782\nThe app will not work if you select a location that needs root access to write to. You need at least 2 GiB free here.</string>
     <string name="updates_text">The following updates are available. They are all deltas, so you need a base ROM to apply them to. Download them. Then, only if this is the first time you\'re using the app, move whichever XOSP ROM zip you have already flashed to the \"/sdcard/XOSPDelta\" directory. Pull down to refresh.</string>
+    <string name="no_internet">Could not connect to the download server, and there is no cached list of available updates. Make sure that you are connected to the internet. If the problem persists, contact your device\'s maintainer. Pull down to refresh.</string>
 </resources>

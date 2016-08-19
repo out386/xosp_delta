@@ -30,6 +30,8 @@ public class Constants {
     final static String ACTION_NOT_XOSP_DIALOG = "delta.out386.xosp.NOT_XOSP_DIALOG";
 	final static String AUTO_UPDATE = "delta.out386.xosp.AUTO_UPDATE_DIALOG";
 	final static String NO_ROMS = "delta.out386.xosp.NO_ROMS";
+    final static String JSON_AVAILABILITY = "delta.out386.xosp.JSON_AVAILABILITY";
+    final static String IS_JSON_AVAILABLE = "delta.out386.xosp.IS_JSON_AVAILABLE";
 	
     final static String PROGRESS = "delta.out386.xosp.PROGRESS";
     final static String DIALOG_MESSAGE = "delta.out386.xosp.DIALOG_MESSAGE";
@@ -56,6 +58,12 @@ public class Constants {
      */
 
     final static String SUPPORTED_ROM_FULL_NAME = "Xperia Open Source Project";
+
+    /**
+     * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device
+     *           ROMName-VersionMajor.VersionMinor-FINAL-MM-OFFICIAL-Date-Device
+     * Date is assumed to be in the format YYYYMMDD
+     */
     final static String SUPPORTED_ROM_PROP = "ro.xosp.display.version";
     final static String SUPPORTED_ROM_PROP_NAME="XOSP";
 	
@@ -71,11 +79,7 @@ public class Constants {
     final static int ROM_ZIP_DEVICE_LOCATION_2 = 8;
     final static String ROM_ZIP_NAME = "XOSP";
     final static String ROM_ZIP_DEVICE_NAME = Shell.SH.run("getprop ro.xosp.device").get(0);
-    /**
-     * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device
-     *           ROMName-VersionMajor.VersionMinor-FINAL-MM-OFFICIAL-Date-Device
-     * Date is assumed to be in the format YYYYMMDD
-     */
+
 
     final static String [] OFFICIAL_LIST = {
             "angler", "armani", "bullhead", "d802", "d850", "d851", "d855", "falcon", "h811", "h815", "hammerhead",

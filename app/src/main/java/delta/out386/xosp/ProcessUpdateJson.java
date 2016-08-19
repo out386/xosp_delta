@@ -49,9 +49,22 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
     @Override
     public Void doInBackground(Void... params){
         Log.v(TAG, "Parsing update JSON");
-        if(json.equals(""))
-            if(!readOldJson())
+        if(json.equals("")) {
+            if(!readOldJson()) {
+                Intent noJson = new Intent(Constants.JSON_AVAILABILITY);
+                noJson.putExtra(Constants.IS_JSON_AVAILABLE, false);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(noJson);
                 return null;
+            } else {
+                Intent noJson = new Intent(Constants.JSON_AVAILABILITY);
+                noJson.putExtra(Constants.IS_JSON_AVAILABLE, true);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(noJson);
+            }
+        } else {
+            Intent noJson = new Intent(Constants.JSON_AVAILABILITY);
+            noJson.putExtra(Constants.IS_JSON_AVAILABLE, true);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(noJson);
+        }
 
         Moshi moshi = new Moshi.Builder().build();
         try {

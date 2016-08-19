@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -129,7 +130,7 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
             }
             return urlConnection;
         }
-        catch(UnknownHostException e) {
+        catch(UnknownHostException | ConnectException e) {
             Intent genericToast = new Intent(Constants.GENERIC_TOAST);
             genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "Could not connect to the download server");
             LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);

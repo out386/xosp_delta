@@ -27,10 +27,12 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -38,11 +40,14 @@ import eu.chainfire.libsuperuser.Shell;
 
 public class AutoApplyFragment extends Fragment {
     View rootView;
+    boolean jsonAvailable = false;
+
     public static AutoApplyFragment newInstance() {
         return new AutoApplyFragment();
     }
 
     public AutoApplyFragment() {}
+
     BroadcastReceiver autoApplyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -54,10 +59,29 @@ public class AutoApplyFragment extends Fragment {
             new ReadFlashablesQueue(context, rootView, list).execute();
         }
     };
+
     BroadcastReceiver noRomsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if(! jsonAvailable) {
+                return;
+            }
             new ReadFlashablesQueue(context, rootView, null).execute();
+        }
+    };
+
+    BroadcastReceiver noJsonReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            jsonAvailable = intent.getBooleanExtra(Constants.IS_JSON_AVAILABLE, false);
+            if(!jsonAvailable) {
+                Log.i(Constants.TAG, "No update descriptors available");
+                TextView statusText = (TextView) rootView.findViewById(R.id.queueEmptyTextview);
+                statusText.setVisibility(View.VISIBLE);
+                statusText.setText(R.string.no_internet);
+            }
+            Intent autoApplyService = new Intent(context, AutoApplySetupService.class);
+            context.startService(autoApplyService);
         }
     };
 
@@ -70,6 +94,11 @@ public class AutoApplyFragment extends Fragment {
         IntentFilter noRomsFilter = new IntentFilter();
         noRomsFilter.addAction(Constants.NO_ROMS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(noRomsReceiver, noRomsFilter);
+
+        IntentFilter noJson = new IntentFilter();
+        noJson.addAction(Constants.JSON_AVAILABILITY);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(noJsonReceiver, noJson);
+
         super.onResume();
     }
 
@@ -90,8 +119,6 @@ public class AutoApplyFragment extends Fragment {
             noAuto.setVisibility(View.GONE);
             return rootView;
         }
-        Intent autoApplyService = new Intent(context, AutoApplySetupService.class);
-        context.startService(autoApplyService);
 
         final SwipeRefreshLayout emptyRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.emptyRefresh);
         if(emptyRefresh != null)
@@ -117,6 +144,7 @@ public class AutoApplyFragment extends Fragment {
     public void onPause() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(autoApplyReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(noRomsReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(noJsonReceiver);
         super.onPause();
     }
 }
