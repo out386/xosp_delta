@@ -105,6 +105,12 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
         URL url;
         HttpURLConnection urlConnection;
 
+        if(!Tools.checkHost("http://connectivitycheck.gstatic.com/generate_204")) {
+            Intent genericToast = new Intent(Constants.GENERIC_TOAST);
+            genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "No internet connection is available.");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);
+            return null;
+        }
         try {
             url = new URL(urlStr);
             urlConnection = (HttpURLConnection) url.openConnection();

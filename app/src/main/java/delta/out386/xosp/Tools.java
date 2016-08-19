@@ -36,6 +36,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import delta.out386.xosp.JenkinsJson.builds;
 import eu.chainfire.libsuperuser.Shell;
 
@@ -272,5 +274,23 @@ public class Tools {
             // Let Medescope take care of this
         }
         return -1;
+    }
+
+    public static boolean checkHost(String host) {
+        try {
+            int response;
+        HttpURLConnection connection = (HttpURLConnection) new URL(host).openConnection();
+            connection.setRequestMethod("HEAD");
+            if((response = connection.getResponseCode()) == 204) {
+                return true;
+            }
+            else {
+                Log.i(Constants.TAG, "No internet: " + response);
+                return false;
+            }
+        } catch(Exception e) {
+            Log.i(Constants.TAG, "No internet: " + e);
+            return false;
+        }
     }
 }
