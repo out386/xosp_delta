@@ -4,49 +4,39 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="80dip"
-        android:background="@color/colorPrimary">
-    </LinearLayout>
+        android:layout_height="160dip"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        android:background="@color/colorPrimary"
+        android:id="@+id/about_author">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:padding="25dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="@string/author"/>
+    </ScrollView>
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="-20dp"
+        android:layout_marginBottom="-3dp"
+        android:id="@+id/aboutListCard"
+        android:layout_below="@id/about_author"
+        card_view:cardElevation="2dip"
+        card_view:cardCornerRadius="2dp">
+        <ListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical">
-        <android.support.v7.widget.CardView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-5dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:id="@+id/me"
-            card_view:cardElevation="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:padding="25dp"
-                android:gravity="center"
-                android:text="@string/author"/>
-        </android.support.v7.widget.CardView>
-        <android.support.v7.widget.CardView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="-5dp"
-            android:id="@+id/aboutListCard"
-            card_view:cardElevation="3dip"
-            card_view:cardCornerRadius="0dp">
-            <ListView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/aboutListView"
-                android:divider="@null"
-                android:scrollbars="none"
-                android:layout_marginTop="5dp"/>
-            </android.support.v7.widget.CardView>
-    </LinearLayout>
+            android:id="@+id/aboutListView"
+            android:divider="@null"
+            android:scrollbars="none"/>
+    </android.support.v7.widget.CardView>
 </RelativeLayout>
