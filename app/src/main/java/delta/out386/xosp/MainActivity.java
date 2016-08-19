@@ -151,6 +151,7 @@ public class MainActivity extends Activity
         IntentFilter downloadsDone = new IntentFilter();
         downloadsDone.addAction(Constants.DOWNLOADS_DONE_INTENT);
         registerReceiver(downloadsDoneReceiver, downloadsDone);
+
         super.onResume();
     }
     @Override
@@ -205,17 +206,17 @@ public class MainActivity extends Activity
             }
         });
         t.start();
-
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, AutoApplyFragment.newInstance())
-                .commit();
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_STORAGE_PERMISSION);
         }
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION);
         }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, AutoApplyFragment.newInstance())
+                .commit();
     }
 
     @Override

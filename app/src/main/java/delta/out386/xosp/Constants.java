@@ -51,20 +51,21 @@ public class Constants {
     final static String DOWNLOADS_PROGRESS = "delta.out386.xosp.DOWNLOADS_PROGRESS";
     final static String DOWNLOADS_PROGRESS_VALUE = "delta.out386.xosp.DOWNLOADS_PROGRESS_VALUE";
     final static String DOWNLOADS_PROGRESS_ID = "delta.out386.xosp.DOWNLOADS_PROGRESS_ID";
+
+    final static String SUPPORTED_ROM_FULL_NAME = "Xperia Open Source Project";
+
     /**
      * Information about the supported rom.
      * SUPPORTED_ROM_PROP is the is the property that XOSP uses to identify itself.
      * SUPPORTED_ROM_PROP_NAME is any unique part of the SUPPORTED_ROM_PROP property.
      */
-
-    final static String SUPPORTED_ROM_FULL_NAME = "Xperia Open Source Project";
-
+    final static String SUPPORTED_ROM_PROP = "ro.xosp.display.version";
     /**
      * EXAMPLE : ROMName-VersionMajor.VersionMinor-OFFICIAL-Date-Device
      *           ROMName-VersionMajor.VersionMinor-FINAL-MM-OFFICIAL-Date-Device
      * Date is assumed to be in the format YYYYMMDD
      */
-    final static String SUPPORTED_ROM_PROP = "ro.xosp.display.version";
+
     final static String SUPPORTED_ROM_PROP_NAME="XOSP";
 	
 	// The delimiter(s) used in the ROM zip to separate name, date, version, etc. 
