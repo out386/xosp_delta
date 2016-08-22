@@ -32,13 +32,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import delta.out386.xosp.BasketbuildJson.*;
-//import delta.out386.xosp.JenkinsJson.*;
+import delta.out386.xosp.JenkinsJson.*;
 
 public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
     String json, version;
     final String TAG = Constants.TAG;
-    //JenkinsJson updates;
-    BasketbuildJson updates;
+    JenkinsJson updates;
     Context context;
 
     public ProcessUpdateJson(String json, Context context){
@@ -68,20 +67,18 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
 
         Moshi moshi = new Moshi.Builder().build();
         try {
-            //JsonAdapter<JenkinsJson> jsonAdapter = moshi.adapter(JenkinsJson.class);
-            JsonAdapter<BasketbuildJson> jsonAdapter = moshi.adapter(BasketbuildJson.class);
+            JsonAdapter<JenkinsJson> jsonAdapter = moshi.adapter(JenkinsJson.class);
             updates = jsonAdapter.fromJson(json);
         }
         catch(Exception e) {
             Log.e(TAG, e.toString());
         }
         
-        if (updates == null || updates.files.size() == 0) {
+        if (updates == null || updates.builds.size() == 0) {
             Tools.sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.", context);
             return null;
         }
-        //boolean isUpdateNeeded = Tools.processJenkins(updates, context);
-        boolean isUpdateNeeded = Tools.processBasketbuild(updates, context);
+        boolean isUpdateNeeded = Tools.processJenkins(updates, context);
         if(updates.isMalformed) {
             Tools.sendGenericToast("ROM filename format is wrong. Ask the maintainer to fix it.", context);
             return null;
@@ -90,10 +87,17 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             Tools.sendGenericToast("No updates are available.", context);
             return null;
         }
-
-        printBasketbuild(updates);
-
-        // Send over the list of stuff to download
+        for (builds builds : updates.builds) {
+            Log.i(TAG, "Build name : " + builds.artifacts[0].fileName);
+            Log.i(TAG, "Build MD5 : " + builds.fingerprint[0].hash);
+            Log.i(TAG, "Build date : " + builds.artifacts[0].date);
+            Log.i(TAG, "Real build date : " + builds.stringDate);
+            Log.i(TAG, "Build ID : " + builds.id);
+            Log.i(TAG, "URL : " + builds.artifacts[0].downloadUrl);
+            Log.i(TAG, "Build relative path : " + builds.artifacts[0].relativePath);
+            if(builds.artifacts[0].size != null)
+            Log.i(TAG, "File size : " + builds.artifacts[0].size);
+        }
         Intent pendingDownloads = new Intent(Constants.PENDING_DOWNLOADS_INTENT);
         pendingDownloads.putExtra(Constants.PENDING_DOWNLOADS, updates);
         LocalBroadcastManager.getInstance(context).sendBroadcast(pendingDownloads);
@@ -115,30 +119,5 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             return false;
         }
         return true;
-    }
-
-    public void printJenkins(JenkinsJson updates) {
-        for (JenkinsJson.builds builds : updates.builds) {
-            Log.i(TAG, "Build name : " + builds.artifacts[0].fileName);
-            Log.i(TAG, "Build MD5 : " + builds.fingerprint[0].hash);
-            Log.i(TAG, "Build date : " + builds.artifacts[0].date);
-            Log.i(TAG, "Real build date : " + builds.stringDate);
-            Log.i(TAG, "Build ID : " + builds.id);
-            Log.i(TAG, "URL : " + builds.artifacts[0].downloadUrl);
-            Log.i(TAG, "Build relative path : " + builds.artifacts[0].relativePath);
-            if(builds.artifacts[0].size != null)
-                Log.i(TAG, "File size : " + builds.artifacts[0].size);
-        }
-    }
-
-    public void printBasketbuild(BasketbuildJson updates) {
-        for (BasketbuildJson.file file : updates.files) {
-            Log.i(TAG, "File name : " + file.file);
-            Log.i(TAG, "File MD5 : " + file.filemd5);
-            Log.i(TAG, "File date : " + file.fileNameDate);
-            Log.i(TAG, "Real file date : " + file.stringDate);
-            Log.i(TAG, "URL : " + file.filelink);
-            Log.i(TAG, "File size : " + file.filesize);
-        }
     }
 }

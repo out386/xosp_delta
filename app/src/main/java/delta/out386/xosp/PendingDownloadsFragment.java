@@ -24,6 +24,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Fragment;
 
 import br.com.bemobi.medescope.Medescope;
+import delta.out386.xosp.JenkinsJson.builds;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -35,18 +36,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-
+import android.widget.RelativeLayout;
 
 
 public class PendingDownloadsFragment extends Fragment {
-    JenkinsJson jsonJenkins;
-    BasketbuildJson jsonBB;
+    JenkinsJson json;
     View rootView;
     Context context;
-    BuildsAdapterJenkins jenkinsAdapter;
-    BuildsAdapterBasketbuild basketbuildAdapter;
+    BuildsAdapter adapter;
     BroadcastReceiver progressReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -60,11 +60,7 @@ public class PendingDownloadsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_BASKETBUILD))
-            jsonBB = (BasketbuildJson) getArguments().getSerializable("json");
-        else if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS))
-            jsonJenkins = (JenkinsJson) getArguments().getSerializable("json");
-
+        json = (JenkinsJson) getArguments().getSerializable("json");
         rootView = inflater.inflate(R.layout.fragment_builds, container, false);
         context = getContext();
         return rootView;
@@ -73,18 +69,9 @@ public class PendingDownloadsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        adapter = new BuildsAdapter(context, R.layout.builds_item, json.builds);
         ListView lv = (ListView) rootView.findViewById(R.id.build_list);
-
-        if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_BASKETBUILD)) {
-            basketbuildAdapter = new BuildsAdapterBasketbuild(context, R.layout.builds_item, jsonBB.files);
-            lv.setAdapter(basketbuildAdapter);
-        }
-        else if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS)) {
-            jenkinsAdapter = new BuildsAdapterJenkins(context, R.layout.builds_item, jsonJenkins.builds);
-            lv.setAdapter(jenkinsAdapter);
-        }
-
+        lv.setAdapter(adapter);
         final ImageButton download = (ImageButton) rootView.findViewById(R.id.download);
         final ImageButton cancel = (ImageButton) rootView.findViewById(R.id.cancel);
 
@@ -131,10 +118,7 @@ public class PendingDownloadsFragment extends Fragment {
                             }
                         });
                 Intent download = new Intent(Constants.DOWNLOADS_INTENT);
-                if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_BASKETBUILD))
-                    download.putExtra(Constants.DOWNLOADS_JSON, jsonBB);
-                else if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS))
-                    download.putExtra(Constants.DOWNLOADS_JSON, jsonJenkins);
+                download.putExtra(Constants.DOWNLOADS_JSON, json);
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(download);
             }
         });
@@ -142,39 +126,20 @@ public class PendingDownloadsFragment extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_BASKETBUILD)) {
-                    for (BasketbuildJson.file current : jsonBB.files) {
-                        Medescope.getInstance(context).cancel(current.filemd5);
-                        Log.i(Constants.TAG, "CANCEL DOWNLOAD  " + current.filemd5);
-                    }
-                }
-                else if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS)) {
-                    for (JenkinsJson.builds current : jsonJenkins.builds) {
-                        Medescope.getInstance(context).cancel(current.id);
-                        Log.i(Constants.TAG, "CANCEL DOWNLOAD  " + current.id);
-                    }
+                for(builds current : json.builds) {
+                    Medescope.getInstance(context).cancel(current.id);
+                    Log.i(Constants.TAG, "CANCEL DOWNLOAD  " + current.id);
                 }
             }
         });
     }
     public void progress(int progress, String id) {
-        if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_BASKETBUILD)) {
-            for (BasketbuildJson.file current : jsonBB.files) {
-                if (current.filemd5.equals(id)) {
-                    current.downloadProgress = progress;
-                    break;
-                }
+        for(builds current : json.builds) {
+            if(current.id.equals(id)) {
+                current.downloadProgress = progress;
+                break;
             }
-            basketbuildAdapter.notifyDataSetChanged();
         }
-        else if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS)) {
-            for (JenkinsJson.builds current : jsonJenkins.builds) {
-                if (current.id.equals(id)) {
-                    current.downloadProgress = progress;
-                    break;
-                }
-            }
-            jenkinsAdapter.notifyDataSetChanged();
-        }
+        adapter.notifyDataSetChanged();
     }
 }

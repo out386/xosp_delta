@@ -21,7 +21,10 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
@@ -32,6 +35,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import delta.out386.xosp.JenkinsJson.builds;
 import eu.chainfire.libsuperuser.Shell;
@@ -114,7 +119,7 @@ public class Tools {
         if(buildsSize == 0)
             return false;
         int  removeIndex = 0, currentIndex = 0;
-        int [] remove = new int [buildsSize];
+        int [] remove = new int [updates.builds.size()];
 
         int installedBuildDate = romZipDate(
                 Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP)
@@ -288,134 +293,4 @@ public class Tools {
             return false;
         }
     }
-
-
-
-
-
-    public static boolean processBasketbuild(BasketbuildJson updates, Context context) {
-        /* Here, each build (Jenkins "job") has just one artifact. That's just how the server's set up.
-         * That is why the loop iterates over "builds" and not over both "builds" and "artifacts".
-         * This behaviour may or may not be changed later.
-         */
-        int buildsSize = updates.files.size();
-        if(buildsSize == 0)
-            return false;
-        int  removeIndex = 0, currentIndex = 0;
-        int [] remove = new int [buildsSize];
-
-        int installedBuildDate = romZipDate(
-                Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP)
-                        .get(0), false)
-                .date;
-        int newestFileDate = 0;
-
-        //comparator here
-
-        newestFileDate = romZipDate(updates.files.get(buildsSize - 1).file, false).date;
-
-        if(installedBuildDate == -1 || newestFileDate == -1)
-        {
-            Log.i(Constants.TAG, "Kill the guy who changed the filename. Malformed ROM name.");
-            sendGenericToast("Malformed ROM name. Please contact your devices' maintainer.", context);
-            return false;
-        }
-
-        // As the update to installedBuildDate will have the same number
-        if(installedBuildDate > newestFileDate) {
-            // No updates needed
-            return false;
-        }
-
-        List<Flashables> newestDownloadedDelta = findNewestDownloadedDelta(context);
-        int downloadedRomBuildDate = 0, downloadedDeltaBuildDate = 0;
-        if(newestDownloadedDelta != null) {
-            downloadedDeltaBuildDate = romZipDate(newestDownloadedDelta.get(0).file.getName(), false).date;
-            if(newestDownloadedDelta.size() == 2)
-                downloadedRomBuildDate = romZipDate(newestDownloadedDelta.get(1).file.getName(), false).date;
-        }
-
-        if(downloadedRomBuildDate == -1 || downloadedDeltaBuildDate == -1)
-        {
-            Log.i(Constants.TAG, "Kill the guy who changed the file name. Malformed ROM name.");
-            sendGenericToast("Malformed ROM name. Please contact your devices' maintainer.", context);
-            return false;
-        }
-
-        if(downloadedRomBuildDate > newestFileDate || downloadedDeltaBuildDate >= newestFileDate)
-            return false;
-
-        /* The builds info returned by the BasketBuilds API is already sorted in ascending
-         * order. We need the oldest build to be the first element, so no problems.
-         */
-        //Collections.reverse(updates.builds);
-        for(BasketbuildJson.file currentFile : updates.files) {
-
-            // This will calculate the date even for duplicates. To be fixed.
-            RomDateType romType = romZipDate(currentFile.file, false);
-            if(romType.date == -1) {
-                updates.isMalformed = true;
-                return false;
-            }
-            currentFile.fileNameDate = romType.date;
-            currentFile.isDelta = romType.isDelta;
-            Date tempdate = new Date(currentFile.fileTimestamp);
-            currentFile.stringDate = new SimpleDateFormat("MMM dd yyyy").format(tempdate);
-
-            if(currentFile.fileNameDate < downloadedRomBuildDate || currentFile.fileNameDate <= downloadedDeltaBuildDate|| currentFile.fileNameDate < installedBuildDate) {
-                Log.i(Constants.TAG, "removing " + currentFile.fileNameDate);
-                remove[removeIndex++] = currentIndex++;
-                continue;
-            }
-
-            for(int i = currentIndex + 1; i < buildsSize; i++) {
-                try {
-                    // Removing duplicate jobs. Just in case.
-                    if (currentFile.filemd5.equals(updates.files.get(i).filemd5))
-                        if(Arrays.binarySearch(remove, 0, removeIndex, i) < 0)
-                            remove[removeIndex++] = i;
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    // Just means that it found a file with no fingerprints
-                }
-            }
-            currentIndex++;
-        }
-
-        int numberElementsRemoved = 0;
-        for(int removeCurrent = 0; removeCurrent <= removeIndex - 1; removeCurrent++)
-            updates.files.remove(remove[removeCurrent] - numberElementsRemoved++);
-        if(updates.files.size() == 0)
-            return false;
-
-        for(BasketbuildJson.file currentFile : updates.files) {
-            if(currentFile.filesize == null || !currentFile.filesize.equals(""))
-                currentFile.filesize = "Size unavailable";
-        }
-        return true;
-    }
-
-    /*public static List<BasketbuildJson> sortBasketbuildFiles(BasketbuildJson basketbuildJson) {
-
-        if(basketbuildJson.files.size() == 0)
-            return null;
-        Collections.sort(basketbuildJson.files, new Comparator<BasketbuildJson.file>() {
-            @Override
-            public int compare(BasketbuildJson.file o1, BasketbuildJson.file o2) {
-                return -(o1.file.compareTo(o2.file));
-            }
-        });
-
-        if(storedRoms.size() == 0)
-            return null;
-        Collections.sort(storedRoms, new Comparator<Flashables>() {
-            @Override
-            public int compare(Flashables o1, Flashables o2) {
-                return -(o1.file.getName().compareTo(o2.file.getName()));
-            }
-        });
-
-        output.add(storedDeltas.get(0));
-        output.add(storedRoms.get(0));
-        return output;
-    }*/
 }

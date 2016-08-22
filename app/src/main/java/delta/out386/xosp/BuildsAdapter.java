@@ -43,11 +43,11 @@ import java.util.List;
 
 import delta.out386.xosp.JenkinsJson.builds;
 
-public class BuildsAdapterJenkins extends ArrayAdapter<builds> {
+public class BuildsAdapter extends ArrayAdapter<builds> {
     NumberProgressBar progress;
     builds current;
 
-    public BuildsAdapterJenkins(Context context, int resource, List<builds> items) {
+    public BuildsAdapter(Context context, int resource, List<builds> items) {
         super(context,resource,items);
     }
 
