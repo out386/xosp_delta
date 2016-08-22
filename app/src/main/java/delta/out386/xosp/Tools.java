@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -93,8 +94,8 @@ public class Tools {
         }
 
         // Rough date after which deltas were introduced in XOSP
-        if(romDate.date < 20160501)
-            romDate.date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION_2 - indexOffset]);
+        /*if(romDate.date < 20160501)
+            romDate.date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION_2 - indexOffset]);*/
 
         if(moreInfo) {
             romDate.romName = fileComponents[Constants.ROM_ZIP_NAME_LOCATION - indexOffset];
@@ -184,7 +185,13 @@ public class Tools {
             }
             currentBuild.artifacts[0].date = romType.date;
             currentBuild.artifacts[0].isDelta = romType.isDelta;
-            Date tempdate = new Date(currentBuild.timestamp);
+            Date tempdate = null;
+            if( Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_BASKETBUILD))
+                tempdate = new Date(currentBuild.timestamp * 1000L);
+            else if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS))
+                tempdate = new Date(currentBuild.timestamp);
+            
+
             currentBuild.stringDate = new SimpleDateFormat("MMM dd yyyy").format(tempdate);
 
             if(currentBuild.artifacts.length > 0)
@@ -213,17 +220,19 @@ public class Tools {
         if(updates.builds.size() == 0)
             return false;
 
-        for(builds currentBuild : updates.builds) {
-            currentBuild.artifacts[0].downloadUrl = Constants.UPDATE_JSON_URL_JENKINS_1
-                    + Constants.ROM_ZIP_DEVICE_NAME + ")/"
-                    + currentBuild.id
-                    + "/artifact/"
-                    + currentBuild.artifacts[0].relativePath;
-            String size = sizeFormat(getUrlSize(currentBuild.artifacts[0].downloadUrl));
-            if(size != null)
-                currentBuild.artifacts[0].size = size;
-            else
-                currentBuild.artifacts[0].size = "Size unavailable";
+        if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS)) {
+            for (builds currentBuild : updates.builds) {
+                currentBuild.artifacts[0].downloadUrl = Constants.UPDATE_JSON_URL_JENKINS_1
+                        + Constants.ROM_ZIP_DEVICE_NAME + ")/"
+                        + currentBuild.id
+                        + "/artifact/"
+                        + currentBuild.artifacts[0].relativePath;
+                String size = sizeFormat(getUrlSize(currentBuild.artifacts[0].downloadUrl));
+                if (size != null)
+                    currentBuild.artifacts[0].size = size;
+                else
+                    currentBuild.artifacts[0].size = "Size unavailable";
+            }
         }
         return true;
     }

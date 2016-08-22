@@ -44,8 +44,7 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     static final int HTTP_CONNECTION_TIMEOUT = 30000;
 
     final String TAG = Constants.TAG;
-    String url = //Constants.UPDATE_JSON_URL_JENKINS_1 + Constants.ROM_ZIP_DEVICE_NAME + Constants.UPDATE_JSON_URL_JENKINS_2;
-                 Constants.UPDATE_JSON_URL_BASKETBUILD + Constants.ROM_ZIP_DEVICE_NAME;
+    String url;
     String json = "", jsonLine;
     File jsonStore;
     View rootView;
@@ -56,6 +55,10 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
         this.context = context;
         this.rootView = rootView;
         jsonStore = new File(context.getCacheDir().toString() + "/romsList");
+        if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_BASKETBUILD))
+            url = Constants.UPDATE_JSON_URL_BASKETBUILD1 + Constants.ROM_ZIP_DEVICE_NAME + Constants.UPDATE_JSON_URL_BASKETBUILD2;
+        else if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS))
+            url = Constants.UPDATE_JSON_URL_JENKINS_1 + Constants.ROM_ZIP_DEVICE_NAME + Constants.UPDATE_JSON_URL_JENKINS_2;
     }
     @Override
     public void onPreExecute() {
@@ -105,7 +108,7 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
         URL url;
         HttpsURLConnection urlConnection;
 
-        if(!Tools.checkHost("http://connectivitycheck.gstatic.com/generate_204")) {
+        if(!Tools.checkHost(Constants.CONNECTIVITY_CHECK_URL)) {
             Intent genericToast = new Intent(Constants.GENERIC_TOAST);
             genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "No internet connection is available.");
             LocalBroadcastManager.getInstance(context).sendBroadcast(genericToast);

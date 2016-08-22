@@ -25,7 +25,6 @@ import java.util.StringTokenizer;
  */
 public class BasketbuildJson implements Serializable{
     List<file> files;
-    boolean isMalformed;
     // BasketBuild support is broken now.
     static class file {
         String file;
@@ -33,11 +32,6 @@ public class BasketbuildJson implements Serializable{
         String filemd5;
         int fileTimestamp;
         String filelink;
-        boolean isDelta;
-        long fileNameDate;
-        int downloadProgress = -2;
-        String stringDate;
-        boolean isDownloaded = false;
     }
     
 }

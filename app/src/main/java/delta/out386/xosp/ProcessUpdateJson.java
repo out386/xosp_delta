@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -31,6 +32,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+
 import delta.out386.xosp.BasketbuildJson.*;
 import delta.out386.xosp.JenkinsJson.*;
 
@@ -47,6 +50,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
 
     @Override
     public Void doInBackground(Void... params){
+        JsonAdapter<JenkinsJson> jsonAdapter = null;
         Log.v(TAG, "Parsing update JSON");
         if(json.equals("")) {
             if(!readOldJson()) {
@@ -65,15 +69,20 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             LocalBroadcastManager.getInstance(context).sendBroadcast(noJson);
         }
 
-        Moshi moshi = new Moshi.Builder().build();
         try {
-            JsonAdapter<JenkinsJson> jsonAdapter = moshi.adapter(JenkinsJson.class);
+            Moshi moshi = null;
+            if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS)) {
+                moshi = new Moshi.Builder().build();
+            }
+            else if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_BASKETBUILD)) {
+                moshi = new Moshi.Builder().add(new BasketbuildJsonCopy()).build();
+            }
+            jsonAdapter = moshi.adapter(JenkinsJson.class);
             updates = jsonAdapter.fromJson(json);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
-        
+
         if (updates == null || updates.builds.size() == 0) {
             Tools.sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.", context);
             return null;
@@ -119,5 +128,31 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             return false;
         }
         return true;
+    }
+    class BasketbuildJsonCopy {
+        @FromJson
+        JenkinsJson jenkinsFromBasketbuild(BasketbuildJson bbJson) {
+            JenkinsJson json = new JenkinsJson();
+            json.builds = new ArrayList<>();
+
+            for(BasketbuildJson.file currentBB : bbJson.files) {
+                JenkinsJson.builds build = new JenkinsJson.builds();
+                build.artifacts = new JenkinsJson.artifacts[1];
+                build.fingerprint = new JenkinsJson.fingerprint[1];
+                JenkinsJson.artifacts artifact = new JenkinsJson.artifacts();
+                JenkinsJson.fingerprint fingerprint = new JenkinsJson.fingerprint();
+
+                fingerprint.hash = currentBB.filemd5;
+                build.id = currentBB.filemd5;
+                build.timestamp = currentBB.fileTimestamp;
+                artifact.fileName = currentBB.file;
+                artifact.size = currentBB.filesize;
+                artifact.downloadUrl = currentBB.filelink;
+                build.artifacts[0] = artifact;
+                build.fingerprint[0] = fingerprint;
+                json.builds.add(build);
+            }
+            return json;
+        }
     }
 }
