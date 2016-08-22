@@ -91,4 +91,8 @@ public class Constants {
 	final static String UPDATE_JSON_URL_BASKETBUILD = "https://basketbuild.com/api4web/devs/XOSP/";
     final static String UPDATE_JSON_URL_JENKINS_1 = "http://144.76.38.141:8090/job/XOSPWeeklies(";
     final static String UPDATE_JSON_URL_JENKINS_2 = ")/api/json?depth=1&tree=builds[artifacts[fileName,relativePath],id,timestamp,fingerprint[hash]]";
+    final static String DOWNLOADS_API_TYPE_BASKETBUILD = "delta.out386.xosp.DOWNLOADS_API_TYPE_BASKETBUILD";
+    final static String DOWNLOADS_API_TYPE_JENKINS = "delta.out386.xosp.DOWNLOADS_API_TYPE_JENKINS";
+    final static String CURRENT_DOWNLOADS_API_TYPE = DOWNLOADS_API_TYPE_BASKETBUILD;
+
 }

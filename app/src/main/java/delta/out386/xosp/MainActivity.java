@@ -306,7 +306,6 @@ public class MainActivity extends Activity
         return false;
     }
     public void download(List<JenkinsJson.builds> json) {
-        Log.i(Constants.TAG, "Recieved");
         new DownloadBuilds(json, this).download(0);
     }
     public int getStatusBarHeight()

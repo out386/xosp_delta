@@ -34,7 +34,6 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ConnectException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownHostException;
 
@@ -45,8 +44,8 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     static final int HTTP_CONNECTION_TIMEOUT = 30000;
 
     final String TAG = Constants.TAG;
-    String url = Constants.UPDATE_JSON_URL_JENKINS_1 + Constants.ROM_ZIP_DEVICE_NAME + Constants.UPDATE_JSON_URL_JENKINS_2;
-                 //Constants.UPDATE_JSON_URL_BASKETBUILD + Constants.ROM_ZIP_DEVICE_NAME;
+    String url = //Constants.UPDATE_JSON_URL_JENKINS_1 + Constants.ROM_ZIP_DEVICE_NAME + Constants.UPDATE_JSON_URL_JENKINS_2;
+                 Constants.UPDATE_JSON_URL_BASKETBUILD + Constants.ROM_ZIP_DEVICE_NAME;
     String json = "", jsonLine;
     File jsonStore;
     View rootView;
@@ -64,10 +63,10 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     }
     @Override
     public Void doInBackground(Void... v) {
-        HttpURLConnection urlConnection = null;
+        HttpsURLConnection urlConnection = null;
         Log.i(TAG, url);
         try {
-            urlConnection = setupHttpRequest(url);
+            urlConnection = setupHttpsRequest(url);
             if(urlConnection == null)
                 return null;
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -102,9 +101,9 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
         }
             new ProcessUpdateJson(json, context).execute();
     }
-    private HttpURLConnection setupHttpRequest(String urlStr){
+    private HttpsURLConnection setupHttpsRequest(String urlStr){
         URL url;
-        HttpURLConnection urlConnection;
+        HttpsURLConnection urlConnection;
 
         if(!Tools.checkHost("http://connectivitycheck.gstatic.com/generate_204")) {
             Intent genericToast = new Intent(Constants.GENERIC_TOAST);
@@ -114,14 +113,14 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
         }
         try {
             url = new URL(urlStr);
-            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setConnectTimeout(HTTP_CONNECTION_TIMEOUT);
             urlConnection.setReadTimeout(HTTP_READ_TIMEOUT);
             urlConnection.setRequestMethod("GET");
             urlConnection.setDoInput(true);
             urlConnection.connect();
             int code = urlConnection.getResponseCode();
-            if (code != HttpURLConnection.HTTP_OK) {
+            if (code != HttpsURLConnection.HTTP_OK) {
                 Intent genericToast = new Intent(Constants.GENERIC_TOAST);
                 genericToast.putExtra(Constants.GENERIC_TOAST_MESSAGE, "Failed to download the list of ROMs and deltas. The error code is " + code);
                 Log.i(TAG, "JSON download failed");

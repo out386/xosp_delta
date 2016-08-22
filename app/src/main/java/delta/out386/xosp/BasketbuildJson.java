@@ -1,5 +1,7 @@
 package delta.out386.xosp;
 
+import java.io.Serializable;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /*
@@ -21,20 +23,21 @@ import java.util.StringTokenizer;
  * You should have received a copy of the GNU General Public License
  * along with XOSPDelta. If not, see <http://www.gnu.org/licenses/>.
  */
-public class BasketbuildJson {
-    file[] files;
+public class BasketbuildJson implements Serializable{
+    List<file> files;
+    boolean isMalformed;
     // BasketBuild support is broken now.
     static class file {
         String file;
         String filesize;
         String filemd5;
-        long date;
+        int fileTimestamp;
+        String filelink;
+        boolean isDelta;
+        long fileNameDate;
+        int downloadProgress = -2;
+        String stringDate;
+        boolean isDownloaded = false;
     }
-
-    public void process(BasketbuildJson updates) {
-        for(int i = 0; i< updates.files.length; i++) {
-            String[] fileComponents = updates.files[i].file.split("[" + Constants.ROM_ZIP_DELIMITER + "]");
-            updates.files[i].date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION - 1]);
-        }
-    }
+    
 }
