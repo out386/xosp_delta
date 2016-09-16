@@ -1,5 +1,4 @@
 apply plugin: 'android-library'
-
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
@@ -8,4 +7,10 @@ android {
         minSdkVersion 8
         targetSdkVersion 23
     }
+    dexOptions {
+        incremental false
+    }
+}
+
+dependencies {
 }

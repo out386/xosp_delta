@@ -9,3 +9,4 @@ gradle.properties
 /app/*.iml
 /gradle/
 /libs/NumberProgressbar/*.iml
+/.project
