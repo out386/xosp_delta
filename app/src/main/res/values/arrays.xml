@@ -4,5 +4,10 @@
         <item>@string/drawer_item1</item>
         <item>@string/drawer_item7</item>
         <item>@string/drawer_item8</item>
+        <item>@string/drawer_item9</item>
+    </string-array>
+    <string-array name="recovery_options">
+        <item>TWRP</item>
+        <item>CWM</item>
     </string-array>
 </resources>

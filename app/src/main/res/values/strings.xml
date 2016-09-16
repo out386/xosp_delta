@@ -6,6 +6,7 @@
     <string name="drawer_item1">Updates</string>
     <string name="drawer_item7">About</string>
     <string name="drawer_item8">Settings</string>
+    <string name="drawer_item9">Flash</string>
     <string name="downloads">Downloads</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -13,4 +14,8 @@
     <string name="locationText">This is the root of the location which the app will use as the working directory. Examples are:\n/storage/emulated/0\n/storage/BABB-4782\nThe app will not work if you select a location that needs root access to write to. You need at least 2 GiB free here.</string>
     <string name="updates_text">The following updates are available. They are all deltas, so you need a base ROM to apply them to. Download them. Then, only if this is the first time you\'re using the app, move whichever XOSP ROM zip you have already flashed to the \"/sdcard/XOSPDelta\" directory. Pull down to refresh.</string>
     <string name="no_internet">Could not connect to the download server, and there is no cached list of available updates. Make sure that you are connected to the internet. If the problem persists, contact your device\'s maintainer. Pull down to refresh.</string>
+    <string name="wipe_data">Wipe the data partition</string>
+    <string name="wipe_cache">Wipe the cache partition</string>
+    <string name="flash_head">Flash</string>
+    <string name="add_action_first">First, add some items to flash.</string>
 </resources>

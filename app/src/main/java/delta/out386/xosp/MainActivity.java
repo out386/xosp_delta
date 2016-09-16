@@ -50,6 +50,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.grarak.kerneladiutor.fragments.RecoveryFragment;
+
 public class MainActivity extends Activity
 {
     private DrawerLayout mDrawerLayout;
@@ -247,6 +249,7 @@ public class MainActivity extends Activity
                 break;
             case 3: fragment = SettingsFragment.newInstance();
                 break;
+            case 4: fragment = new RecoveryFragment();
         }
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
