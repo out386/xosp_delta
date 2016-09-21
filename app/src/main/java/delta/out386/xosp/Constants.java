@@ -19,7 +19,7 @@ package delta.out386.xosp;
 import eu.chainfire.libsuperuser.Shell;
 
 public class Constants {
-    final static String TAG = "XOSPDelta";
+    final public static String TAG = "XOSPDelta";
 
     final static String ACTION_CLOSE_DIALOG = "delta.out386.xosp.CLOSE_DIALOG";
     final static String ACTION_APPLY_DIALOG = "delta.out386.xosp.APPLY_DIALOG";

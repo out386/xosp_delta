@@ -42,14 +42,18 @@ public class Recovery {
 
     private final RECOVERY_COMMAND mRecovery_command;
     private final File mFile;
+    public final String mSummary;
+    public final String mType;
 
     public Recovery(RECOVERY_COMMAND recovery_command) {
-        this(recovery_command, null);
+        this(recovery_command, null, null, null);
     }
 
-    public Recovery(RECOVERY_COMMAND recovery_command, File file) {
+    public Recovery(RECOVERY_COMMAND recovery_command, File file, String summary, String type) {
         mRecovery_command = recovery_command;
         mFile = file;
+        mSummary = summary;
+        mType = type;
     }
 
     public String getFile(RECOVERY recovery) {

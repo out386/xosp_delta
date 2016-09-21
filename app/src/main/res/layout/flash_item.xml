@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
     android:layout_width="fill_parent"
-    android:id="@+id/build_item_view"
+    android:id="@+id/flash_item_view"
     android:paddingBottom="20dp"
     android:clickable="true"
     android:background="@color/transparent">

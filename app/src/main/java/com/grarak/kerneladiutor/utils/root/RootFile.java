@@ -127,7 +127,11 @@ public class RootFile {
     }
 
     public boolean isEmpty() {
-        return "false".equals(Shell.SU.run("find '" + mFile + "' -mindepth 1 | read || echo false").get(0));
+        String o = null;
+        try {
+                o = Shell.SU.run("busybox find '" + mFile + "' -mindepth 1 | read || echo false").get(0);
+                } catch(IndexOutOfBoundsException e) { return false; }
+        return "false".equals(o);
     }
 
     public boolean exists() {

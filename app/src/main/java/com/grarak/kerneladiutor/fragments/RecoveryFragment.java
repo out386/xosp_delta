@@ -22,6 +22,7 @@ package com.grarak.kerneladiutor.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.CheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,21 +31,27 @@ import android.widget.LinearLayout;
 import android.graphics.Color;
 
 import android.widget.ListView;
+import com.github.developerpaul123.filepickerlibrary.enums.MimeType;
+import com.github.developerpaul123.filepickerlibrary.enums.Request;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.grarak.kerneladiutor.utils.Prefs;
 import com.grarak.kerneladiutor.utils.Utils;
 import com.grarak.kerneladiutor.utils.root.RootFile;
 import com.grarak.kerneladiutor.utils.tools.Recovery;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import delta.out386.xosp.Constants;
 import delta.out386.xosp.R;
-import droidninja.filepicker.FilePickerBuilder;
-import droidninja.filepicker.FilePickerConst;
-import eu.chainfire.libsuperuser.Shell;
+import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
+import delta.out386.xosp.RecoveryAdapter;
+import delta.out386.xosp.SortFileType;
 
 import static android.app.Activity.RESULT_OK;
+import static com.github.developerpaul123.filepickerlibrary.FilePickerActivity.REQUEST_FILE;
 
 /**
  * Created by willi on 12.07.16.
@@ -53,13 +60,15 @@ public class RecoveryFragment extends Fragment {
 
     private List<Recovery> mCommands = new ArrayList<>();
     private int mRecoveryOption;
+    private RecoveryAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView;
         rootView = inflater.inflate(R.layout.fragment_recovery, container, false);
-        ListView lv = (ListView) rootView.findViewById(R.id.flash_list);
+        ListView listView = (ListView) rootView.findViewById(R.id.flash_list);
         mRecoveryOption = Prefs.getInt("recovery_option", 0, getActivity());
+        Log.i(Constants.TAG, "Recovery : " + mRecoveryOption);
 
         String[] options = getResources().getStringArray(R.array.recovery_options);
 
@@ -80,6 +89,7 @@ public class RecoveryFragment extends Fragment {
                     for (int i = 0; i < checkBoxes.size(); i++) {
                         checkBoxes.get(i).setChecked(position == i);
                     }
+                    Log.i(Constants.TAG, "onClick: Saving Reco " + position);
                     Prefs.saveInt("recovery_option", position, getActivity());
                     mRecoveryOption = position;
                 }
@@ -94,12 +104,18 @@ public class RecoveryFragment extends Fragment {
             public void onClick(View view) {
                 if (mCommands != null && mCommands.size() > 0) {
                     flashNow(mRecoveryOption);
+                    Utils.toast("Selected reco " + mRecoveryOption, getActivity());
                 } else {
                     Utils.toast(R.string.add_action_first, getActivity());
                 }
                 add();
             }
         });
+
+
+        adapter = new RecoveryAdapter(getContext(), R.layout.flash_item, mCommands);
+        listView.setAdapter(adapter);
+
         return rootView;
     }
 
@@ -108,9 +124,15 @@ public class RecoveryFragment extends Fragment {
         intent.putExtra(FilePickerActivity.PATH_INTENT, "/sdcard");
         intent.putExtra(FilePickerActivity.EXTENSION_INTENT, ".zip");
         startActivityForResult(intent, 0);*/
-        FilePickerBuilder.getInstance()
+        /*FilePickerBuilder.getInstance()
                 .setActivityTheme(R.style.AppTheme)
-                .pickDocument(getActivity());
+                .pickDocument(RecoveryFragment.this)*/;//getActivity());
+        Intent filePicker = new Intent(getContext(), FilePickerActivity.class);
+        filePicker.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
+        filePicker.putExtra(FilePickerActivity.REQUEST, Request.FILE);
+        filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, getResources().getColor(R.color.colorPrimary));
+        filePicker.putExtra(FilePickerActivity.MIME_TYPE, MimeType.TXT);
+        startActivityForResult(filePicker, REQUEST_FILE);
     }
 
     private void addAction(Recovery.RECOVERY_COMMAND recovery_command, String path) {
@@ -127,9 +149,17 @@ public class RecoveryFragment extends Fragment {
                 break;
         }
 
-        final Recovery recovery = new Recovery(recovery_command, path == null ? null : new File(path));
+        String type = null;
+        try {
+            if(path != null)
+            type = new SortFileType().sort(new File(path));
+        } catch(IOException e) {
+            Utils.toast("File " + path + " is not a zip", getActivity());
+            return;
+        }
+        final Recovery recovery = new Recovery(recovery_command, path == null ? null : new File(path), summary, type);
         mCommands.add(recovery);
-
+        adapter.notifyDataSetChanged();
         /*CardView cardView = new CardView(getActivity());
         cardView.setOnMenuListener(new CardView.OnMenuListener() {
             @Override
@@ -161,16 +191,9 @@ public class RecoveryFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode)
-        {
-            case FilePickerConst.REQUEST_CODE:
-                if(resultCode == RESULT_OK && data!=null)
-                {
-                    for(String zip : data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_PHOTOS)) {
-                        addAction(Recovery.RECOVERY_COMMAND.FLASH_ZIP, zip);
-                        Utils.toast(zip, getActivity());
-                    }
-                }
+        if ((requestCode == REQUEST_FILE) && (resultCode == RESULT_OK)) {
+            addAction(Recovery.RECOVERY_COMMAND.FLASH_ZIP, data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH));
+            Utils.toast(data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH), getActivity());
         }
     }
 

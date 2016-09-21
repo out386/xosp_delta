@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.grarak.kerneladiutor.utils.tools.Recovery;
+
 import java.util.List;
 
 /*
@@ -29,10 +31,9 @@ import java.util.List;
  * along with XOSPDelta. If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class RecoveryAdapter extends ArrayAdapter<Flashables> {
-    Flashables current;
+public class RecoveryAdapter extends ArrayAdapter<Recovery> {
 
-    public RecoveryAdapter(Context context, int resource, List<Flashables> items) {
+    public RecoveryAdapter(Context context, int resource, List<Recovery> items) {
         super(context,resource,items);
     }
 
@@ -42,12 +43,15 @@ public class RecoveryAdapter extends ArrayAdapter<Flashables> {
 
         if(v == null)
             v= LayoutInflater.from(getContext()).inflate(R.layout.flash_item,null);
-        current = getItem(position);
+        Recovery current = getItem(position);
+
         if(current != null) {
             TextView path = (TextView) v.findViewById(R.id.flash_path);
             TextView type = (TextView) v.findViewById(R.id.flash_type);
-            path.setText(current.file.getPath());
-            type.setText(current.type);
+            if(current.mSummary != null)
+                path.setText(current.mSummary);
+            if(current.mType != null)
+                type.setText(current.mType);
         }
         return v;
     }
