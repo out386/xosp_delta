@@ -22,10 +22,14 @@ package delta.out386.xosp;
 import android.content.Context;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+import android.util.Log;
 import org.apache.commons.io.FileUtils;
+
+import static delta.out386.xosp.Constants.TAG;
 
 public class FilesCategorize {
     List<File> zips;
@@ -41,12 +45,17 @@ public class FilesCategorize {
 			return null;
 		SortFileType sortFile = new SortFileType();
         FlashablesTypeList flashablesTypeList = new FlashablesTypeList();
-		String zipType;
+		String zipType = null;
         long size=0;
 		
         for(File current:zips){
             size=FileUtils.sizeOf(current);
-            if((zipType=sortFile.sort(current)) != null)
+            try {
+                zipType=sortFile.sort(current);
+            } catch(IOException e) {
+                Log.i(TAG, "sortSize:  " + "File is not a zip");
+            }
+            if(zipType != null)
                 flashablesTypeList.addFlashable(new Flashables(current, zipType, size));
         }
         return flashablesTypeList;

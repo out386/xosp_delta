@@ -32,17 +32,12 @@ public class SortFileType
 	final String TAG = Constants.TAG;
 	File file;
 
-	public String sort(File file)
+	public String sort(File file) throws IOException
 	{
 		this.file = file;
 		boolean other = false;
-		Enumeration zipTypeList = null;
-		try {
-			zipTypeList = new ZipFile(file.toString()).entries();
-		}
-		catch(IOException e) {
-			Log.e(TAG, e.toString());
-		}
+		Enumeration zipTypeList;
+		zipTypeList = new ZipFile(file.toString()).entries();
 		
 		if(zipTypeList == null)
 			return "emptylist";
