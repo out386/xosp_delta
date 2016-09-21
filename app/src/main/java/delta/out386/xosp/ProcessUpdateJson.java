@@ -147,7 +147,10 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
                 build.timestamp = currentBB.fileTimestamp;
                 artifact.fileName = currentBB.file;
                 artifact.size = currentBB.filesize;
-                artifact.downloadUrl = currentBB.filelink;
+                artifact.downloadUrl = Constants.DOWNLOAD_FILE_BASKETBUILD1
+                        + Constants.ROM_ZIP_DEVICE_NAME
+                        + Constants.DOWNLOAD_FILE_BASKETBUILD2
+                        + currentBB.file;
                 build.artifacts[0] = artifact;
                 build.fingerprint[0] = fingerprint;
                 json.builds.add(build);
