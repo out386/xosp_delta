@@ -1,2 +1,3 @@
-include ':app', ':NumberProgressbar'
+include ':app', ':NumberProgressbar', ':FilePickerLibrary'
 project(':NumberProgressbar').projectDir = new File('libs/NumberProgressbar')
+project(':FilePickerLibrary').projectDir = new File('libs/FilePickerLibrary')

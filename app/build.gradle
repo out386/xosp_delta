@@ -44,4 +44,5 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'br.com.bemobi:medescope:1.1.0'
     compile project(':NumberProgressbar')
+    compile project(':FilePickerLibrary')
 }
