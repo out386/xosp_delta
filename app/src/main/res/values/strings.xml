@@ -19,4 +19,5 @@
     <string name="flash_head">You can select flashable zips here. The selected zips will be flashed through a recovery. Select your recovery\'s type below.</string>
     <string name="add_action_first">First, add some items to flash.</string>
     <string name="not_flashable_zip">" is not a flashable zip"</string>
+    <string name="not_flashable_zip_delta">"You cannot flash deltas. Go to \"Updates\" to apply them."</string>
 </resources>

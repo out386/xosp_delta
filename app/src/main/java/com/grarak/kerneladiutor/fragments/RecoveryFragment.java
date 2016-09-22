@@ -38,6 +38,8 @@ import android.widget.LinearLayout;
 import android.graphics.Color;
 
 import android.widget.ListView;
+import android.widget.Toast;
+
 import com.grarak.kerneladiutor.utils.Prefs;
 import com.grarak.kerneladiutor.utils.Utils;
 import com.grarak.kerneladiutor.utils.root.RootFile;
@@ -104,6 +106,9 @@ public class RecoveryFragment extends Fragment {
             loc = preferences.getString("location", defaultDir);
         }
 
+        adapter = new RecoveryAdapter(getContext(), R.layout.flash_item, mCommands);
+        listView.setAdapter(adapter);
+
         rootView.findViewById(R.id.flash_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,13 +118,23 @@ public class RecoveryFragment extends Fragment {
                 } else {
                     Utils.toast(R.string.add_action_first, getActivity());
                 }
+            }
+        });
+
+        rootView.findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 add();
             }
         });
 
-
-        adapter = new RecoveryAdapter(getContext(), R.layout.flash_item, mCommands);
-        listView.setAdapter(adapter);
+        rootView.findViewById(R.id.clear_flash_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCommands = new ArrayList<>();
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         return rootView;
     }
@@ -151,9 +166,15 @@ public class RecoveryFragment extends Fragment {
         try {
             if(path != null)
             type = new SortFileType().sort(new File(path));
-            if(type != null && type.equals("noFlash")) {
-                Utils.toast(path + getResources().getString(R.string.not_flashable_zip), getActivity());
-                return;
+            if(type != null) {
+                if(type.equals("noFlash")) {
+                    Utils.toast(path + getResources().getString(R.string.not_flashable_zip), getActivity());
+                    return;
+                }
+                else if(type.equals("delta")) {
+                    Utils.toast(getResources().getString(R.string.not_flashable_zip_delta), getActivity(), Toast.LENGTH_LONG);
+                    return;
+                }
             }
         } catch(IOException e) {
             Utils.toast(path + getResources().getString(R.string.not_flashable_zip), getActivity());

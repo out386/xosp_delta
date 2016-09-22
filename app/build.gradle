@@ -39,6 +39,5 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'br.com.bemobi:medescope:1.1.0'
     compile 'com.nononsenseapps:filepicker:3.0.0'
-    compile 'com.android.support:design:24.2.1'
     compile project(':NumberProgressbar')
 }
