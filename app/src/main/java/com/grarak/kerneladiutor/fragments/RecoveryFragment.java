@@ -168,37 +168,15 @@ public class RecoveryFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
-            if (data.getBooleanExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)) {
-                ClipData clip = data.getClipData();
-
-                if (clip != null) {
-                    for (int i = 0; i < clip.getItemCount(); i++) {
-                        Uri uri = clip.getItemAt(i).getUri();
-                        addAction(Recovery.RECOVERY_COMMAND.FLASH_ZIP, uri.getPath());
-                        Utils.toast(uri.getPath(), getActivity());
-                    }
+            ClipData clip = data.getClipData();
+            if (clip != null) {
+                for (int i = 0; i < clip.getItemCount(); i++) {
+                    Uri uri = clip.getItemAt(i).getUri();
+                    addAction(Recovery.RECOVERY_COMMAND.FLASH_ZIP, uri.getPath());
                 }
-            } else {
-                Uri uri = data.getData();
-                addAction(Recovery.RECOVERY_COMMAND.FLASH_ZIP, uri.getPath());
-                Utils.toast(uri.getPath(), getActivity());
             }
         }
     }
-
-    /*private void flashNow(final int recoveryOption){
-        String file = "/cache/recovery/" + mCommands.get(0).getFile(recoveryOption == 1 ?
-                Recovery.RECOVERY.TWRP : Recovery.RECOVERY.CWM);
-        RootFile recoveryFile = new RootFile(file);
-        recoveryFile.delete();
-        for (Recovery commands : mCommands) {
-            for (String command : commands.getCommands(recoveryOption == 1 ?
-                    Recovery.RECOVERY.TWRP :
-                    Recovery.RECOVERY.CWM))
-                recoveryFile.write(command, true);
-        }
-        //Shell.SU.run("reboot recovery");
-    }*/
             /*rootView.findViewById(R.id.reboot_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -220,7 +198,7 @@ public class RecoveryFragment extends Fragment {
     class FlashNow extends AsyncTask<Void,Void,Void> {
         private List<Recovery> mCommands;
         private int mRecoveryOption;
-        public FlashNow(List<Recovery> commands, int recoveryOption) {
+        FlashNow(List<Recovery> commands, int recoveryOption) {
             mCommands = commands;
             mRecoveryOption = recoveryOption;
         }

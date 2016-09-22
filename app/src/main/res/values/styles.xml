@@ -12,4 +12,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="XOSPTheme" parent="Theme.Design.Light">
+
+    </style>
 </resources>

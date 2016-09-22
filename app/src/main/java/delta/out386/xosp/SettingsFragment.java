@@ -78,9 +78,9 @@ public class SettingsFragment extends Fragment {
                     selectedLocation = storage;
                     Toast.makeText(getContext(), "Storage location changed", Toast.LENGTH_SHORT).show();
                 }
-                final String tempSpace2 = Tools.sizeFormat(new File(selectedLocation).getFreeSpace());
-                if(tempSpace2 != null)
-                freeSpace.setText(tempSpace2 + " free");
+                final String tempSpace = Tools.sizeFormat(new File(selectedLocation).getFreeSpace());
+                if(tempSpace != null)
+                freeSpace.setText(tempSpace + " is free in the selected location");
             }
         });
         return rootView;
