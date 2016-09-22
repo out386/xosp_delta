@@ -8,5 +8,6 @@ android {
         targetSdkVersion 23
     }
 
-dependencies {
+    dependencies {
+    }
 }
