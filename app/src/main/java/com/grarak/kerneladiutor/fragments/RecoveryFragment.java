@@ -1,20 +1,21 @@
 /*
  * Copyright (C) 2015-2016 Willi Ye <williye97@gmail.com>
  *
- * This file is part of Kernel Adiutor.
+ * This file was originally a part of Kernel Adiutor.
  *
- * Kernel Adiutor is free software: you can redistribute it and/or modify
+ * Adapted for XOSPDelta by Ritayan Chakraborty (out386)
+ * XOSPDelta is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Kernel Adiutor is distributed in the hope that it will be useful,
+ * XOSPDelta is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Kernel Adiutor.  If not, see <http://www.gnu.org/licenses/>.
+ * along with XOSPDelta.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 package com.grarak.kerneladiutor.fragments;
@@ -55,6 +56,7 @@ import delta.out386.xosp.Constants;
 import delta.out386.xosp.R;
 import delta.out386.xosp.RecoveryAdapter;
 import delta.out386.xosp.SortFileType;
+import eu.chainfire.libsuperuser.Shell;
 
 /**
  * Created by willi on 12.07.16.
@@ -240,6 +242,6 @@ public class RecoveryFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void p) {
-            //Shell.SU.run("reboot recovery");
+            Shell.SU.run("reboot recovery");
         }
     }
