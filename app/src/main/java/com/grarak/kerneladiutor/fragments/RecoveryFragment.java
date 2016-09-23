@@ -131,7 +131,7 @@ public class RecoveryFragment extends Fragment {
         rootView.findViewById(R.id.clear_flash_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCommands = new ArrayList<>();
+                mCommands.clear();
                 adapter.notifyDataSetChanged();
             }
         });
