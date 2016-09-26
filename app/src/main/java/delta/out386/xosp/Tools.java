@@ -164,10 +164,13 @@ public class Tools {
         if(downloadedRomBuildDate > newestBuildDate || downloadedDeltaBuildDate >= newestBuildDate)
             return false;
 
+        if(Constants.CURRENT_DOWNLOADS_API_TYPE == Constants.DOWNLOADS_API_TYPE_JENKINS){
         /* The builds info returned by the Jenkins API is already sorted in a reverse
          * order. We need the oldest build to be the first element.
          */
-        Collections.reverse(updates.builds);
+            Collections.reverse(updates.builds);
+        }
+
         for(builds currentBuild : updates.builds) {
 
             // Removing empty jobs
