@@ -145,7 +145,7 @@ public class Tools {
             return false;
         }
 
-        FlashablesTypeList newestDownloadedZip = findNewestDownloadedZip(context);
+        FlashablesTypeList newestDownloadedZip = findNewestDownloadedZip(context, true);
         int downloadedRomBuildDate = 0, downloadedDeltaBuildDate = 0;
         if(newestDownloadedZip != null) {
             if(newestDownloadedZip.deltas.size() != 0)
@@ -161,7 +161,7 @@ public class Tools {
             return false;
         }
 
-        if(downloadedRomBuildDate > newestBuildDate || downloadedDeltaBuildDate >= newestBuildDate)
+        if(downloadedRomBuildDate > newestBuildDate)
             return false;
 
         if(Constants.CURRENT_DOWNLOADS_API_TYPE == Constants.DOWNLOADS_API_TYPE_JENKINS){
@@ -197,7 +197,7 @@ public class Tools {
             currentBuild.stringDate = new SimpleDateFormat("MMM dd yyyy").format(tempdate);
 
             if(currentBuild.artifacts.length > 0)
-                if(currentBuild.artifacts[0].date < downloadedRomBuildDate || currentBuild.artifacts[0].date <= downloadedDeltaBuildDate|| currentBuild.artifacts[0].date < installedBuildDate) {
+                if(currentBuild.artifacts[0].date < downloadedRomBuildDate || currentBuild.artifacts[0].date < installedBuildDate) {
                     Log.i(Constants.TAG, "removing "+currentBuild.artifacts[0].date);
                     remove[removeIndex++] = currentIndex++;
                     continue;
@@ -212,6 +212,23 @@ public class Tools {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // Just means that it found a job with no fingerprints
                 }
+            }
+
+            if(newestDownloadedZip != null) {
+                /* Removing deltas that have already been downloaded.
+                 * This is needed because it is possible that even if the newest delta
+                 * is present, an older delta might be missing.
+                 */
+                boolean foundAlreadyDownloaded = false;
+                for (Flashables current : newestDownloadedZip.deltas) {
+                    if (currentBuild.artifacts[0].fileName.equals(current.file.getName())) {
+                        remove[removeIndex++] = currentIndex++;
+                        foundAlreadyDownloaded = true;
+                        break;
+                    }
+                }
+                if(foundAlreadyDownloaded)
+                    continue;
             }
             currentIndex++;
         }
@@ -239,7 +256,7 @@ public class Tools {
         return true;
     }
 
-    public static FlashablesTypeList findNewestDownloadedZip(Context context) {
+    public static FlashablesTypeList findNewestDownloadedZip(Context context, boolean allDeltas) {
         FlashablesTypeList zips = new FindZips(context, null, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
                 .run();
         List<Flashables> storedDeltas = zips.deltas;
@@ -252,8 +269,12 @@ public class Tools {
                     return -(o1.file.getName().compareTo(o2.file.getName()));
                 }
             });
-
-            output.addFlashable(storedDeltas.get(0));
+            if(allDeltas) {
+                for(Flashables current : storedDeltas)
+                    output.addFlashable(current);
+            }
+            else
+                output.addFlashable(storedDeltas.get(0));
         }
 
         if(storedRoms.size() != 0) {

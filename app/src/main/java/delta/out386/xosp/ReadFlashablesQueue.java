@@ -34,7 +34,6 @@ import com.squareup.moshi.Moshi;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.List;
 import java.util.Scanner;
 
@@ -48,6 +47,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
     final String TAG = Constants.TAG;
     FlashablesTypeList flashablesTypeList;
     Intent closeDialog=new Intent(), messageDialog = new Intent(Constants.GENERIC_DIALOG);
+    FlashablesTypeList downloadedZips;
 
     public ReadFlashablesQueue(Context context, View view, FlashablesTypeList flashablesTypeList) {
         this.context = context;
@@ -57,9 +57,10 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
     }
     @Override
     public FlashablesTypeList doInBackground(Void... v) {
+        downloadedZips = Tools.findNewestDownloadedZip(context, false);
         if(flashablesTypeList == null)
             return null;
-        if(!flashablesTypeList.deltas.isEmpty()) {
+        if(flashablesTypeList.deltas.size() > 0) {
             delta = flashablesTypeList.deltas.get(0).file;
             deltaJson = targetPath(delta);
         }
