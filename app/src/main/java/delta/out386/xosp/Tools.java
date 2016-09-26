@@ -69,7 +69,7 @@ public class Tools {
             newSize = newSize / 1024;
         }
         if (newSize >= 1024) {
-            unit = " PiB";
+            unit = ". Corrupt volume.";
             newSize = 0;
         }
         return (new DecimalFormat("#0.00").format(newSize) + unit);
@@ -94,6 +94,7 @@ public class Tools {
             }
             catch (NumberFormatException e2) {
                 romDate.date = -1;
+                Log.e(Constants.TAG, "romZipDate: " + "Rom naming scheme has changed.");
             }
         }
 
@@ -137,7 +138,7 @@ public class Tools {
 
         if(installedBuildDate == -1 || newestBuildDate == -1)
         {
-            Log.i(Constants.TAG, "Kill the guy who changed the filename. Malformed ROM name.");
+            Log.e(Constants.TAG, "Kill the guy who changed the filename. Malformed ROM name.");
             sendGenericToast("Malformed ROM name. Please contact your devices' maintainer.", context);
             return false;
         }
@@ -159,7 +160,7 @@ public class Tools {
 
         if(downloadedRomBuildDate == -1 || downloadedDeltaBuildDate == -1)
         {
-            Log.i(Constants.TAG, "Kill the guy who changed the file name. Malformed ROM name.");
+            Log.e(Constants.TAG, "Kill the guy who changed the file name. Malformed ROM name.");
             sendGenericToast("Malformed ROM name. Please contact your devices' maintainer.", context);
             return false;
         }
