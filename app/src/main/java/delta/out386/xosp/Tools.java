@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -122,10 +123,7 @@ public class Tools {
         int  removeIndex = 0, currentIndex = 0;
         int [] remove = new int [updates.builds.size()];
 
-        int installedBuildDate = romZipDate(
-                Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP)
-                        .get(0), false)
-                .date;
+        int installedBuildDate = romZipDate(getInstalledRomName(), false).date;
         int newestBuildDate = 0;
         for(JenkinsJson.builds currentBuild : updates.builds) {
             if (currentBuild.artifacts.length > 0) {
@@ -147,12 +145,13 @@ public class Tools {
             return false;
         }
 
-        List<Flashables> newestDownloadedDelta = findNewestDownloadedDelta(context);
+        FlashablesTypeList newestDownloadedZip = findNewestDownloadedZip(context);
         int downloadedRomBuildDate = 0, downloadedDeltaBuildDate = 0;
-        if(newestDownloadedDelta != null) {
-            downloadedDeltaBuildDate = romZipDate(newestDownloadedDelta.get(0).file.getName(), false).date;
-            if(newestDownloadedDelta.size() == 2)
-                downloadedRomBuildDate = romZipDate(newestDownloadedDelta.get(1).file.getName(), false).date;
+        if(newestDownloadedZip != null) {
+            if(newestDownloadedZip.deltas.size() != 0)
+                downloadedDeltaBuildDate = romZipDate(newestDownloadedZip.deltas.get(0).file.getName(), false).date;
+            if(newestDownloadedZip.roms.size() != 0)
+                downloadedRomBuildDate = romZipDate(newestDownloadedZip.roms.get(0).file.getName(), false).date;
         }
 
         if(downloadedRomBuildDate == -1 || downloadedDeltaBuildDate == -1)
@@ -237,32 +236,33 @@ public class Tools {
         return true;
     }
 
-    public static List<Flashables> findNewestDownloadedDelta(Context context) {
+    public static FlashablesTypeList findNewestDownloadedZip(Context context) {
         FlashablesTypeList zips = new FindZips(context, null, context.getSharedPreferences("settings", Context.MODE_PRIVATE))
                 .run();
         List<Flashables> storedDeltas = zips.deltas;
         List<Flashables> storedRoms = zips.roms;
-        List<Flashables> output = new ArrayList<>();
-        if(storedDeltas.size() == 0)
-            return null;
-        Collections.sort(storedDeltas, new Comparator<Flashables>() {
-            @Override
-            public int compare(Flashables o1, Flashables o2) {
-                return -(o1.file.getName().compareTo(o2.file.getName()));
-            }
-        });
+        FlashablesTypeList output = new FlashablesTypeList();
+        if(storedDeltas.size() != 0) {
+            Collections.sort(storedDeltas, new Comparator<Flashables>() {
+                @Override
+                public int compare(Flashables o1, Flashables o2) {
+                    return -(o1.file.getName().compareTo(o2.file.getName()));
+                }
+            });
 
-        if(storedRoms.size() == 0)
-            return null;
-        Collections.sort(storedRoms, new Comparator<Flashables>() {
-            @Override
-            public int compare(Flashables o1, Flashables o2) {
-                return -(o1.file.getName().compareTo(o2.file.getName()));
-            }
-        });
+            output.addFlashable(storedDeltas.get(0));
+        }
 
-        output.add(storedDeltas.get(0));
-        output.add(storedRoms.get(0));
+        if(storedRoms.size() != 0) {
+            Collections.sort(storedRoms, new Comparator<Flashables>() {
+                @Override
+                public int compare(Flashables o1, Flashables o2) {
+                    return -(o1.file.getName().compareTo(o2.file.getName()));
+                }
+            });
+            output.addFlashable(storedRoms.get(0));
+        }
+
         return output;
     }
 
@@ -301,5 +301,12 @@ public class Tools {
             Log.i(Constants.TAG, "No internet: " + e);
             return false;
         }
+    }
+    public static String getInstalledRomName() {
+        return Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP)
+                .get(0);
+    }
+    public static boolean isNewRomAvailable(File newRom) {
+        return romZipDate(newRom.getName(), false).date > romZipDate(getInstalledRomName(), false).date;
     }
 }
