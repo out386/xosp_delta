@@ -185,10 +185,10 @@ public class Tools {
             }
             currentBuild.artifacts[0].date = romType.date;
             currentBuild.artifacts[0].isDelta = romType.isDelta;
-            Date tempdate = null;
-            if( Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_BASKETBUILD))
+            Date tempdate;
+            if( Constants.CURRENT_DOWNLOADS_API_TYPE == Constants.DOWNLOADS_API_TYPE_BASKETBUILD)
                 tempdate = new Date(currentBuild.timestamp * 1000L);
-            else if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS))
+            else if(Constants.CURRENT_DOWNLOADS_API_TYPE == Constants.DOWNLOADS_API_TYPE_JENKINS)
                 tempdate = new Date(currentBuild.timestamp);
             
 
@@ -220,7 +220,7 @@ public class Tools {
         if(updates.builds.size() == 0)
             return false;
 
-        if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS)) {
+        if(Constants.CURRENT_DOWNLOADS_API_TYPE == Constants.DOWNLOADS_API_TYPE_JENKINS) {
             for (builds currentBuild : updates.builds) {
                 currentBuild.artifacts[0].downloadUrl = Constants.UPDATE_JSON_URL_JENKINS_1
                         + Constants.ROM_ZIP_DEVICE_NAME + ")/"

@@ -50,7 +50,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
 
     @Override
     public Void doInBackground(Void... params){
-        JsonAdapter<JenkinsJson> jsonAdapter = null;
+        JsonAdapter<JenkinsJson> jsonAdapter;
         Log.v(TAG, "Parsing update JSON");
         if(json.equals("")) {
             if(!readOldJson()) {
@@ -71,10 +71,10 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
 
         try {
             Moshi moshi = null;
-            if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_JENKINS)) {
+            if(Constants.CURRENT_DOWNLOADS_API_TYPE == Constants.DOWNLOADS_API_TYPE_JENKINS) {
                 moshi = new Moshi.Builder().build();
             }
-            else if(Constants.CURRENT_DOWNLOADS_API_TYPE.equals(Constants.DOWNLOADS_API_TYPE_BASKETBUILD)) {
+            else if(Constants.CURRENT_DOWNLOADS_API_TYPE == Constants.DOWNLOADS_API_TYPE_BASKETBUILD) {
                 moshi = new Moshi.Builder().add(new BasketbuildJsonCopy()).build();
             }
             jsonAdapter = moshi.adapter(JenkinsJson.class);
