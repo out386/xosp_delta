@@ -19,5 +19,11 @@
     <string name="flash_head">You can select flashable zips here. The selected zips will be flashed through a recovery. Select your recovery\'s type below.</string>
     <string name="add_action_first">First, add some items to flash.</string>
     <string name="not_flashable_zip">" is not a flashable zip"</string>
-    <string name="not_flashable_zip_delta">"You cannot flash deltas. Go to \"Updates\" to apply them."</string>
+    <string name="not_flashable_zip_delta">You cannot flash deltas. Go to \"Updates\" to apply them.</string>
+    <string name="no_rom_delta">No base ROM and no deltas found. Please move the zip of whichever version of XOSP you have to the XOSPDelta directory in root of storage.</string>
+    <string name="no_rom">No base ROM found. Please move the zip of whichever version of XOSP you have to the XOSPDelta directory in root of storage.</string>
+    <string name="no_update">No updates are available. It seems that you already have the latest version of XOSP. You can pull down to refresh the list of updates.</string>
+    <string name="missing_delta">No suitable delta found. Update not required, or you don't have the newest delta. Pull down to update the list. Also, please move the zip of whichever version of XOSP you have to the XOSPDelta directory in root of storage.</string>
+    <string name="ready_to_flash">You have a new version ready to flash. Go to the Flash section to install it.</string>
+
 </resources>
