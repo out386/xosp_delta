@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2016 Ritayan Chakraborty (out386)
+ */
 /* This file is part of XOSPDelta.
  *
  * XOSPDelta is free software: you can redistribute it and/or modify
@@ -332,5 +335,17 @@ public class Tools {
     }
     public static boolean isNewRomAvailable(File newRom) {
         return romZipDate(newRom.getName(), false).date > romZipDate(getInstalledRomName(), false).date;
+    }
+    public static String romFromDeltaName(String deltaName) {
+        return deltaName.substring(deltaName.indexOf('.') + 1);
+    }
+    public static boolean foundRomForOldestDelta(FlashablesTypeList downloadedZips) {
+        for(Flashables currentRom : downloadedZips.roms) {
+            // Checking whether the base ROM for the oldest delta exists
+            if(downloadedZips.deltas.size() > 0)
+                if(currentRom.file.getName().equals(romFromDeltaName(downloadedZips.deltas.get(downloadedZips.deltas.size() -1).file.getName())))
+                    return true;
+        }
+        return false;
     }
 }

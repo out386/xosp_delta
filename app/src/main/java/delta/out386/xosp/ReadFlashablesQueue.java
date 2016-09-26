@@ -46,7 +46,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
     DeltaData deltaJson;
     final String TAG = Constants.TAG;
     FlashablesTypeList flashablesTypeList;
-    Intent closeDialog=new Intent(), messageDialog = new Intent(Constants.GENERIC_DIALOG);
+    Intent closeDialog=new Intent(Constants.ACTION_CLOSE_DIALOG), messageDialog = new Intent(Constants.GENERIC_DIALOG);
     FlashablesTypeList downloadedZips;
 
     public ReadFlashablesQueue(Context context, View view, FlashablesTypeList flashablesTypeList) {
@@ -78,65 +78,77 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
         RelativeLayout queueReadyLayout = (RelativeLayout)view.findViewById(R.id.queueReadyLayout);
         Button queueApplyButton = (Button)view.findViewById(R.id.queueApplyButton);
 
-        if(output == null
-                || output.roms == null
-                || output.deltas == null
-                || (output.roms.size() == 0 && output.deltas.size() == 0)) {
+        if ((output == null
+                || (output.roms.size() == 0
+                && output.deltas.size() == 0))
+                && downloadedZips.deltas.size() == 0
+                && downloadedZips.roms.size() == 0) {
             queueEmptyTextview.setText(R.string.no_rom_delta);
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyTextview.setVisibility(View.VISIBLE);
             return;
         }
-        if(output.roms.size() == 0) {
+        if (downloadedZips.roms.size() == 0 || ! Tools.foundRomForOldestDelta(downloadedZips)) {
             queueEmptyTextview.setText(R.string.no_rom);
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyTextview.setVisibility(View.VISIBLE);
             return;
         }
-        if(output.deltas.size() == 0) {
-            queueEmptyTextview.setText(R.string.no_update);
-            queueReadyLayout.setVisibility(View.GONE);
-            queueEmptyTextview.setVisibility(View.VISIBLE);
-            return;
-        }
-        if(! output.deltas.get(0).file.exists()) {
+        if (output != null && !output.deltas.get(0).file.exists()) {
+            // Something really weird just happened. NOTE: Check if this is even needed.
             queueEmptyTextview.setText(R.string.missing_delta);
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyTextview.setVisibility(View.VISIBLE);
             return;
         }
-        queueEmptyTextview.setVisibility(View.GONE);
-        queueReadyLayout.setVisibility(View.VISIBLE);
+        if(downloadedZips.roms.size() != 0 && Tools.isNewRomAvailable(downloadedZips.roms.get(0).file)) {
+            queueEmptyTextview.setText(R.string.ready_to_flash);
+            // If there are new deltas available as well, that will need to be handled, to avoid possible UI stuttering.
+            queueReadyLayout.setVisibility(View.GONE);
+            queueEmptyTextview.setVisibility(View.VISIBLE);
+            return;
+        }
+        if(output != null
+                && output.deltas.size() > 0
+                && output.deltas.get(0).file.exists()
+                && output.roms.size()>0
+                && output.roms.get(0).file.exists()) {
+            queueEmptyTextview.setVisibility(View.GONE);
+            queueReadyLayout.setVisibility(View.VISIBLE);
 
-        source = output.roms.get(0).file;
+            source = output.roms.get(0).file;
 
-        queueApplyButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                try {
-                    if(deltaJson != null) {
-                        Intent deltaIntent = new Intent(context, ApplyDeltaService.class);
-                        deltaIntent.putExtra("source", source.toString());
-                        deltaIntent.putExtra("deltaJson", deltaJson);
-                        deltaIntent.putExtra("sourceParent", source.getParent());
-                        deltaIntent.putExtra("deltaName", delta.toString());
-                        context.startService(deltaIntent);
+            queueApplyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (deltaJson != null) {
+                            Intent deltaIntent = new Intent(context, ApplyDeltaService.class);
+                            deltaIntent.putExtra("source", source.toString());
+                            deltaIntent.putExtra("deltaJson", deltaJson);
+                            deltaIntent.putExtra("sourceParent", source.getParent());
+                            deltaIntent.putExtra("deltaName", delta.toString());
+                            context.startService(deltaIntent);
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
                     }
                 }
-                catch(Exception e) {
-                    Log.e(TAG,e.toString());
-                }
+            });
+            romName.setText(source.getName());
+            romPath.setText(source.getParent());
+            deltaName.setText(delta.getName());
+            deltaPath.setText(delta.getParent());
+            if (deltaJson != null) {
+                targetName.setText(deltaJson.target);
+                targetPathDir.setText(source.getParent());
             }
-        });
-        romName.setText(source.getName());
-        romPath.setText(source.getParent());
-        deltaName.setText(delta.getName());
-        deltaPath.setText(delta.getParent());
-        if(deltaJson != null) {
-            targetName.setText(deltaJson.target);
-            targetPathDir.setText(source.getParent());
         }
-        queueReadyLayout.setVisibility(RelativeLayout.VISIBLE);
+        else {
+            queueEmptyTextview.setText(R.string.no_update);
+            queueReadyLayout.setVisibility(View.GONE);
+            queueEmptyTextview.setVisibility(View.VISIBLE);
+        }
     }
     public DeltaData targetPath(File delta) {
         if(! delta.exists()) {
