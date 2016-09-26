@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -72,8 +73,8 @@ public class PendingDownloadsFragment extends Fragment {
         adapter = new BuildsAdapter(context, R.layout.builds_item, json.builds);
         ListView lv = (ListView) rootView.findViewById(R.id.build_list);
         lv.setAdapter(adapter);
-        final ImageButton download = (ImageButton) rootView.findViewById(R.id.download);
-        final ImageButton cancel = (ImageButton) rootView.findViewById(R.id.cancel);
+        final ImageView download = (ImageView) rootView.findViewById(R.id.download);
+        final ImageView cancel = (ImageView) rootView.findViewById(R.id.cancel);
 
         IntentFilter progressFilter = new IntentFilter();
         progressFilter.addAction(Constants.DOWNLOADS_PROGRESS);

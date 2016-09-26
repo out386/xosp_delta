@@ -49,16 +49,17 @@ Sample deltaconfig
 Used libraries and assets
 ----------------------------------------
 
-(1) Android Support v4 - Google  
-(2) Android Cardview - Google  
-(3) Android-MaterialRefreshLayout - android-cjj  
-(4) Apache Commons IO - Apache  
-(5) AppIntro - PaoloRotolo  
-(6) AVLoadingIndicatorView - Jack Wang  
-(7) libopendelta - Chainfire (https://github.com/omnirom/android_packages_apps_OpenDelta/blob/android-6.0/jni/delta_run.c)  
-(8) libsuperuser - Chainfire  
-(9) Moshi - Square, Inc.  
-(10) Nineoldandroids (used by AVLoadingIndicatorView) - Jake Wharton  
-(11) NumberProgressbar - daimajia  
-(12) SlideExpandableListView - tjerkw  
-(13) xdelta3  
+(1) Android-Iconics - mikepenz
+(2) Android Support v4 - Google  
+(3) Android Cardview - Google  
+(4) Android-MaterialRefreshLayout - android-cjj  
+(5) Apache Commons IO - Apache  
+(6) AppIntro - PaoloRotolo  
+(7) AVLoadingIndicatorView - Jack Wang  
+(8) libopendelta - Chainfire (https://github.com/omnirom/android_packages_apps_OpenDelta/blob/android-6.0/jni/delta_run.c)  
+(9) libsuperuser - Chainfire  
+(10) Moshi - Square, Inc.  
+(11) Nineoldandroids (used by AVLoadingIndicatorView) - Jake Wharton  
+(12) NumberProgressbar - daimajia  
+(13) SlideExpandableListView - tjerkw  
+(14) xdelta3  

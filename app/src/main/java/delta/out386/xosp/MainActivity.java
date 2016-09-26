@@ -51,6 +51,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.grarak.kerneladiutor.fragments.RecoveryFragment;
+import com.mikepenz.iconics.context.IconicsContextWrapper;
 
 public class MainActivity extends Activity
 {
@@ -229,6 +230,11 @@ public class MainActivity extends Activity
                     .replace(R.id.content_frame, AutoApplyFragment.newInstance())
                     .commit();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
     }
 	
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

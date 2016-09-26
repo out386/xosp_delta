@@ -43,6 +43,7 @@ public class AboutFragment extends Fragment {
         ListView lv=(ListView) rootView.findViewById(R.id.aboutListView);
         List<AboutData> aboutList = new ArrayList<>();
 
+        aboutList.add(new AboutData("Android-Iconics", 0, "https://github.com/mikepenz/Android-Iconics"));
         aboutList.add(new AboutData("Android-MaterialRefreshLayout", 2, "https://github.com/android-cjj/Android-MaterialRefreshLayout"));
         aboutList.add(new AboutData("Android-SlideExpandableListView", 0, "https://github.com/tjerkw/Android-SlideExpandableListView"));
         aboutList.add(new AboutData("Apache Commons IO", 0, "http://commons.apache.org/io"));

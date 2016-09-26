@@ -75,23 +75,29 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_centerInParent="true">
-                <ImageButton
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@android:drawable/ic_menu_add"
-                    android:id="@+id/add_button"
-                    android:layout_marginRight="30dp"/>
-            <ImageButton
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_done_white_48dp"
+                app:ico_size="24dp"
+                app:ico_icon="gmd_add"
+                app:ico_color="@color/white"
+                android:id="@+id/add_button"
+                android:layout_marginRight="30dp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ico_size="24dp"
+                app:ico_icon="gmd_check"
+                app:ico_color="@color/white"
                 android:id="@+id/flash_button"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"/>
-            <ImageButton
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_cancel_white_48dp"
+                app:ico_size="24dp"
+                app:ico_icon="gmd_close"
+                app:ico_color="@color/white"
                 android:id="@+id/clear_flash_button"
                 android:layout_marginLeft="30dp"/>
         </LinearLayout>

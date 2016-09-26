@@ -200,17 +200,6 @@ public class RecoveryFragment extends Fragment {
             }
         }
     }
-            /*rootView.findViewById(R.id.reboot_button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mRecoveryFragment != null) {
-                        mRecoveryFragment.reboot();
-                    }
-                }
-            });
-             return rootView;
-        }
-    }*/
 
     @Override
     public void onDestroy() {
