@@ -88,15 +88,8 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             queueEmptyTextview.setVisibility(View.VISIBLE);
             return;
         }
-        if (downloadedZips.roms.size() == 0 || ! Tools.foundRomForOldestDelta(downloadedZips)) {
+        if (downloadedZips.roms.size() == 0 || (downloadedZips.deltas.size() > 0 &&! Tools.foundRomForOldestDelta(downloadedZips))) {
             queueEmptyTextview.setText(R.string.no_rom);
-            queueReadyLayout.setVisibility(View.GONE);
-            queueEmptyTextview.setVisibility(View.VISIBLE);
-            return;
-        }
-        if (output != null && !output.deltas.get(0).file.exists()) {
-            // Something really weird just happened. NOTE: Check if this is even needed.
-            queueEmptyTextview.setText(R.string.missing_delta);
             queueReadyLayout.setVisibility(View.GONE);
             queueEmptyTextview.setVisibility(View.VISIBLE);
             return;
