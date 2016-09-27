@@ -25,5 +25,6 @@
     <string name="no_update">No updates are available. It seems that you already have the latest version of XOSP. You can pull down to refresh the list of updates.</string>
     <string name="missing_delta">No suitable delta was found, even though one was expected. Pull down to update the list.</string>
     <string name="ready_to_flash">You have a new version ready to flash. Go to the Flash section to install it.</string>
+    <string name="file_picker_actionbar_text">Select zips to flash</string>
 
 </resources>

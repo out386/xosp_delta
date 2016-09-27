@@ -54,6 +54,8 @@ public class AboutAdapter extends ArrayAdapter<AboutData> {
                 license = "MIT License (MIT)";
             else if(p.license == 3)
                 license  = "GNU General Public Licence 2";
+            else if(p.license == 4)
+                license  = "Mozilla Public License, v. 2.0";
             if(license == null)
                 return v;
             name.setText(p.name + ", licensed under the " + license);

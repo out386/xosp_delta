@@ -38,9 +38,9 @@ dependencies {
     compile 'br.com.bemobi:medescope:1.1.0'
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'br.com.bemobi:medescope:1.1.0'
-    compile 'com.nononsenseapps:filepicker:3.0.0'
     compile "com.mikepenz:iconics-core:2.8.1@aar"
     compile 'com.mikepenz:google-material-typeface:2.2.0.3.original@aar'
     compile 'com.mikepenz:typeicons-typeface:2.0.7.2@aar'
     compile project(':NumberProgressbar')
+    compile project(':NoNonsense-FilePicker')
 }

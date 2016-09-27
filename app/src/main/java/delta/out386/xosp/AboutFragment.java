@@ -54,6 +54,7 @@ public class AboutFragment extends Fragment {
         aboutList.add(new AboutData("medescope", 0, "https://github.com/bemobi/medescope"));
         aboutList.add(new AboutData("moshi", 0, "https://github.com/square/moshi"));
         aboutList.add(new AboutData("NineOldAndroids", 0, "https://github.com/JakeWharton/NineOldAndroids"));
+        aboutList.add(new AboutData("NoNonsense-FilePicker", 4, "https://github.com/spacecowboy/NoNonsense-FilePicker"));
         aboutList.add(new AboutData("NumberProgressBar", 2, "https://github.com/daimajia/NumberProgressBar"));
         aboutList.add(new AboutData("xdelta3", 3, "https://github.com/jmacd/xdelta/tree/release3_0"));
         AboutAdapter adapter = new AboutAdapter(getContext(),
