@@ -58,6 +58,9 @@ import delta.out386.xosp.RecoveryAdapter;
 import delta.out386.xosp.SortFileType;
 import eu.chainfire.libsuperuser.Shell;
 
+import delta.out386.xosp.Tools;
+import delta.out386.xosp.Flashables;
+
 /**
  * Created by willi on 12.07.16.
  */
@@ -137,6 +140,13 @@ public class RecoveryFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+
+        List<Flashables> readyRoms = Tools.findNewestDownloadedZip(getContext(), false).roms;
+        if (readyRoms.size() > 0) {
+            File newestRom = readyRoms.get(0).file;
+            if(Tools.isNewRomAvailable(newestRom))
+                addAction(Recovery.RECOVERY_COMMAND.FLASH_ZIP, newestRom.getAbsolutePath());
+        }
 
         return rootView;
     }

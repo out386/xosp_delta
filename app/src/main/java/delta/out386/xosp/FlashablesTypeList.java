@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FlashablesTypeList implements Serializable {
-    List<Flashables> roms=new ArrayList<>();
+    public List<Flashables> roms=new ArrayList<>();
     List<Flashables> kernels=new ArrayList<>();
     List<Flashables> deltas=new ArrayList<>();
     List<Flashables> others=new ArrayList<>();

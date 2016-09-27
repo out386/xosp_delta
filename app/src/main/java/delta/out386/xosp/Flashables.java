@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 public class Flashables implements Serializable
 {
-	File file;
+	public File file;
 	String type;
     long size;
 	public Flashables(File file, String type, long size) {
