@@ -237,7 +237,16 @@ public class FilePickerFragment extends AbstractFilePickerFragment<File> {
                 if (listFiles != null) {
                     for (java.io.File f : listFiles) {
                         if (isItemVisible(f)) {
-                            files.add(f);
+                            if (! f.isDirectory()) {
+                                int extensionIndex = f.getName().lastIndexOf('.');
+                                if (f.getName().length() > extensionIndex) {
+                                    if (f.getName().substring(extensionIndex + 1).equals("zip")) {
+                                        files.add(f);
+                                    }
+                                }
+                            } else {
+                                files.add(f);
+                            }
                         }
                     }
                 }
