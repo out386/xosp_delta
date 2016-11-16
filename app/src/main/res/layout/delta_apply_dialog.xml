@@ -11,7 +11,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:background="@color/colorPrimary">
+            android:background="@color/white">
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
                 android:layout_width="50.0dip"
                 android:layout_height="50.0dip"
 	    		app:indicator="LineScalePulseOut"
-	    		app:indicator_color="@color/white"
+	    		app:indicator_color="@color/darkGray"
                 android:layout_centerHorizontal="true"/>
             <com.daimajia.numberprogressbar.NumberProgressBar
                 android:id="@+id/progressbar"
@@ -37,9 +37,9 @@
                 android:paddingRight="15dp"
                 android:paddingLeft="15dp"
                 android:visibility="gone"
-                app:progress_unreached_color="@color/progressUnreached"
-                app:progress_reached_color="@color/progressReached"
-                app:progress_text_color_bar="@color/progressReached"/>
+                app:progress_unreached_color="@color/gray"
+                app:progress_reached_color="@color/darkGray"
+                app:progress_text_color_bar="@color/darkGray"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                 android:padding="15.0dip"
                 android:gravity="center"
                 android:id="@+id/loadingText"
-                android:textColor="@color/white"
+                android:textColor="@color/darkGray"
                 android:textSize="17sp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
                     android:padding="15.0dip"
                     android:gravity="center"
                     android:id="@+id/progressText"
-                    android:textColor="@color/white"
+                    android:textColor="@color/darkGray"
                     android:textSize="17sp"
                     android:visibility="gone"/>
             </RelativeLayout>
@@ -66,11 +66,11 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/white">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@color/darkGray"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="25dp"
@@ -80,13 +80,13 @@
             <RelativeLayout
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="@color/white"
                 android:padding="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="OK"
-                    android:textColor="@color/white"
+                    android:textColor="@color/darkGray"
                     android:layout_centerInParent="true"/>
             </RelativeLayout>
         </RelativeLayout>
