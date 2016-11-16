@@ -334,8 +334,19 @@ public class Tools {
         return Shell.SH.run("getprop " + Constants.SUPPORTED_ROM_PROP)
                 .get(0);
     }
-    public static boolean isNewRomAvailable(File newRom) {
-        return romZipDate(newRom.getName(), false).date > romZipDate(getInstalledRomName(), false).date;
+    public static boolean isNewRomAvailable(FlashablesTypeList downloadedZips) {
+        // Is a new ROM available for flashing?
+        // Does not refer to a new ROM/delta that needs to be downloaded
+
+        boolean isAvailable = false;
+        if(downloadedZips != null && downloadedZips.roms.size() > 0) {
+            isAvailable = romZipDate(downloadedZips.roms.get(0).file.getName(), false).date > romZipDate(getInstalledRomName(), false).date;
+            if (downloadedZips.deltas.size() != 0) {
+                isAvailable = isAvailable && ! foundRomForOldestDelta(downloadedZips);
+                // If foundRomForOldestDelta returns true, then that means that a delta needs to be applied first.
+            }
+        }
+        return isAvailable;
     }
     public static String romFromDeltaName(String deltaName) {
         return deltaName.substring(deltaName.indexOf('.') + 1);

@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import delta.out386.xosp.Constants;
+import delta.out386.xosp.FlashablesTypeList;
 import delta.out386.xosp.R;
 import delta.out386.xosp.RecoveryAdapter;
 import delta.out386.xosp.SortFileType;
@@ -141,12 +142,9 @@ public class RecoveryFragment extends Fragment {
             }
         });
 
-        List<Flashables> readyRoms = Tools.findNewestDownloadedZip(getContext(), false).roms;
-        if (readyRoms.size() > 0) {
-            File newestRom = readyRoms.get(0).file;
-            if(Tools.isNewRomAvailable(newestRom))
-                addAction(Recovery.RECOVERY_COMMAND.FLASH_ZIP, newestRom.getAbsolutePath());
-        }
+        FlashablesTypeList allZips = Tools.findNewestDownloadedZip(getContext(), false);
+        if(Tools.isNewRomAvailable(allZips))
+            addAction(Recovery.RECOVERY_COMMAND.FLASH_ZIP, allZips.roms.get(0).file.getAbsolutePath());
 
         return rootView;
     }

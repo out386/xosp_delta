@@ -64,7 +64,7 @@ public class FindZips {
                 if (Environment.getExternalStorageState(storage).equals(Environment.MEDIA_MOUNTED))
                     directory = new File(location + "/XOSPDelta");
             }
-            catch (Exception e) {
+        catch (Exception e) {
             Log.e(TAG, e.toString());
             return null;
         }

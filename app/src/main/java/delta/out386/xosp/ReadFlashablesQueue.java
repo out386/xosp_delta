@@ -57,7 +57,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
     }
     @Override
     public FlashablesTypeList doInBackground(Void... v) {
-        downloadedZips = Tools.findNewestDownloadedZip(context, false);
+        downloadedZips = Tools.findNewestDownloadedZip(context, true);
         if(flashablesTypeList == null)
             return null;
         if(flashablesTypeList.deltas.size() > 0) {
@@ -94,7 +94,7 @@ public class ReadFlashablesQueue extends AsyncTask<Void, Void, FlashablesTypeLis
             queueEmptyTextview.setVisibility(View.VISIBLE);
             return;
         }
-        if(downloadedZips.roms.size() != 0 && Tools.isNewRomAvailable(downloadedZips.roms.get(0).file)) {
+        if(downloadedZips.roms.size() != 0 && Tools.isNewRomAvailable(downloadedZips)) {
             queueEmptyTextview.setText(R.string.ready_to_flash);
             // If there are new deltas available as well, that will need to be handled, to avoid possible UI stuttering.
             queueReadyLayout.setVisibility(View.GONE);
