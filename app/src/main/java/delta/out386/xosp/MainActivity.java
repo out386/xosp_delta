@@ -117,6 +117,7 @@ public class MainActivity extends Activity
     BroadcastReceiver downloadsDoneReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            removeStickyBroadcast(intent);
             FragmentManager fragmentManager = getFragmentManager();
             AutoApplyFragment frag = AutoApplyFragment.newInstance();
             try {
@@ -125,7 +126,6 @@ public class MainActivity extends Activity
                         .commit();
                 getActionBar().setTitle(R.string.drawer_item1);
             } catch (IllegalStateException e) {}
-            removeStickyBroadcast(intent);
         }
     };
 

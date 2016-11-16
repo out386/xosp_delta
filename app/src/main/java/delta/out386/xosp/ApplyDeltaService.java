@@ -186,6 +186,9 @@ public class ApplyDeltaService extends IntentService {
                 deltaconfF.delete();
             if(deltaNameF.exists())
                 deltaNameF.delete();
+
+            Intent deltaAppliedIntent = new Intent(Constants.DOWNLOADS_DONE_INTENT);
+            getApplicationContext().sendStickyBroadcast(deltaAppliedIntent);
         }
     }
     @Override
