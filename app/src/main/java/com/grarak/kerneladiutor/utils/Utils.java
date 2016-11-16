@@ -62,7 +62,7 @@ public class Utils {
         return Environment.getExternalStorageDirectory().getPath();
     }
 
-    private static String calculateMD5(File updateFile) {
+    public static String calculateMD5(File updateFile) {
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("MD5");
@@ -118,7 +118,7 @@ public class Utils {
         return existFile(file, true);
     }
 
-    public static boolean existFile(String file, boolean root) {
+    private static boolean existFile(String file, boolean root) {
         return root ? new RootFile(file).exists() : new File(file).exists();
     }
 

@@ -25,6 +25,8 @@ import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.grarak.kerneladiutor.utils.Utils;
+
 import java.io.File;
 import java.util.List;
 
@@ -85,8 +87,8 @@ public class ApplyDeltaService extends IntentService {
             Log.v(TAG, "Calculating MD5s");
             Log.v(TAG, "Source --> " + source);
             Log.v(TAG, "Delta --> " + diff);
-            sourceMd5 = Shell.SH.run("md5sum -b " + source).get(0);
-            deltaMd5 = Shell.SH.run("md5sum -b " + diff).get(0);
+            sourceMd5 = Utils.calculateMD5(new File(source));
+            deltaMd5 = Utils.calculateMD5(new File(diff));
             Log.v(TAG, sourceMd5);
             Log.v(TAG, deltaMd5);
         } catch (Exception e) {
