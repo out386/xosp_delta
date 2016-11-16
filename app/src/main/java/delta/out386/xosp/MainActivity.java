@@ -253,9 +253,7 @@ public class MainActivity extends Activity
                 break;
             case 2: fragment = AboutFragment.newInstance();
                 break;
-            case 3: fragment = SettingsFragment.newInstance();
-                break;
-            case 4: fragment = new RecoveryFragment();
+            case 3: fragment = new RecoveryFragment();
         }
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
