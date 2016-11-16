@@ -109,18 +109,21 @@ public class ApplyDeltaService extends IntentService {
             return;
         }
 
-        applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Decompressing input zip");
-        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(applyDialog);
-        try {
-            zipadjust = Native.zipadjust(source, source, 1);
-            Log.v(TAG, "Result of decompression : " + zipadjust);
-        }
-        catch(Exception e) {
-            messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Decompression of base ROM failed.\nMake sure that you have enough free space.");
-            sendStickyBroadcast(messageDialog);
-            Log.e(TAG, e.toString());
-            return;
-        }
+        if(sourceMd5.equalsIgnoreCase(deltaJson.sourceMd5)) {
+            // Decompressoon needed
+            applyDialog.putExtra(Constants.DIALOG_MESSAGE, "Decompressing input zip");
+            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(applyDialog);
+            try {
+                zipadjust = Native.zipadjust(source, source, 1);
+                Log.v(TAG, "Result of decompression : " + zipadjust);
+            } catch (Exception e) {
+                messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Decompression of base ROM failed.\nMake sure that you have enough free space.");
+                sendStickyBroadcast(messageDialog);
+                Log.e(TAG, e.toString());
+                return;
+            }
+        } else
+        zipadjust = 1;
         if(zipadjust != 1)
         {
             messageDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE, "Decompression of base ROM failed.\nMake sure that you have enough free space.");
