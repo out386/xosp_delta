@@ -83,9 +83,7 @@ public class Constants {
 
 
     final static String [] OFFICIAL_LIST = {
-            "angler", "armani", "bullhead", "d802", "d850", "d851", "d855", "falcon", "h811", "h815", "hammerhead",
-            "kenzo", "lettuce", "lux", "mako", "oneplus2", "onyx", "osprey", "shamu", "shieldtablet", "sprout4",
-            "sprout8", "surnia", "titan", "tomato", "wt88047", "vs985", "Z008", "Z00A"
+           "bacon", "bullhead", "d802", "hammerhead", "mako", "oneplus3", "Z008", "Z00A"
     };
 	 
 	final static String UPDATE_JSON_URL_BASKETBUILD1 = "https://basketbuild.com/api4web/devs/XOSP/";
