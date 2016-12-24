@@ -96,7 +96,7 @@ public class Constants {
     final static String UPDATE_JSON_URL_JENKINS_2 = ")/api/json?depth=1&tree=builds[artifacts[fileName,relativePath],id,timestamp,fingerprint[hash]]";
     final static String DOWNLOADS_API_TYPE_BASKETBUILD = "delta.out386.xosp.DOWNLOADS_API_TYPE_BASKETBUILD";
     final static String DOWNLOADS_API_TYPE_JENKINS = "delta.out386.xosp.DOWNLOADS_API_TYPE_JENKINS";
-    final static String CURRENT_DOWNLOADS_API_TYPE = DOWNLOADS_API_TYPE_BASKETBUILD;
+    final static String CURRENT_DOWNLOADS_API_TYPE = DOWNLOADS_API_TYPE_JENKINS;
     final static String CONNECTIVITY_CHECK_URL = "http://connectivitycheck.gstatic.com/generate_204";
 
 }
