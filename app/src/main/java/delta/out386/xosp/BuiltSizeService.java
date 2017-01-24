@@ -35,17 +35,18 @@ public class BuiltSizeService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String target = intent.getStringExtra("target");
         long targetSize = intent.getLongExtra("targetSize", 0), currentSize = 0;
-        final int INTERVAL = 2;
+        final int INTERVAL = 10;
         boolean isFileReady = false;
-        Intent progress = new Intent(Constants.PROGRESS_DIALOG);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplication());
         while(!isFileReady || currentSize < targetSize) {
             File targetFile = new File(target);
             if(targetFile.exists()) {
                 isFileReady = true;
                 currentSize = targetFile.length();
                 int progressValue = (int) ((float)currentSize/targetSize * 100);
+                Intent progress = new Intent(Constants.PROGRESS_DIALOG);
                 progress.putExtra(Constants.PROGRESS, progressValue);
-                LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(progress);
+                localBroadcastManager.sendBroadcast(progress);
                 Log.v(TAG, progressValue + "%");
                 try {
                     Thread.sleep(INTERVAL * 1000);
