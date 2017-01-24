@@ -25,6 +25,7 @@ import android.app.Fragment;
 
 import br.com.bemobi.medescope.Medescope;
 import delta.out386.xosp.JenkinsJson.builds;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -81,8 +82,7 @@ public class PendingDownloadsFragment extends Fragment {
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(progressReceiver, progressFilter);
 
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.buildsRefresh);
-        if(refreshLayout != null)
-        {
+        if (refreshLayout != null) {
             refreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary);
             refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -105,16 +105,16 @@ public class PendingDownloadsFragment extends Fragment {
                                 cancel.animate()
                                         .translationY(60)
                                         .setDuration(0)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        super.onAnimationEnd(animation);
-                                        cancel.setVisibility(View.VISIBLE);
-                                        cancel.animate()
-                                                .translationY(0)
-                                                .setDuration(500);
-                                    }
-                                });
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                super.onAnimationEnd(animation);
+                                                cancel.setVisibility(View.VISIBLE);
+                                                cancel.animate()
+                                                        .translationY(0)
+                                                        .setDuration(500);
+                                            }
+                                        });
 
                             }
                         });
@@ -127,16 +127,42 @@ public class PendingDownloadsFragment extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(builds current : json.builds) {
+                for (builds current : json.builds) {
                     Medescope.getInstance(context).cancel(current.id);
                     Log.i(Constants.TAG, "CANCEL DOWNLOAD  " + current.id);
                 }
+
+                cancel.animate()
+                        .translationY(60)
+                        .setDuration(500)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                cancel.setVisibility(View.GONE);
+                                download.animate()
+                                        .translationY(60)
+                                        .setDuration(0)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                super.onAnimationEnd(animation);
+                                                download.setVisibility(View.VISIBLE);
+                                                download.animate()
+                                                        .translationY(0)
+                                                        .setDuration(500);
+                                            }
+                                        });
+
+                            }
+                        });
             }
         });
     }
+
     public void progress(int progress, String id) {
-        for(builds current : json.builds) {
-            if(current.id.equals(id)) {
+        for (builds current : json.builds) {
+            if (current.id.equals(id)) {
                 current.downloadProgress = progress;
                 break;
             }
