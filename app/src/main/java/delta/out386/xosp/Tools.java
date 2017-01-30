@@ -88,11 +88,11 @@ public class Tools {
         try {
             romDate.date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION - indexOffset]);
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
             try {
                 romDate.date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION_2 - indexOffset]);
             }
-            catch (NumberFormatException e2) {
+            catch (NumberFormatException | ArrayIndexOutOfBoundsException e2) {
                 romDate.date = -1;
                 Log.e(Constants.TAG, "romZipDate: " + "Rom naming scheme has changed.");
             }
