@@ -17,6 +17,6 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    repo: XOSP-Project/xosp_delta
+    repo: nilac8991/xosp_delta
 notifications:
   email: false
