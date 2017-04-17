@@ -38,14 +38,17 @@ import delta.out386.xosp.BasketbuildJson.*;
 import delta.out386.xosp.JenkinsJson.*;
 
 public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
-    String json, version;
+    String json;
+    String version;
+    int newestBuildDateAlt;
     final String TAG = Constants.TAG;
     JenkinsJson updates;
     Context context;
 
-    public ProcessUpdateJson(String json, Context context){
+    public ProcessUpdateJson(String json, int newestBuildDateAlt, Context context){
         this.json = json;
         this.context = context;
+        this.newestBuildDateAlt = newestBuildDateAlt;
     }
 
     @Override
@@ -70,7 +73,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
         }
 
         try {
-            Moshi moshi = null;
+            Moshi moshi;
             if(Constants.CURRENT_DOWNLOADS_API_TYPE == Constants.DOWNLOADS_API_TYPE_JENKINS) {
                 moshi = new Moshi.Builder().build();
             }
@@ -84,7 +87,16 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
         }
 
         if (updates == null || updates.builds.size() == 0) {
-            Tools.sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.", context);
+            int installedBuildDate = Tools.romZipDate(Tools.getInstalledRomName(), false).date;
+
+            if (installedBuildDate > -1 && newestBuildDateAlt > installedBuildDate) {
+                Intent errorDialog = new Intent(Constants.GENERIC_DIALOG);
+                errorDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE,
+                        context.getResources().getString(R.string.basketbuild_down_new_available));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(errorDialog);
+            } else
+                Tools.sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.", context);
+
             return null;
         }
         boolean isUpdateNeeded = Tools.processJenkins(updates, context);

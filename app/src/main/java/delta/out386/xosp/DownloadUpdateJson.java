@@ -31,6 +31,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ConnectException;
@@ -39,19 +40,20 @@ import java.net.UnknownHostException;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
-    static final int HTTP_READ_TIMEOUT = 30000;
-    static final int HTTP_CONNECTION_TIMEOUT = 30000;
+class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
+    private static final int HTTP_READ_TIMEOUT = 30000;
+    private static final int HTTP_CONNECTION_TIMEOUT = 30000;
 
     final String TAG = Constants.TAG;
-    String url;
-    String json = "", jsonLine;
-    File jsonStore;
-    View rootView;
+    private String url;
+    private String json = "";
+    private int newestDateAlt;
+    private File jsonStore;
+    private View rootView;
     Context context;
-    SwipeRefreshLayout emptyRefresh;
+    private SwipeRefreshLayout emptyRefresh;
 
-    public DownloadUpdateJson(Context context, View rootView) {
+    DownloadUpdateJson(Context context, View rootView) {
         this.context = context;
         this.rootView = rootView;
         jsonStore = new File(context.getCacheDir().toString() + "/romsList");
@@ -66,29 +68,23 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     }
     @Override
     public Void doInBackground(Void... v) {
-        HttpsURLConnection urlConnection = null;
         Log.i(TAG, url);
         try {
-            urlConnection = setupHttpsRequest(url);
-            if(urlConnection == null)
-                return null;
-            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            while((jsonLine = br.readLine()) != null)
-                json = json + jsonLine;
-            br.close();
+            json = readHTTPS(url);
+            newestDateAlt = Tools.romZipDate(
+                    readHTTPS(Constants.NEWEST_BUILD_URL_ALT), false)
+            .date;
 
             if(jsonStore.exists())
                 jsonStore.delete();
+
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(jsonStore)));
             bw.write(json);
             bw.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.e(TAG, e.toString());
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
         }
+
         return null;
     }
 
@@ -102,7 +98,7 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
                 }
             });
         }
-            new ProcessUpdateJson(json, context).execute();
+            new ProcessUpdateJson(json, newestDateAlt, context).execute();
     }
     private HttpsURLConnection setupHttpsRequest(String urlStr){
         URL url;
@@ -141,5 +137,25 @@ public class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
             Log.e(TAG, "URLConnection : " + e.toString());
         }
         return null;
+    }
+
+    String readHTTPS (String url) {
+        HttpsURLConnection urlConnection = setupHttpsRequest(url);
+        String content = "";
+        if(urlConnection == null)
+            return null;
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String jsonLine;
+            while ((jsonLine = br.readLine()) != null)
+                content = content + jsonLine;
+            br.close();
+        } catch (IOException e) {}
+        finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+        return content;
     }
 }

@@ -97,4 +97,10 @@ public class Constants {
     final static String CURRENT_DOWNLOADS_API_TYPE = DOWNLOADS_API_TYPE_BASKETBUILD;
     final static String CONNECTIVITY_CHECK_URL = "http://connectivitycheck.gstatic.com/generate_204";
 
+    /* Link to a file containing just the name of the newest ROM.
+     * Hosted on a server that will be accessible even if the main downloads server is not.
+     * Used so that the delta can be downloaded manually from an alternate server if the main one is down.
+     */
+    final static String NEWEST_BUILD_URL_ALT = "https://raw.githubusercontent.com/XOSP-Project/utilities-xosp-changelogs/master/" + ROM_ZIP_DEVICE_NAME + "/Current-Version.txt";
+
 }
