@@ -11,8 +11,6 @@ android:
 script: "./gradlew assembleDebug"
 deploy:
   provider: releases
-  api_key:
-    secure: j01HXaSiPerNv9ZWU3IOcuwCcwMlBfIvcpEC5ALl2PyojCPoDsUN7AlcvFy2e41o/Hh6ib1M2+xIcoZZOq9IoFV+qtXyXReOEpVFjAprLmoU/TOyn9I8RWPDedCUgkUdOYNvAJdqNNnKXaqiQgLQ5Krqd9AyFoV0im9cIluVTU7hh+0/Dpn0uUjc5Nvy6KdEEu8syqrwCgQEA8qPoorKwV7CgTzdw7NC+ML67kTcsptGQMZjEle5gqOHlTPJNq0WOihxiCCHqHZVLr8cUJ9w313xJMsYVrXQetrNxGQ0QskGgTEJuC/DGiH+W9mpHgyh+O5/gsg+QG0RMTMQ7pZWUYnYPhAoHf+se/9tev08VYUzs2J83nOUZ23olpDjkNsXx3wzLzCMh+LD32zFJ4PwTTsXo7tAElfJLjeimd49xTMzfylIYFU+5wLSV8iT1beXImTNzHaI/A9agUdhDRtgQlYAenkNl0uELGMvlT9zHRk6hJTha+jO7Nzv/JYG03jEb8aJgt7NY3GZfv2XwSeWL8ZOurrBzP8RS0vQ/OpYISWIvmQ75K93MqUHMV2AdO2XX/CkUM93Z3HwKRu7gR4XAt5WjQg1TPAs1atkt45NMfUFTuU6mQAOB4aT8LbCPTCSLbhJRDJYUG+iq1bhQuILwTuLXRImgjdQ6jTsKvdUemk=
   file: app/build/outputs/apk/app-debug.apk
   skip_cleanup: true
   on:
