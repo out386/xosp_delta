@@ -95,6 +95,7 @@ public class Tools {
             catch (NumberFormatException | ArrayIndexOutOfBoundsException e2) {
                 romDate.date = -1;
                 Log.e(Constants.TAG, "romZipDate: " + "Rom naming scheme has changed.");
+                return romDate;
             }
         }
 
@@ -103,10 +104,16 @@ public class Tools {
             romDate.date = Integer.parseInt(fileComponents[Constants.ROM_ZIP_DATE_LOCATION_2 - indexOffset]);*/
 
         if(moreInfo) {
-            romDate.romName = fileComponents[Constants.ROM_ZIP_NAME_LOCATION - indexOffset];
-            romDate.deviceName = fileComponents[Constants.ROM_ZIP_DEVICE_LOCATION - indexOffset];
-            if(! romDate.deviceName.equals(Constants.ROM_ZIP_DEVICE_NAME))
+            if (fileComponents.length > (Constants.ROM_ZIP_NAME_LOCATION - indexOffset)
+                && fileComponents.length > (Constants.ROM_ZIP_DEVICE_LOCATION - indexOffset)) {
+                romDate.romName = fileComponents[Constants.ROM_ZIP_NAME_LOCATION - indexOffset];
+                romDate.deviceName = fileComponents[Constants.ROM_ZIP_DEVICE_LOCATION - indexOffset];
+            }
+            if(! Constants.ROM_ZIP_DEVICE_NAME.equals(romDate.deviceName)
+                && fileComponents.length > (Constants.ROM_ZIP_DEVICE_LOCATION_2 - indexOffset))
                 romDate.deviceName = fileComponents[Constants.ROM_ZIP_DEVICE_LOCATION_2 - indexOffset];
+            // Assuming rom name location is not changed in the 2nd naming scheme
+            // To-Do: Check if alternate location should be used, or if user is using the zip of another device
         }
         return romDate;
     }
@@ -196,7 +203,7 @@ public class Tools {
                 tempdate = new Date(currentBuild.timestamp * 1000L);
             else if(Constants.CURRENT_DOWNLOADS_API_TYPE == Constants.DOWNLOADS_API_TYPE_JENKINS)
                 tempdate = new Date(currentBuild.timestamp);
-            
+
 
             currentBuild.stringDate = new SimpleDateFormat("MMM dd yyyy").format(tempdate);
 
