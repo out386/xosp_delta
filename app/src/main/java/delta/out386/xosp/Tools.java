@@ -111,9 +111,9 @@ public class Tools {
             }
             if(! Constants.ROM_ZIP_DEVICE_NAME.equals(romDate.deviceName)
                 && fileComponents.length > (Constants.ROM_ZIP_DEVICE_LOCATION_2 - indexOffset)
-                && fileComponents.length > (Constants.ROM_ZIP_NAME_LOCATION2 - indexOffset)) {
+                && fileComponents.length > (Constants.ROM_ZIP_NAME_LOCATION - indexOffset)) {
                 romDate.deviceName = fileComponents[Constants.ROM_ZIP_DEVICE_LOCATION_2 - indexOffset];
-                romDate.romName = fileComponents[Constants.ROM_ZIP_NAME_LOCATION2 - indexOffset];
+                romDate.romName = fileComponents[Constants.ROM_ZIP_NAME_LOCATION - indexOffset];
                 // Assuming rom name location is not changed in the 2nd naming scheme
                 // To-Do: Check if alternate location should be used, or if user is using the zip of another device
             }
