@@ -22,7 +22,7 @@
     <string name="not_flashable_zip_delta">You cannot flash deltas. Go to \"Updates\" to apply them.</string>
     <string name="no_rom_delta">No base ROM and no deltas found. Please move the zip of whichever version of XOSP you have to the XOSPDelta directory in root of storage, and pull down to refresh the list of available builds.</string>
     <string name="no_rom">No base ROM found. Please move the zip of whichever version of XOSP you already have to /sdcard/XOSPDelta. If this problem persists, that means that your ROM zip is too old. You will have to update manually by downloading a full ROM from XOSP.org.</string>
-    <string name="no_update">No updates are available. It seems that you already have the latest version of XOSP. You can pull down to refresh the list of updates.</string>
+    <string name="no_update">The server appears to be down. Try again later, or get the newest delta from https://downloads.xosp.org. Move it to /sdcard/xospdelta and relaunch XOSPChangeLOGApp after downloading.</string>
     <string name="missing_delta">No suitable delta was found, even though one was expected. Pull down to update the list.</string>
     <string name="ready_to_flash">You have a new version ready to flash. Open the navigation drawer and go to the Flash section to install it.</string>
     <string name="file_picker_actionbar_text">Select zips to flash</string>
