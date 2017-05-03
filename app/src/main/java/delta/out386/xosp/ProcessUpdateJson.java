@@ -86,7 +86,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             Log.e(TAG, e.toString());
         }
 
-        if (updates == null || updates.builds.size() == 0) {
+        if (updates == null || updates.builds == null || updates.builds.size() == 0) {
             int installedBuildDate = Tools.romZipDate(Tools.getInstalledRomName(), false).date;
 
             if (installedBuildDate > -1 && newestBuildDateAlt > installedBuildDate) {
@@ -98,7 +98,24 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
                 Tools.sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.", context);
 
             return null;
+        } else {
+            int newestBuildDate = 0;
+            // TO-DO: Clean up all this redundant code all over the app, and organize the classes.
+            for (JenkinsJson.builds currentBuild : updates.builds) {
+                if (currentBuild.artifacts.length > 0) {
+                    newestBuildDate = Tools.romZipDate(currentBuild.artifacts[0].fileName, false).date;
+                    break;
+                }
+            }
+            if (newestBuildDateAlt > newestBuildDate) {
+                Intent errorDialog = new Intent(Constants.GENERIC_DIALOG);
+                errorDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE,
+                        context.getResources().getString(R.string.basketbuild_old_new_available));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(errorDialog);
+                return null;
+            }
         }
+
         boolean isUpdateNeeded = Tools.processJenkins(updates, context);
         if(updates.isMalformed) {
             Tools.sendGenericToast("ROM filename format is wrong. Ask the maintainer to fix it.", context);
