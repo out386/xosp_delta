@@ -27,5 +27,5 @@
     <string name="ready_to_flash">You have a new version ready to flash. Open the navigation drawer and go to the Flash section to install it.</string>
     <string name="file_picker_actionbar_text">Select zips to flash</string>
     <string name="basketbuild_down_new_available">The server appears to be down. Try again later, or get the newest delta from https://downloads.xosp.org. Move it to /sdcard/xospdelta and relaunch this app after downloading.</string>
-    <string name="basketbuild_old_new_available">The newest build hasn't yet been uploaded to Basketbuild. You can download the newest delta from https://downloads.xosp.org. Move it to /sdcard/xospdelta and relaunch this app after downloading.</string>
+    <string name="basketbuild_old_new_available">The newest build hasn\'t yet been uploaded to Basketbuild. You can download the newest delta from https://downloads.xosp.org. Move it to /sdcard/xospdelta and relaunch this app after downloading.</string>
 </resources>

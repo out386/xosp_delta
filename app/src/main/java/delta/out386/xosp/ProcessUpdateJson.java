@@ -55,7 +55,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
     public Void doInBackground(Void... params){
         JsonAdapter<JenkinsJson> jsonAdapter;
         Log.v(TAG, "Parsing update JSON");
-        if(json.equals("")) {
+        if(json == null || json.equals("")) {
             if(!readOldJson()) {
                 Intent noJson = new Intent(Constants.JSON_AVAILABILITY);
                 noJson.putExtra(Constants.IS_JSON_AVAILABLE, false);
@@ -88,9 +88,10 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
 
         if (updates == null || updates.builds == null || updates.builds.size() == 0) {
             int installedBuildDate = Tools.romZipDate(Tools.getInstalledRomName(), false).date;
-
+            Log.i(TAG, "ProcessUpdateJson: Currently installed build date: " + installedBuildDate);
             if (installedBuildDate > -1 && newestBuildDateAlt > installedBuildDate) {
-                Intent errorDialog = new Intent(Constants.GENERIC_DIALOG);
+                Log.i(TAG, "ProcessUpdateJson: Newer build available in alt, main server down");
+                Intent errorDialog = new Intent(Constants.GENERIC_DIALOG_FIRST_START);
                 errorDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE,
                         context.getResources().getString(R.string.basketbuild_down_new_available));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(errorDialog);
@@ -99,7 +100,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
 
             return null;
         } else {
-            int newestBuildDate = 0;
+            int newestBuildDate = -1;
             // TO-DO: Clean up all this redundant code all over the app, and organize the classes.
             for (JenkinsJson.builds currentBuild : updates.builds) {
                 if (currentBuild.artifacts.length > 0) {
@@ -107,8 +108,15 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
                     break;
                 }
             }
+            Log.i(TAG, "ProcessUpdateJson: Newest build date: " + newestBuildDate);
+            if (newestBuildDate == -1) {
+                Tools.sendGenericToast("ROM descriptors are wrong. Ask the maintainer to fix it.", context);
+                return null;
+            }
+                
             if (newestBuildDateAlt > newestBuildDate) {
-                Intent errorDialog = new Intent(Constants.GENERIC_DIALOG);
+                Log.i(TAG, "ProcessUpdateJson: New build in alt, main server working");
+                Intent errorDialog = new Intent(Constants.GENERIC_DIALOG_FIRST_START);
                 errorDialog.putExtra(Constants.GENERIC_DIALOG_MESSAGE,
                         context.getResources().getString(R.string.basketbuild_old_new_available));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(errorDialog);

@@ -329,6 +329,7 @@ public class Tools {
         HttpURLConnection connection = (HttpURLConnection) new URL(host).openConnection();
             connection.setRequestMethod("HEAD");
             if((response = connection.getResponseCode()) == 204) {
+                Log.i(Constants.TAG, "checkHost: Got internet");
                 return true;
             }
             else {

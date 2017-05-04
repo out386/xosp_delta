@@ -47,7 +47,7 @@ class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
     final String TAG = Constants.TAG;
     private String url;
     private String json = "";
-    private int newestDateAlt;
+    private int newestDateAlt = -1;
     private File jsonStore;
     private View rootView;
     Context context;
@@ -71,13 +71,18 @@ class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
         Log.i(TAG, url);
         try {
             json = readHTTPS(url);
-            newestDateAlt = Tools.romZipDate(
-                    readHTTPS(Constants.NEWEST_BUILD_URL_ALT), false)
-            .date;
+
+            // Check if read https is null first
+            String altBuildRom = readHTTPS(Constants.NEWEST_BUILD_URL_ALT);
+            if (altBuildRom != null)
+                newestDateAlt = Tools.romZipDate(altBuildRom, false).date;
+            Log.i(TAG, "Alt build version: " + newestDateAlt);
+
+            if (json == null)
+                return null;
 
             if(jsonStore.exists())
                 jsonStore.delete();
-
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(jsonStore)));
             bw.write(json);
             bw.close();
@@ -139,7 +144,7 @@ class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    String readHTTPS (String url) {
+    private String readHTTPS(String url) {
         HttpsURLConnection urlConnection = setupHttpsRequest(url);
         String content = "";
         if(urlConnection == null)
@@ -152,9 +157,7 @@ class DownloadUpdateJson extends AsyncTask<Void, Void, Void> {
             br.close();
         } catch (IOException e) {}
         finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
+            urlConnection.disconnect();
         }
         return content;
     }
