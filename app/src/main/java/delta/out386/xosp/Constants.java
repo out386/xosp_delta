@@ -83,7 +83,7 @@ public class Constants {
 
 
     final static String [] OFFICIAL_LIST = {
-           "Z008", "Z00A", "angler", "armani", "huashan", "kenzo", "lux", "mako", "onyx", "surnia", "osprey", "libra"
+           "Z008", "Z00A", "angler", "armani", "huashan", "kenzo", "lux", "mako", "onyx", "libra", "dogo", "m7", "yuga"
     };
 	 
 	final static String UPDATE_JSON_URL_BASKETBUILD1 = "https://basketbuild.com/api4web/devs/XOSP/";
@@ -101,6 +101,6 @@ public class Constants {
      * Hosted on a server that will be accessible even if the main downloads server is not.
      * Used so that the delta can be downloaded manually from an alternate server if the main one is down.
      */
-    final static String NEWEST_BUILD_URL_ALT = "https://raw.githubusercontent.com/XOSP-Project/utilities-xosp-changelogs/master/" + ROM_ZIP_DEVICE_NAME + "/Current-Version.txt";
+    final static String NEWEST_BUILD_URL_ALT = "https://raw.githubusercontent.com/XOSP-Project/utilities-xosp-changelogs/master/" + ROM_ZIP_DEVICE_NAME + "/Current-Delta-Version.txt";
 
 }
