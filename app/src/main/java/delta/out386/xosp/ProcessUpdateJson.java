@@ -179,8 +179,15 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
                 JenkinsJson.artifacts artifact = new JenkinsJson.artifacts();
                 JenkinsJson.fingerprint fingerprint = new JenkinsJson.fingerprint();
 
-                fingerprint.hash = currentBB.filemd5;
-                build.id = currentBB.filemd5;
+                if (currentBB.filemd5 != null && ! currentBB.filemd5.equals("")) {
+                    fingerprint.hash = currentBB.filemd5;
+                    build.id = currentBB.filemd5;
+                } else {
+                    // The API changed and made this empty. This is only used as an identifier for Medescope
+                    fingerprint.hash = String.valueOf(Math.random() * 1000);
+                    build.id = fingerprint.hash;
+                }
+
                 build.timestamp = currentBB.fileTimestamp;
                 artifact.fileName = currentBB.file;
                 artifact.size = currentBB.filesize;
