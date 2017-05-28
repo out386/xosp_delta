@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import delta.out386.xosp.BasketbuildJson.*;
 import delta.out386.xosp.JenkinsJson.*;
@@ -172,6 +173,7 @@ public class ProcessUpdateJson extends AsyncTask<Void, Void, Void>{
             JenkinsJson json = new JenkinsJson();
             json.builds = new ArrayList<>();
 
+            Collections.reverse(bbJson.files);
             for(BasketbuildJson.file currentBB : bbJson.files) {
                 JenkinsJson.builds build = new JenkinsJson.builds();
                 build.artifacts = new JenkinsJson.artifacts[1];
